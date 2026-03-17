@@ -552,6 +552,7 @@ export default function App() {
   return (
     <div className="app">
       <header className="app-header">
+        <img src="/icon-logo.png" alt="USDX Editor" className="app-logo" />
         <h1>USDX Editor</h1>
         <span className="subtitle">UltraStar Deluxe Song Editor</span>
       </header>
