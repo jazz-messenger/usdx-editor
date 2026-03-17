@@ -62,5 +62,14 @@ describe('parseUsdx', () => {
       expect(result.tracks[0].phrases[0].text).toBe('When-e-ver')
       expect(result.tracks[0].phrases[1].text).toBe('Re-mind')
     })
+
+    it('preserves trailing space in syllable (word boundary marker)', () => {
+      const input = `#TITLE:T\n#ARTIST:A\n#BPM:120\n#GAP:0\n: 64 2 17 Rock \n: 68 2 15 your \n: 72 8 15 bo\nE`
+      const song = parseUsdx(input)
+      const notes = song.tracks[0].phrases[0].notes
+      expect(notes[0].syllable).toBe('Rock ')
+      expect(notes[1].syllable).toBe('your ')
+      expect(notes[2].syllable).toBe('bo')
+    })
   })
 })

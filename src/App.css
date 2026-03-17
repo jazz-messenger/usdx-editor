@@ -1,6 +1,6 @@
 /* Layout */
 .app {
-  min-height: 100svh;
+  height: 100svh;
   display: flex;
   flex-direction: column;
   background: #0f0f13;
@@ -9,6 +9,7 @@
 }
 
 .app-header {
+  flex-shrink: 0;
   padding: 16px 24px;
   border-bottom: 1px solid #2a2a35;
   display: flex;
@@ -30,10 +31,14 @@
 
 .app-main {
   flex: 1;
-  padding: 32px 24px;
-  max-width: 960px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 32px;
+  max-width: 1400px;
   width: 100%;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 /* Drop zone */
@@ -77,12 +82,15 @@
 
 /* Song view */
 .song-view {
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 0;
 }
 
 .song-meta {
+  flex-shrink: 0;
   background: #1a1a24;
   border: 1px solid #2a2a35;
   border-bottom: none;
@@ -147,22 +155,28 @@
 
 /* Two-column layout */
 .song-content {
+  flex: 1;
+  min-height: 0;
   display: grid;
-  grid-template-columns: 1fr 360px;
+  grid-template-columns: 1fr 320px;
   align-items: start;
   gap: 0;
   border: 1px solid #2a2a35;
   border-radius: 0 0 10px 10px;
+  overflow: hidden;
 }
 
 .lyrics-column {
   min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow-y: auto;
   border-right: 1px solid #2a2a35;
 }
 
 .video-sidebar {
-  position: sticky;
-  top: 16px;
+  height: 100%;
+  overflow-y: auto;
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -248,6 +262,30 @@
   margin-top: 2px;
 }
 
+.song-title-input,
+.song-artist-input {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid transparent;
+  border-radius: 0;
+  padding: 0;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.15s;
+}
+
+.song-title-input:hover,
+.song-artist-input:hover {
+  border-bottom-color: #555;
+}
+
+.song-title-input:focus,
+.song-artist-input:focus {
+  border-bottom-color: #7c6af7;
+}
+
 .song-tags {
   display: flex;
   flex-wrap: wrap;
@@ -298,8 +336,17 @@
 .gap-sync-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
+}
+
+/* Timing grid — two rows (GAP / VIDEOGAP), labels column-aligned.
+   Third column holds the ⏱ Jetzt! button on the GAP row (or is empty). */
+.gap-timing-grid {
+  display: grid;
+  grid-template-columns: max-content auto max-content;
+  gap: 6px 10px;
+  align-items: center;
 }
 
 .gap-sync-label {
@@ -318,7 +365,7 @@
 }
 
 .gap-input {
-  width: 90px;
+  width: 96px;
   background: #0f0f13;
   border: 1px solid #3a3a4a;
   border-radius: 6px;
@@ -361,6 +408,39 @@
 .youtube-input:focus {
   outline: none;
   border-color: #7c6aff;
+}
+
+/* Transport control row */
+.gap-sync-transport {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-transport {
+  background: #1e2a1e;
+  border: 1px solid #3a5a3a;
+  color: #7ecb7e;
+  padding: 5px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.btn-transport:hover {
+  background: #2a4a2a;
+  border-color: #5a9a5a;
+}
+
+/* Live video position readout in transport bar */
+.video-clock {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: #7ecb7e;
+  min-width: 38px;
+  text-align: right;
 }
 
 .btn-sync {
@@ -449,10 +529,11 @@
 .yt-result-title {
   font-size: 13px;
   color: #e8e8f0;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 220px;
+  line-height: 1.4;
 }
 
 .yt-result-meta {
@@ -495,18 +576,61 @@
   letter-spacing: 0.08em;
 }
 
-.yt-player-wrap {
+/* Video source switcher — pill toggle between local file and YouTube */
+.video-source-switcher {
+  display: flex;
+  gap: 0;
+  border: 1px solid #3a3a4a;
+  border-radius: 8px;
+  overflow: hidden;
+  align-self: flex-start;
+}
+
+.vsw-btn {
+  background: transparent;
+  border: none;
+  color: #6b6b7e;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.vsw-btn + .vsw-btn {
+  border-left: 1px solid #3a3a4a;
+}
+
+.vsw-btn:hover {
+  background: #1e1e2a;
+  color: #b0b0c8;
+}
+
+.vsw-btn--active {
+  background: #2a2a3e;
+  color: #e8e8f0;
+}
+
+.yt-player-wrap,
+.local-video-wrap {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.yt-player {
+.local-video-wrap--hidden {
+  display: none;
+}
+
+.yt-player,
+.local-video {
   width: 100%;
   aspect-ratio: 16 / 9;
   border-radius: 8px;
   overflow: hidden;
   background: #000;
+  display: block;
 }
 
 .yt-player iframe {
@@ -518,6 +642,7 @@
 .yt-hint {
   font-size: 12px;
   color: #6b6b7e;
+  margin: 0;
 }
 
 .yt-error {
@@ -564,6 +689,10 @@
 }
 
 .duet-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #0f0f13;
   display: grid;
   grid-template-columns: 1fr 32px 1fr;
   gap: 0;
@@ -680,7 +809,14 @@
   border-radius: 0 6px 6px 0;
 }
 
-/* Active phrase: only the line number is highlighted, no row background */
+/* Active phrase: rounded rectangle highlight + numbered line accent */
+.phrase--active {
+  background: rgba(124, 106, 255, 0.1);
+  border-radius: 6px;
+  outline: 1px solid rgba(124, 106, 255, 0.2);
+  outline-offset: -1px;
+}
+
 .phrase--active .phrase-number {
   color: #7c6aff;
   font-weight: 600;
@@ -692,8 +828,9 @@
 }
 
 .yt-hint-live {
+  font-size: 12px;
   color: #7c6aff;
-  margin-left: 4px;
+  margin: 0;
 }
 
 .phrase-text {
