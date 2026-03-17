@@ -69,26 +69,170 @@
   color: #6b6b7e;
 }
 
-.drop-zone input[type="file"] {
-  display: none;
+.drop-zone-error {
+  color: #f87171;
+  font-size: 13px;
+  margin-top: 8px;
 }
 
 /* Song view */
 .song-view {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 0;
 }
 
 .song-meta {
   background: #1a1a24;
   border: 1px solid #2a2a35;
-  border-radius: 10px;
-  padding: 20px 24px;
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
+  position: relative;
+  z-index: 1;
+  padding: 16px 20px;
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
-  align-items: flex-start;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Missing files warning */
+.missing-files-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-top: none;
+  border-bottom: none;
+  font-size: 13px;
+  color: #fbbf24;
+}
+
+.missing-files-icon {
+  flex-shrink: 0;
+}
+
+.missing-files-text {
+  color: #a89060;
+}
+
+.missing-file-pill {
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  border-radius: 4px;
+  padding: 1px 7px;
+  font-size: 12px;
+  font-family: monospace;
+  color: #fbbf24;
+}
+
+.missing-files-dismiss {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #6b6b7e;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px 4px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.missing-files-dismiss:hover {
+  color: #e8e8f0;
+}
+
+/* Two-column layout */
+.song-content {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  align-items: start;
+  gap: 0;
+  border: 1px solid #2a2a35;
+  border-radius: 0 0 10px 10px;
+}
+
+.lyrics-column {
+  min-width: 0;
+  border-right: 1px solid #2a2a35;
+}
+
+.video-sidebar {
+  position: sticky;
+  top: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.song-cover-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+}
+
+.song-cover-wrap:hover .song-cover-actions {
+  opacity: 1;
+}
+
+.song-cover-actions {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+  border-radius: 0 0 6px 6px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.cover-btn {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 13px;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.cover-btn:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+.song-cover {
+  width: 64px;
+  height: 64px;
+  border-radius: 6px;
+  object-fit: cover;
+  display: block;
+}
+
+.song-cover--placeholder {
+  width: 64px;
+  height: 64px;
+  border-radius: 6px;
+  background: #2a2a35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #555;
+  flex-shrink: 0;
 }
 
 .song-title-block .song-title {
@@ -146,10 +290,6 @@
 
 /* GAP Sync panel */
 .gap-sync {
-  background: #1a1a24;
-  border: 1px solid #2a2a35;
-  border-radius: 10px;
-  padding: 14px 20px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -240,6 +380,121 @@
   border-color: #7c6aff;
 }
 
+.btn-yt-search {
+  background: rgba(255, 0, 0, 0.08);
+  border: 1px solid rgba(255, 60, 60, 0.3);
+  color: #ff6b6b;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.btn-yt-search:hover {
+  background: rgba(255, 0, 0, 0.18);
+  border-color: rgba(255, 60, 60, 0.6);
+}
+
+.btn-yt-search:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* YouTube search results */
+.yt-search-results {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 8px;
+  border: 1px solid #2a2a35;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.yt-search-result {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  background: #1a1a24;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+  width: 100%;
+}
+
+.yt-search-result:hover {
+  background: #22223a;
+}
+
+.yt-result-thumb {
+  width: 80px;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+  background: #0f0f13;
+}
+
+.yt-result-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.yt-result-title {
+  font-size: 13px;
+  color: #e8e8f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+}
+
+.yt-result-meta {
+  font-size: 11px;
+  color: #6b6b7e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+}
+
+.yt-search-msg {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #6b6b7e;
+  padding: 8px 4px;
+}
+
+.bg-preview-wrap {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+}
+
+.bg-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.bg-preview-label {
+  position: absolute;
+  bottom: 6px;
+  left: 8px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
 .yt-player-wrap {
   display: flex;
   flex-direction: column;
@@ -303,10 +558,9 @@
 }
 
 /* Lyrics */
-.lyrics-section {
+.lyrics-column {
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
 .duet-header {
@@ -358,7 +612,7 @@
 .phrases {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 0;
 }
 
 .phrase {
@@ -386,8 +640,8 @@
 }
 
 .phrase-col {
-  padding: 9px 14px;
-  min-height: 38px;
+  padding: 5px 14px;
+  min-height: 30px;
   display: flex;
   align-items: center;
 }
@@ -424,6 +678,22 @@
 .phrase--singer-2 .phrase-col--2 {
   background: rgba(255, 106, 154, 0.04);
   border-radius: 0 6px 6px 0;
+}
+
+/* Active phrase: only the line number is highlighted, no row background */
+.phrase--active .phrase-number {
+  color: #7c6aff;
+  font-weight: 600;
+}
+
+.syllable.active-note {
+  color: #a78bff;
+  font-weight: 600;
+}
+
+.yt-hint-live {
+  color: #7c6aff;
+  margin-left: 4px;
 }
 
 .phrase-text {
