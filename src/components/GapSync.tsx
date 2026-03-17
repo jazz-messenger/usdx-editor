@@ -133,8 +133,15 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
   const play           = useLocal ? localPlay           : ytPlay
   const pause          = useLocal ? localPause          : ytPause
 
+  // ── Pause inactive player when source is switched ───────────────────────────
+  useEffect(() => {
+    if (preferYoutube) localPause()
+    else ytPause()
+  }, [preferYoutube]) // eslint-disable-line react-hooks/exhaustive-deps
+
   // ── Search state ────────────────────────────────────────────────────────────
   const [searchResults, setSearchResults] = useState<YtResult[] | null>(null)
+  const [showResults, setShowResults] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
   const [searchMsg, setSearchMsg] = useState<string | null>(null)
   // Displayed video clock — updated by RAF while playing, or after seeks
@@ -188,6 +195,7 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
 
     if (outcome.kind === 'results' && outcome.items.length > 0) {
       setSearchResults(outcome.items)
+      setShowResults(true)
     } else if (outcome.kind === 'quota') {
       setSearchMsg('Tageslimit erreicht — YouTube wird im neuen Tab geöffnet.')
       openYouTubeSearch(artist, title)
@@ -198,7 +206,7 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
 
   const selectVideo = (vid: string) => {
     setYoutubeUrl(`https://www.youtube.com/watch?v=${vid}`)
-    setSearchResults(null)
+    setShowResults(false)   // hide list, but keep results cached for "andere Auswahl"
     setSearchMsg(null)
   }
 
@@ -277,28 +285,50 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
             value={youtubeUrl}
             onChange={(e) => {
               setYoutubeUrl(e.target.value)
-              setSearchResults(null)
+              setShowResults(false)
               setSearchMsg(null)
             }}
           />
-          {!videoId && (artist || title) && (
-            <button
-              className="btn-yt-search"
-              onClick={handleSearch}
-              disabled={isSearching}
-              title="Nach Official Video suchen"
-            >
-              {isSearching ? '…' : '🔍'}
-            </button>
-          )}
+          {videoId
+            ? (
+              /* Clear selection → go back to search results if cached */
+              <button
+                className="btn-yt-clear"
+                onClick={() => {
+                  setYoutubeUrl('')
+                  setShowResults(searchResults !== null && searchResults.length > 0)
+                }}
+                title="Video-Auswahl zurücksetzen"
+              >
+                ✕
+              </button>
+            )
+            : (artist || title) && (
+              <button
+                className="btn-yt-search"
+                onClick={handleSearch}
+                disabled={isSearching}
+                title="Nach Official Video suchen"
+              >
+                {isSearching ? '…' : '🔍'}
+              </button>
+            )
+          }
         </div>
+      )}
+
+      {/* "Andere Auswahl" — shown when a video is active but cached results exist */}
+      {(!videoUrl || preferYoutube) && videoId && searchResults && !showResults && (
+        <button className="btn-yt-other" onClick={() => setShowResults(true)}>
+          🔍 Andere Auswahl
+        </button>
       )}
 
       {/* Feedback message (quota / no results) */}
       {searchMsg && <div className="yt-search-msg">{searchMsg}</div>}
 
-      {/* Search results */}
-      {searchResults && searchResults.length > 0 && (
+      {/* Search results — cached, toggled via showResults */}
+      {showResults && searchResults && searchResults.length > 0 && (
         <div className="yt-search-results">
           {searchResults.map((r) => (
             <button key={r.videoId} className="yt-search-result" onClick={() => selectVideo(r.videoId)}>
@@ -344,9 +374,10 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
         </div>
       )}
 
-      {/* ── YouTube player ── */}
-      {(!videoUrl || preferYoutube) && videoId && (
-        <div className="yt-player-wrap">
+      {/* ── YouTube player — always mounted when videoId is set so the iframe
+           is never destroyed on source toggle. CSS-hidden when local is active. ── */}
+      {videoId && (
+        <div className={`yt-player-wrap${useLocal ? ' yt-player-wrap--hidden' : ''}`}>
           {ytPlayerState === 'error' && (
             <div className="yt-error">Video konnte nicht geladen werden.</div>
           )}
