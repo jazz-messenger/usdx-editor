@@ -30,6 +30,7 @@ export interface UsdxHeader {
   audio?: string
   video?: string
   cover?: string
+  background?: string
   language?: string
   genre?: string
   year?: number
@@ -135,6 +136,9 @@ export function parseUsdx(content: string): UsdxSong {
           break
         case 'COVER':
           header.cover = value
+          break
+        case 'BACKGROUND':
+          header.background = value
           break
         case 'LANGUAGE':
           header.language = value

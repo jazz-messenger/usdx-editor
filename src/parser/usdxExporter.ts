@@ -36,6 +36,7 @@ export function exportUsdx(
   lines.push(`#GAP:${header.gap}`)
   if (header.video)         lines.push(`#VIDEO:${header.video}`)
   if (header.cover)         lines.push(`#COVER:${header.cover}`)
+  if (header.background)    lines.push(`#BACKGROUND:${header.background}`)
   if (header.language)      lines.push(`#LANGUAGE:${header.language}`)
   if (header.genre)         lines.push(`#GENRE:${header.genre}`)
   if (header.year)          lines.push(`#YEAR:${header.year}`)

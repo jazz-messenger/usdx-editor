@@ -16,9 +16,14 @@ declare global {
         options: {
           videoId: string
           playerVars?: Record<string, unknown>
-          events?: { onReady?: () => void; onError?: () => void }
+          events?: {
+            onReady?: () => void
+            onError?: () => void
+            onStateChange?: (e: { data: number }) => void
+          }
         }
       ) => YTPlayerInstance
+      PlayerState: { PLAYING: number; PAUSED: number; ENDED: number }
     }
     onYouTubeIframeAPIReady?: () => void
   }
@@ -45,19 +50,21 @@ export function useYouTubePlayer(videoId: string | null) {
   const containerRef = useRef<HTMLDivElement>(null)
   const playerRef = useRef<YTPlayerInstance | null>(null)
   const [playerState, setPlayerState] = useState<YTPlayerState>('idle')
+  const [isPlaying, setIsPlaying] = useState(false)
 
   useEffect(() => {
     if (!videoId) {
       setPlayerState('idle')
+      setIsPlaying(false)
       return
     }
 
     setPlayerState('idle')
+    setIsPlaying(false)
 
     const createPlayer = () => {
       if (!containerRef.current || !window.YT?.Player) return
       playerRef.current?.destroy()
-      // YT replaces the element, so we need a fresh div inside the container
       const el = document.createElement('div')
       containerRef.current.innerHTML = ''
       containerRef.current.appendChild(el)
@@ -67,6 +74,9 @@ export function useYouTubePlayer(videoId: string | null) {
         events: {
           onReady: () => setPlayerState('ready'),
           onError: () => setPlayerState('error'),
+          onStateChange: (e) => {
+            setIsPlaying(e.data === 1) // 1 = YT.PlayerState.PLAYING
+          },
         },
       })
     }
@@ -81,5 +91,5 @@ export function useYouTubePlayer(videoId: string | null) {
 
   const getCurrentTime = (): number => playerRef.current?.getCurrentTime() ?? 0
 
-  return { containerRef, playerState, getCurrentTime }
+  return { containerRef, playerState, isPlaying, getCurrentTime }
 }
