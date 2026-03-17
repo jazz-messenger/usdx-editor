@@ -38,19 +38,12 @@ export function phraseToSyllables(phrase: Phrase): DisplaySyllable[] {
     if (raw === '') {
       // Pure melisma / hold note — extend the endBeat of the preceding syllable
       // so it stays highlighted while the singer holds the note.
+      // A standalone `~` never creates a word boundary; word breaks must be
+      // encoded with leading/trailing spaces in the syllable text.
       if (result.length > 0) {
         const last = result[result.length - 1]
         const holdEnd = note.beat + note.length
         if (holdEnd > last.endBeat) last.endBeat = holdEnd
-
-        // Beat-gap heuristic: if there is a gap between this hold note's end and
-        // the next note's start, the two syllables belong to different words —
-        // even when the source file omits the explicit space marker.
-        // (Zero/no gap = melisma within the same word; gap > 0 = word boundary.)
-        const nextNote = phrase.notes[ni + 1]
-        if (nextNote && holdEnd < nextNote.beat) {
-          prevHadTrailingSpace = true
-        }
       }
       continue
     }
