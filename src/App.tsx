@@ -9,6 +9,19 @@ import { exportUsdx } from './parser/usdxExporter'
 import { GapSync } from './components/GapSync'
 import { msToBeat } from './parser/timing'
 
+const GENRE_SUGGESTIONS = [
+  'Pop', 'Rock', 'Metal', 'Jazz', 'Classical', 'Electronic', 'Hip-Hop',
+  'R&B', 'Dance', 'Country', 'Indie', 'Alternative', 'Folk', 'Blues',
+  'Reggae', 'Soul', 'Latin', 'Punk', 'Schlager', 'Volksmusik', 'Chanson',
+  'Disco', 'Funk', 'Gospel', 'Opera', 'Techno', 'House',
+]
+
+const LANGUAGE_SUGGESTIONS = [
+  'English', 'German', 'French', 'Spanish', 'Italian', 'Portuguese',
+  'Japanese', 'Korean', 'Swedish', 'Danish', 'Norwegian', 'Finnish',
+  'Dutch', 'Polish', 'Russian', 'Turkish', 'Arabic', 'Chinese', 'Greek',
+]
+
 // ── Directory loading ────────────────────────────────────────────────────────
 
 type SongFileMap = Map<string, File>  // lowercase filename → File
@@ -136,6 +149,97 @@ function fetchRemoteCover(artist: string, title: string): Promise<string | null>
       return artwork ? artwork.replace('100x100bb', '600x600bb') : null
     })
     .catch(() => null)
+}
+
+// ── TagEditor ────────────────────────────────────────────────────────────────
+
+interface TagEditorProps {
+  tags: string[]
+  onChange: (tags: string[]) => void
+  suggestions: string[]
+}
+
+function TagEditor({ tags, onChange, suggestions }: TagEditorProps) {
+  const [open, setOpen] = useState(false)
+  const [query, setQuery] = useState('')
+  const wrapRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    const handler = (e: MouseEvent) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) {
+        setOpen(false)
+        setQuery('')
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [open])
+
+  const filtered = suggestions.filter(
+    (s) => !tags.includes(s) && s.toLowerCase().includes(query.toLowerCase())
+  )
+
+  const add = (value: string) => {
+    const v = value.trim()
+    if (v && !tags.includes(v)) onChange([...tags, v])
+    setOpen(false)
+    setQuery('')
+  }
+
+  return (
+    <div className="tag-editor" ref={wrapRef}>
+      {tags.map((t) => (
+        <span key={t} className="tag tag--editable">
+          {t}
+          <button
+            className="tag-remove"
+            onClick={() => onChange(tags.filter((x) => x !== t))}
+            title={`${t} entfernen`}
+          >
+            ✕
+          </button>
+        </span>
+      ))}
+      <div className="tag-add-wrap">
+        <button className="tag-add-btn" onClick={() => setOpen((v) => !v)} title="Hinzufügen">
+          +
+        </button>
+        {open && (
+          <div className="tag-dropdown">
+            <input
+              autoFocus
+              className="tag-search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && query.trim()) add(query)
+                if (e.key === 'Escape') { setOpen(false); setQuery('') }
+              }}
+              placeholder="Suchen oder eingeben…"
+            />
+            <div className="tag-suggestions">
+              {filtered.map((s) => (
+                <button key={s} className="tag-suggestion" onClick={() => add(s)}>
+                  {s}
+                </button>
+              ))}
+              {query.trim() && !suggestions.some(
+                (s) => s.toLowerCase() === query.trim().toLowerCase()
+              ) && (
+                <button className="tag-suggestion tag-suggestion--custom" onClick={() => add(query)}>
+                  „{query.trim()}" hinzufügen
+                </button>
+              )}
+              {filtered.length === 0 && !query.trim() && (
+                <span className="tag-suggestions-empty">Alle Vorschläge bereits verwendet</span>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
 }
 
 // ── DropZone ─────────────────────────────────────────────────────────────────
@@ -337,6 +441,13 @@ function SongView({ song, filename, files, onReset }: {
   const [singerNames, setSingerNames] = useState<[string, string]>(['', ''])
   const [editTitle, setEditTitle] = useState(header.title)
   const [editArtist, setEditArtist] = useState(header.artist)
+  const [editYear, setEditYear] = useState<number | ''>(header.year ?? '')
+  const [editGenres, setEditGenres] = useState<string[]>(
+    header.genre ? header.genre.split(',').map((g) => g.trim()).filter(Boolean) : []
+  )
+  const [editLanguages, setEditLanguages] = useState<string[]>(
+    header.language ? header.language.split(',').map((l) => l.trim()).filter(Boolean) : []
+  )
   const [gap, setGap] = useState(header.gap)
   const [videoGap, setVideoGap] = useState(header.videoGap ?? 0)
   const [activePos, setActivePos] = useState<ActivePos | null>(null)
@@ -370,6 +481,9 @@ function SongView({ song, filename, files, onReset }: {
       ...header,
       title: editTitle,
       artist: editArtist,
+      year: editYear !== '' ? Number(editYear) : undefined,
+      genre: editGenres.join(', ') || undefined,
+      language: editLanguages.join(', ') || undefined,
       gap,
       videoGap: videoGap || undefined,
       comment: `edited with usdx-editor on ${today}, http://korczak.at/usdx-editor`,
@@ -435,13 +549,29 @@ function SongView({ song, filename, files, onReset }: {
             onChange={e => setEditArtist(e.target.value)}
             aria-label="Künstler"
           />
+          <input
+            className="song-year-input"
+            type="number"
+            value={editYear}
+            min={1900}
+            max={2099}
+            onChange={(e) => setEditYear(e.target.value === '' ? '' : Number(e.target.value))}
+            aria-label="Jahr"
+            placeholder="Jahr"
+          />
         </div>
         <div className="song-tags">
-          {header.year && <span className="tag">{header.year}</span>}
-          {header.language && <span className="tag">{header.language}</span>}
-          {header.genre && <span className="tag">{header.genre}</span>}
           {header.edition && <span className="tag">{header.edition}</span>}
-          <span className="tag">{Math.round(header.bpm / 4)} BPM</span>
+          <TagEditor
+            tags={editLanguages}
+            onChange={setEditLanguages}
+            suggestions={LANGUAGE_SUGGESTIONS}
+          />
+          <TagEditor
+            tags={editGenres}
+            onChange={setEditGenres}
+            suggestions={GENRE_SUGGESTIONS}
+          />
         </div>
         <div className="meta-actions">
           <label className="toggle-label">
