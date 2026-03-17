@@ -138,6 +138,35 @@
   transition: border-color var(--transition-fast), background var(--transition-fast);
 }
 
+.drop-zone--warning {
+  cursor: default;
+  border-color: rgb(251 191 36 / .40);
+  background: rgb(251 191 36 / .04);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.multi-txt-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.multi-txt-list li {
+  font-family: monospace;
+  font-size: 13px;
+  color: rgb(var(--text-muted));
+  background: rgb(var(--bg-elevated));
+  border: 1px solid rgb(var(--border-mid));
+  border-radius: var(--radius-sm);
+  padding: 3px 10px;
+}
+
 .drop-zone:hover,
 .drop-zone.drag-over {
   border-color: rgb(var(--accent-primary));

@@ -143,12 +143,18 @@ function fetchRemoteCover(artist: string, title: string): Promise<string | null>
 function DropZone({ onLoad }: { onLoad: (song: UsdxSong, filename: string, files: SongFileMap) => void }) {
   const [dragOver, setDragOver] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [multiTxtNames, setMultiTxtNames] = useState<string[] | null>(null)
 
   const processFileMap = useCallback((files: SongFileMap) => {
-    const txtFile = Array.from(files.values()).find((f) => f.name.toLowerCase().endsWith('.txt'))
-    if (!txtFile) { setError('Keine .txt-Datei im Ordner gefunden.'); return }
+    const txtFiles = Array.from(files.values()).filter((f) => f.name.toLowerCase().endsWith('.txt'))
+    if (txtFiles.length === 0) { setError('Keine .txt-Datei im Ordner gefunden.'); return }
+    if (txtFiles.length > 1) {
+      setMultiTxtNames(txtFiles.map((f) => f.name))
+      return
+    }
     setError(null)
-    readTxtFile(txtFile).then((text) => onLoad(parseUsdx(text), txtFile.name, files))
+    setMultiTxtNames(null)
+    readTxtFile(txtFiles[0]).then((text) => onLoad(parseUsdx(text), txtFiles[0].name, files))
   }, [onLoad])
 
   const onDrop = async (e: DragEvent<HTMLLabelElement>) => {
@@ -169,6 +175,20 @@ function DropZone({ onLoad }: { onLoad: (song: UsdxSong, filename: string, files
       files.set(file.name.toLowerCase(), file)
     }
     processFileMap(files)
+  }
+
+  if (multiTxtNames) {
+    return (
+      <div className="drop-zone drop-zone--warning">
+        <div className="drop-zone-icon">⚠️</div>
+        <h2>Mehrere .txt-Dateien gefunden</h2>
+        <p>Die Auswahl enthält {multiTxtNames.length} .txt-Dateien. Bitte öffne nur den Ordner eines einzelnen Songs.</p>
+        <ul className="multi-txt-list">
+          {multiTxtNames.map((n) => <li key={n}>{n}</li>)}
+        </ul>
+        <button className="btn-primary" onClick={() => setMultiTxtNames(null)}>Verstanden</button>
+      </div>
+    )
   }
 
   return (
