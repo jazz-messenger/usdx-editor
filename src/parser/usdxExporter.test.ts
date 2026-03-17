@@ -28,15 +28,16 @@ describe('exportUsdx', () => {
   it('exports duet with P1/P2 blocks when singer 2 is assigned', () => {
     const song = parseUsdx(SONG)
     const output = exportUsdx(song, { 1: 2 }) // phrase 1 → singer 2
-    expect(output).toContain('#P1')
-    expect(output).toContain('#P2')
+    // Note-section markers are bare P1/P2 (no #); #P1:#NAME only written when singerNames provided
+    expect(output).toContain('\nP1\n')
+    expect(output).toContain('\nP2\n')
   })
 
   it('places phrases in correct P block', () => {
     const song = parseUsdx(SONG)
     const output = exportUsdx(song, { 1: 2 })
-    const p1Start = output.indexOf('#P1')
-    const p2Start = output.indexOf('#P2')
+    const p1Start = output.indexOf('\nP1\n')
+    const p2Start = output.indexOf('\nP2\n')
     // "Hello world" phrase is singer 1 → appears in P1 block
     expect(output.indexOf('Hello')).toBeGreaterThan(p1Start)
     expect(output.indexOf('Hello')).toBeLessThan(p2Start)
