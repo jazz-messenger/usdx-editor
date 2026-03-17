@@ -327,8 +327,8 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
       {/* Feedback message (quota / no results) */}
       {searchMsg && <div className="yt-search-msg">{searchMsg}</div>}
 
-      {/* Search results — cached, toggled via showResults */}
-      {showResults && searchResults && searchResults.length > 0 && (
+      {/* Search results — cached, only visible in YouTube mode */}
+      {(!videoUrl || preferYoutube) && showResults && searchResults && searchResults.length > 0 && (
         <div className="yt-search-results">
           {searchResults.map((r) => (
             <button key={r.videoId} className="yt-search-result" onClick={() => selectVideo(r.videoId)}>
