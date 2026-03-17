@@ -96,9 +96,12 @@
 }
 
 .app-logo {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   flex-shrink: 0;
+  /* Orange glow so the icon pops against the dark header background */
+  filter: drop-shadow(0 0 10px rgb(var(--accent-primary) / .55))
+          drop-shadow(0 0 3px  rgb(var(--accent-primary) / .30));
 }
 
 .app-header h1 {
@@ -325,6 +328,11 @@
 }
 
 /* ─── Title / Artist inline edit ─────────────────────────────────────────── */
+.song-title-block {
+  flex: 1 1 0;
+  min-width: 0;   /* allows the block to shrink below its content width */
+}
+
 .song-title-block .song-title {
   font-size: 22px;
   font-weight: 600;
