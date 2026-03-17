@@ -15,13 +15,15 @@ function phraseToLines(phrase: Phrase): string[] {
  * Serializes a UsdxSong back to USDX text format.
  *
  * @param song        The parsed song
- * @param singerMap   Maps phrase index → singer (1 | 2). Phrases not in the map default to singer 1.
+ * @param singerMap   Maps phrase index → singer (1 | 2 | 3).
+ *                    1 = P1 only, 2 = P2 only, 3 = both singers.
+ *                    Phrases not in the map default to singer 1.
  *                    When all phrases are singer 1, a solo file is exported (no P1/P2 markers).
  * @param singerNames Optional display names for each singer [p1Name, p2Name].
  */
 export function exportUsdx(
   song: UsdxSong,
-  singerMap: Record<number, 1 | 2>,
+  singerMap: Record<number, 1 | 2 | 3>,
   singerNames: [string, string] = ['', '']
 ): string {
   const lines: string[] = []
@@ -42,6 +44,7 @@ export function exportUsdx(
   if (header.genre)         lines.push(`#GENRE:${header.genre}`)
   if (header.year)          lines.push(`#YEAR:${header.year}`)
   if (header.edition)       lines.push(`#EDITION:${header.edition}`)
+  if (header.tags)          lines.push(`#TAGS:${header.tags}`)
   if (header.creator)       lines.push(`#CREATOR:${header.creator}`)
   if (header.previewStart !== undefined) lines.push(`#PREVIEWSTART:${header.previewStart}`)
   if (header.comment)       lines.push(`#COMMENT:${header.comment}`)
@@ -52,7 +55,7 @@ export function exportUsdx(
     return lines.join('\n')
   }
 
-  const isDuet = track.phrases.some((_, i) => (singerMap[i] ?? 1) === 2)
+  const isDuet = track.phrases.some((_, i) => (singerMap[i] ?? 1) !== 1)
 
   if (!isDuet) {
     // Solo export – no P markers
@@ -60,16 +63,20 @@ export function exportUsdx(
       lines.push(...phraseToLines(phrase))
     }
   } else {
-    // Duet export – split into P1 and P2 blocks
-    const p1Phrases = track.phrases.filter((_, i) => (singerMap[i] ?? 1) === 1)
-    const p2Phrases = track.phrases.filter((_, i) => (singerMap[i] ?? 1) === 2)
+    // Duet export: singer names go in header, bare P1/P2 mark sections in note area.
+    // Singer 3 = both: phrase appears in both the P1 and P2 blocks.
+    if (singerNames[0]) lines.push(`#P1:${singerNames[0]}`)
+    if (singerNames[1]) lines.push(`#P2:${singerNames[1]}`)
 
-    lines.push(singerNames[0] ? `#P1:${singerNames[0]}` : '#P1')
+    const p1Phrases = track.phrases.filter((_, i) => { const s = singerMap[i] ?? 1; return s === 1 || s === 3 })
+    const p2Phrases = track.phrases.filter((_, i) => { const s = singerMap[i] ?? 1; return s === 2 || s === 3 })
+
+    lines.push('P1')
     for (const phrase of p1Phrases) {
       lines.push(...phraseToLines(phrase))
     }
 
-    lines.push(singerNames[1] ? `#P2:${singerNames[1]}` : '#P2')
+    lines.push('P2')
     for (const phrase of p2Phrases) {
       lines.push(...phraseToLines(phrase))
     }

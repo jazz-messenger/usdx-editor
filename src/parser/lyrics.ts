@@ -30,7 +30,8 @@ export function phraseToSyllables(phrase: Phrase): DisplaySyllable[] {
   const result: DisplaySyllable[] = []
   let prevHadTrailingSpace = false
 
-  for (const note of phrase.notes) {
+  for (let ni = 0; ni < phrase.notes.length; ni++) {
+    const note = phrase.notes[ni]
     // Strip tilde markers: leading ~ = melisma continuation, trailing ~ = held note
     const raw = note.syllable.replace(/^~/, '').replace(/~$/, '')
 
@@ -41,6 +42,15 @@ export function phraseToSyllables(phrase: Phrase): DisplaySyllable[] {
         const last = result[result.length - 1]
         const holdEnd = note.beat + note.length
         if (holdEnd > last.endBeat) last.endBeat = holdEnd
+
+        // Beat-gap heuristic: if there is a gap between this hold note's end and
+        // the next note's start, the two syllables belong to different words —
+        // even when the source file omits the explicit space marker.
+        // (Zero/no gap = melisma within the same word; gap > 0 = word boundary.)
+        const nextNote = phrase.notes[ni + 1]
+        if (nextNote && holdEnd < nextNote.beat) {
+          prevHadTrailingSpace = true
+        }
       }
       continue
     }

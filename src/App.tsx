@@ -10,16 +10,138 @@ import { GapSync } from './components/GapSync'
 import { msToBeat } from './parser/timing'
 
 const GENRE_SUGGESTIONS = [
-  'Pop', 'Rock', 'Metal', 'Jazz', 'Classical', 'Electronic', 'Hip-Hop',
-  'R&B', 'Dance', 'Country', 'Indie', 'Alternative', 'Folk', 'Blues',
-  'Reggae', 'Soul', 'Latin', 'Punk', 'Schlager', 'Volksmusik', 'Chanson',
-  'Disco', 'Funk', 'Gospel', 'Opera', 'Techno', 'House',
+  'Blues', 'Country', 'Darkwave', 'Electronic', 'Folk', 'Funk',
+  'Hip-Hop', 'Jazz', 'Metal', 'Musical', 'Oldies', 'Pop', 'Punk',
+  'R&B', 'Rap', 'Reggae', 'Rock', 'Soul',
 ]
 
 const LANGUAGE_SUGGESTIONS = [
   'English', 'German', 'French', 'Spanish', 'Italian', 'Portuguese',
   'Japanese', 'Korean', 'Swedish', 'Danish', 'Norwegian', 'Finnish',
   'Dutch', 'Polish', 'Russian', 'Turkish', 'Arabic', 'Chinese', 'Greek',
+]
+
+type SuggestionGroup = { group: string; items: string[] }
+
+const EDITION_SUGGESTIONS: SuggestionGroup[] = [
+  { group: 'USDX Community', items: [
+    '[SC]-Songs', '[DUET]-Songs', '[VIDEO]-Songs',
+    '[KARAOKE]-Songs', '[MULTI]-Songs', '[SOLO]-Songs',
+  ]},
+  { group: '🇩🇪 Deutschland', items: [
+    'SingStar [DE]', "SingStar '80s [DE]", 'SingStar Amped [DE]',
+    'SingStar Après-Ski Party [DE]', 'SingStar Après-Ski Party 2 [DE]',
+    'SingStar Chartbreaker [DE]', 'SingStar Deutsch Rock-Pop [DE]',
+    'SingStar Deutsch Rock-Pop Vol. 2 [DE]', 'SingStar Die größten Solokünstler [DE]',
+    'SingStar Die Toten Hosen [DE]', 'SingStar Fußballhits [DE]',
+    'SingStar Hottest Hits [DE]', 'SingStar Legends [DE]',
+    'SingStar Made in Germany [DE]', 'SingStar Mallorca Party [DE]',
+    'SingStar Party [DE]', 'SingStar Pop [DE]', 'SingStar Pop Hits [DE]',
+    'SingStar Rocks! [DE]', 'SingStar Summer Party [DE]',
+    'SingStar The Dome [DE]', 'SingStar best of Disney [DE]',
+  ]},
+  { group: '🇬🇧 United Kingdom', items: [
+    'SingStar [UK]', "SingStar '80s [UK]", "SingStar '90s [UK]",
+    'SingStar ABBA [UK]', 'SingStar Anthems [UK]', 'SingStar Bollywood [UK]',
+    'SingStar Boy Bands vs Girl Bands [UK]', 'SingStar Legends [UK]',
+    'SingStar Motown [UK]', 'SingStar Party [UK]', 'SingStar Pop [UK]',
+    'SingStar Pop Hits [UK]', 'SingStar Popworld [UK]', 'SingStar Queen [UK]',
+    'SingStar R&B [UK]', 'SingStar Rock Ballads [UK]', 'SingStar Rocks! [UK]',
+    'SingStar Singalong with Disney [UK]', 'SingStar Summer Party [UK]',
+    'SingStar Take That [UK]',
+  ]},
+  { group: '🇦🇺 Australia', items: [
+    'SingStar Amped [AU]', 'SingStar Chart Hits [AU]', 'SingStar Hottest Hits [AU]',
+    'SingStar Legends [AU]', 'SingStar Party Hits [AU]', 'SingStar Pop [AU]',
+    'SingStar Pop Hits [AU]', 'SingStar Rocks! [AU]',
+    'SingStar Summer Party [AU]', 'SingStar The Wiggles [AU]',
+  ]},
+  { group: '🇩🇰 Denmark', items: [
+    'SingStar Legends [DK]', 'SingStar Pop Hits Skandinavisk [DK]',
+    'SingStar Summer Party [DK]',
+  ]},
+  { group: '🇫🇮 Finland', items: [
+    'SingStar Legendat [FI]', 'SingStar SuomiPop [FI]', 'SingStar SuomiRock [FI]',
+  ]},
+  { group: '🇫🇷 France', items: [
+    'SingStar [FR]', "SingStar '80s [FR]", 'SingStar Legends [FR]',
+    'SingStar NRJ Music Tour [FR]', 'SingStar Party [FR]',
+    'SingStar Pop Hits [FR]', 'SingStar Pop Hits 2 [FR]',
+    'SingStar Pop Hits 3 [FR]', 'SingStar Pop Hits 4 [FR]',
+    'SingStar Rocks! [FR]', 'SingStar Chansons magiques de Disney [FR]',
+    'SingStar Summer Party [FR]',
+  ]},
+  { group: '🇭🇷 Croatia', items: [
+    'SingStar Rocks! HRVATSKA! [HR]',
+  ]},
+  { group: '🇮🇹 Italy', items: [
+    'SingStar [IT]', "SingStar '80s [IT]", 'SingStar Italian Greatest Hits [IT]',
+    'SingStar Italian Party [IT]', 'SingStar Italian Party 2 [IT]',
+    'SingStar Legends [IT]', 'SingStar Party [IT]', 'SingStar Pop [IT]',
+    'SingStar Pop Hits [IT]', 'SingStar Radio 105 [IT]',
+    'SingStar top.it [IT]', 'SingStar Vasco [IT]',
+    'SingStar e la magia Disney [IT]',
+  ]},
+  { group: '🇳🇱 Netherlands', items: [
+    "SingStar '80s [NL]", 'SingStar Pop [NL]', 'SingStar Rock Ballads [NL]',
+    'SingStar Rocks! TMF [NL]', 'SingStar Studio 100 [NL]',
+    'SingStar Summer Party [NL]', 'SingStar zingt met Disney [NL]',
+  ]},
+  { group: '🇳🇿 New Zealand', items: [
+    'SingStar Chart Hits [NZ]',
+  ]},
+  { group: '🇳🇴 Norway', items: [
+    'SingStar [NO]', "SingStar '80s [NO]", "SingStar '90s [NO]",
+    'SingStar Legends [NO]', 'SingStar Norsk På Norsk [NO]',
+    'SingStar Norske Hits [NO]', 'SingStar Party [NO]', 'SingStar Pop [NO]',
+    'SingStar Pop Hits Skandinavisk [NO]', 'SingStar R&B [NO]',
+    'SingStar Rock Ballads [NO]', 'SingStar Rocks! [NO]',
+    'SingStar Summer Party [NO]',
+  ]},
+  { group: '🇵🇱 Poland', items: [
+    "SingStar '80s [PL]", 'SingStar ESKA Hity Na Czasie [PL]',
+    'SingStar Polskie Hity [PL]', 'SingStar Polskie Hity 2 [PL]',
+    'SingStar Pop Hits [PL]', 'SingStar R&B [PL]',
+    'SingStar Summer Party [PL]', 'SingStar Wakacyjna Impreza! [PL]',
+  ]},
+  { group: '🇵🇹 Portugal', items: [
+    'SingStar Hottest Hits [PT]', 'SingStar Latino [PT]',
+    'SingStar Morangos com Açucar [PT]', 'SingStar Pop Hits [PT]',
+    'SingStar Portugal Hits [PT]', 'SingStar Summer Party [PT]',
+    'SingStar Canções Disney [PT]',
+  ]},
+  { group: '🇷🇺 Russia', items: [
+    'SingStar Russian Hits [RU]',
+  ]},
+  { group: '🇸🇪 Sweden', items: [
+    "SingStar '80s [SE]", 'SingStar Pop Hits Skandinavisk [SE]',
+    'SingStar Svenska Hits [SE]', 'SingStar Svenska Hits Schlager [SE]',
+    'SingStar Svenska Stjarnor [SE]', 'SingStar Singalong with Disney [SE]',
+  ]},
+  { group: '🇪🇸 Spain', items: [
+    'SingStar [ES]', 'SingStar Clásicos [ES]',
+    'SingStar La Edad de Oro del Pop Español [ES]', 'SingStar Latino [ES]',
+    'SingStar Legends [ES]', 'SingStar Mecano [ES]', 'SingStar Miliki [ES]',
+    'SingStar Operación Triunfo [ES]', 'SingStar Party [ES]',
+    'SingStar Patito Feo [ES]', 'SingStar Pop [ES]',
+    'SingStar Pop Hits 40 Principales [ES]', 'SingStar Rocks! [ES]',
+    'SingStar Summer Party [ES]',
+  ]},
+  { group: '🇹🇷 Turkey', items: [
+    'SingStar Turkish Party [TR]',
+  ]},
+  { group: '🇺🇸 United States', items: [
+    "SingStar '80s [US]", "SingStar '90s [US]", 'SingStar Amped [US]',
+    'SingStar Country [US]', 'SingStar Legends [US]',
+    'SingStar Pop [US]', 'SingStar Pop Vol. 2 [US]', 'SingStar Rocks! [US]',
+  ]},
+  { group: 'PlayStation', items: [
+    'SingStar [PS3]', 'SingStar Afrikaans Treffers [PS3]',
+    'SingStar Back to the \'80s [PS3]', 'SingStar Hits [PS3]',
+    'SingStar Hits 2 [PS3]', 'SingStar Pop Edition [PS3]',
+    'SingStar Pop 2009 [PS3]', 'SingStar Ultimate Party [PS3]',
+    'SingStar Celebration [PS4]', 'SingStar Ultimate Party [PS4]',
+  ]},
 ]
 
 // ── Directory loading ────────────────────────────────────────────────────────
@@ -156,13 +278,25 @@ function fetchRemoteCover(artist: string, title: string): Promise<string | null>
 interface TagEditorProps {
   tags: string[]
   onChange: (tags: string[]) => void
-  suggestions: string[]
+  suggestions: string[] | SuggestionGroup[]
+  label: string
+  /** When set, limits the number of tags; selecting a new one replaces the existing one */
+  maxTags?: number
 }
 
-function TagEditor({ tags, onChange, suggestions }: TagEditorProps) {
+function flatItems(suggestions: string[] | SuggestionGroup[]): string[] {
+  if (suggestions.length === 0) return []
+  return typeof suggestions[0] === 'string'
+    ? (suggestions as string[])
+    : (suggestions as SuggestionGroup[]).flatMap((g) => g.items)
+}
+
+function TagEditor({ tags, onChange, suggestions, label, maxTags }: TagEditorProps) {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const wrapRef = useRef<HTMLDivElement>(null)
+  const isGrouped = suggestions.length > 0 && typeof suggestions[0] === 'object'
+  const allItems = flatItems(suggestions)
 
   useEffect(() => {
     if (!open) return
@@ -176,15 +310,43 @@ function TagEditor({ tags, onChange, suggestions }: TagEditorProps) {
     return () => document.removeEventListener('mousedown', handler)
   }, [open])
 
-  const filtered = suggestions.filter(
+  const filtered = allItems.filter(
     (s) => !tags.includes(s) && s.toLowerCase().includes(query.toLowerCase())
   )
 
   const add = (value: string) => {
     const v = value.trim()
-    if (v && !tags.includes(v)) onChange([...tags, v])
+    if (v) {
+      if (maxTags && tags.length >= maxTags) {
+        onChange([v])  // replace existing (single-select behaviour)
+      } else if (!tags.includes(v)) {
+        onChange([...tags, v])
+      }
+    }
     setOpen(false)
     setQuery('')
+  }
+
+  const renderItems = () => {
+    if (query.trim() || !isGrouped) {
+      // Flat filtered list while searching, or always for non-grouped suggestions
+      return filtered.map((s) => (
+        <button key={s} className="tag-suggestion" onClick={() => add(s)}>{s}</button>
+      ))
+    }
+    // Grouped list when browsing (no active query)
+    return (suggestions as SuggestionGroup[]).map((group) => {
+      const visible = group.items.filter((s) => !tags.includes(s))
+      if (visible.length === 0) return null
+      return (
+        <div key={group.group} className="tag-suggestion-group-block">
+          <div className="tag-suggestion-group-header">{group.group}</div>
+          {visible.map((s) => (
+            <button key={s} className="tag-suggestion" onClick={() => add(s)}>{s}</button>
+          ))}
+        </div>
+      )
+    })
   }
 
   return (
@@ -202,8 +364,12 @@ function TagEditor({ tags, onChange, suggestions }: TagEditorProps) {
         </span>
       ))}
       <div className="tag-add-wrap">
-        <button className="tag-add-btn" onClick={() => setOpen((v) => !v)} title="Hinzufügen">
-          +
+        <button
+          className={tags.length === 0 ? 'tag-add-btn tag-add-btn--labeled' : 'tag-add-btn'}
+          onClick={() => setOpen((v) => !v)}
+          title="Hinzufügen"
+        >
+          {tags.length === 0 ? `+ ${label}` : '+'}
         </button>
         {open && (
           <div className="tag-dropdown">
@@ -219,12 +385,8 @@ function TagEditor({ tags, onChange, suggestions }: TagEditorProps) {
               placeholder="Suchen oder eingeben…"
             />
             <div className="tag-suggestions">
-              {filtered.map((s) => (
-                <button key={s} className="tag-suggestion" onClick={() => add(s)}>
-                  {s}
-                </button>
-              ))}
-              {query.trim() && !suggestions.some(
+              {renderItems()}
+              {query.trim() && !allItems.some(
                 (s) => s.toLowerCase() === query.trim().toLowerCase()
               ) && (
                 <button className="tag-suggestion tag-suggestion--custom" onClick={() => add(query)}>
@@ -421,7 +583,14 @@ function SongView({ song, filename, files, onReset }: {
   onReset: () => void
 }) {
   const { header, tracks } = song
-  const track = tracks[0]
+
+  // Merge all tracks into one flat phrase list for display.
+  // For duet files the parser produces separate tracks per player.
+  const track = useMemo(() => {
+    if (tracks.length <= 1) return tracks[0]
+    const allPhrases = tracks.flatMap(t => t.phrases)
+    return { player: 1 as const, phrases: allPhrases }
+  }, [tracks])
   const phraseCount = track?.phrases.length ?? 0
 
   const videoFile = useMemo(() => findVideoFile(header, files), [header, files])
@@ -437,8 +606,23 @@ function SongView({ song, filename, files, onReset }: {
   )
 
   const [highlightGolden, setHighlightGolden] = useState(false)
-  const [singerMap, setSingerMap] = useState<Record<number, 1 | 2>>({})
-  const [singerNames, setSingerNames] = useState<[string, string]>(['', ''])
+  const [singerMap, setSingerMap] = useState<Record<number, 1 | 2 | 3>>(() => {
+    // For duet files: assign phrases from P2 track to singer 2
+    if (tracks.length <= 1) return {}
+    const map: Record<number, 1 | 2 | 3> = {}
+    let offset = 0
+    for (const t of tracks) {
+      if (t.player === 2) {
+        for (let i = 0; i < t.phrases.length; i++) map[offset + i] = 2
+      }
+      offset += t.phrases.length
+    }
+    return map
+  })
+  const [singerNames, setSingerNames] = useState<[string, string]>([
+    header.singerP1 ?? '',
+    header.singerP2 ?? '',
+  ])
   const [editTitle, setEditTitle] = useState(header.title)
   const [editArtist, setEditArtist] = useState(header.artist)
   const [editYear, setEditYear] = useState<number | ''>(header.year ?? '')
@@ -447,6 +631,12 @@ function SongView({ song, filename, files, onReset }: {
   )
   const [editLanguages, setEditLanguages] = useState<string[]>(
     header.language ? header.language.split(',').map((l) => l.trim()).filter(Boolean) : []
+  )
+  const [editEdition, setEditEdition] = useState<string[]>(
+    header.edition ? [header.edition] : []
+  )
+  const [editTags, setEditTags] = useState<string>(
+    (header.tags as string | undefined) ?? ''
   )
   const [gap, setGap] = useState(header.gap)
   const [videoGap, setVideoGap] = useState(header.videoGap ?? 0)
@@ -484,6 +674,8 @@ function SongView({ song, filename, files, onReset }: {
       year: editYear !== '' ? Number(editYear) : undefined,
       genre: editGenres.join(', ') || undefined,
       language: editLanguages.join(', ') || undefined,
+      edition: editEdition[0] || undefined,
+      tags: editTags.trim() || undefined,
       gap,
       videoGap: videoGap || undefined,
       comment: `edited with usdx-editor on ${today}, http://korczak.at/usdx-editor`,
@@ -526,10 +718,15 @@ function SongView({ song, filename, files, onReset }: {
   }
 
   const toggleSinger = (i: number) => {
-    setSingerMap((prev) => ({ ...prev, [i]: prev[i] === 2 ? 1 : 2 }))
+    // Cycle: P1 → P2 → Beide → P1
+    setSingerMap((prev) => {
+      const cur = prev[i] ?? 1
+      const next = cur === 1 ? 2 : cur === 2 ? 3 : 1
+      return { ...prev, [i]: next }
+    })
   }
 
-  const singerOf = (i: number): 1 | 2 => singerMap[i] ?? 1
+  const singerOf = (i: number): 1 | 2 | 3 => singerMap[i] ?? 1
 
   return (
     <div className="song-view">
@@ -549,29 +746,46 @@ function SongView({ song, filename, files, onReset }: {
             onChange={e => setEditArtist(e.target.value)}
             aria-label="Künstler"
           />
-          <input
-            className="song-year-input"
-            type="number"
-            value={editYear}
-            min={1900}
-            max={2099}
-            onChange={(e) => setEditYear(e.target.value === '' ? '' : Number(e.target.value))}
-            aria-label="Jahr"
-            placeholder="Jahr"
-          />
-        </div>
-        <div className="song-tags">
-          {header.edition && <span className="tag">{header.edition}</span>}
-          <TagEditor
-            tags={editLanguages}
-            onChange={setEditLanguages}
-            suggestions={LANGUAGE_SUGGESTIONS}
-          />
-          <TagEditor
-            tags={editGenres}
-            onChange={setEditGenres}
-            suggestions={GENRE_SUGGESTIONS}
-          />
+          <div className="song-meta-tags">
+            <input
+              className="song-year-input"
+              type="number"
+              value={editYear}
+              min={1900}
+              max={2099}
+              onChange={(e) => setEditYear(e.target.value === '' ? '' : Number(e.target.value))}
+              aria-label="Jahr"
+              placeholder="Jahr"
+            />
+            <TagEditor
+              tags={editLanguages}
+              onChange={setEditLanguages}
+              suggestions={LANGUAGE_SUGGESTIONS}
+              label="Sprache"
+            />
+            <TagEditor
+              tags={editGenres}
+              onChange={setEditGenres}
+              suggestions={GENRE_SUGGESTIONS}
+              label="Genre"
+            />
+            <TagEditor
+              tags={editEdition}
+              onChange={setEditEdition}
+              suggestions={EDITION_SUGGESTIONS}
+              label="Edition"
+              maxTags={1}
+            />
+          </div>
+          {(editTags || true) && (
+            <input
+              className="tags-free-input"
+              value={editTags}
+              onChange={(e) => setEditTags(e.target.value)}
+              aria-label="Tags"
+              placeholder="Tags: Party, Charts, Disney, Dancefloor…"
+            />
+          )}
         </div>
         <div className="meta-actions">
           <label className="toggle-label">
@@ -603,21 +817,25 @@ function SongView({ song, filename, files, onReset }: {
       <div className="song-content">
         {/* Left: lyrics (scrollable) */}
         <div className="lyrics-column">
-          <div className="duet-header">
-            <input
-              className="singer-name-input singer-name-input--1"
-              value={singerNames[0]}
-              onChange={(e) => setSingerNames([e.target.value, singerNames[1]])}
-              placeholder="Name von Sänger:in 1"
-            />
-            <span />
-            <input
-              className="singer-name-input singer-name-input--2"
-              value={singerNames[1]}
-              onChange={(e) => setSingerNames([singerNames[0], e.target.value])}
-              placeholder="Name von Sänger:in 2"
-            />
-          </div>
+          {/* Singer name inputs: only shown when any phrase is assigned to singer 2,
+              or when singer names are already set from the file */}
+          {(Object.values(singerMap).some(v => v === 2) || singerNames[0] || singerNames[1]) && (
+            <div className="duet-header">
+              <input
+                className="singer-name-input singer-name-input--1"
+                value={singerNames[0]}
+                onChange={(e) => setSingerNames([e.target.value, singerNames[1]])}
+                placeholder="Name von Sänger:in 1"
+              />
+              <span />
+              <input
+                className="singer-name-input singer-name-input--2"
+                value={singerNames[1]}
+                onChange={(e) => setSingerNames([singerNames[0], e.target.value])}
+                placeholder="Name von Sänger:in 2"
+              />
+            </div>
+          )}
           <div className="phrases">
             {Array.from({ length: phraseCount }, (_, i) => {
               const phrase = track.phrases[i]
@@ -662,15 +880,15 @@ function SongView({ song, filename, files, onReset }: {
                   className={`phrase phrase--singer-${singer}${isActivePhrase ? ' phrase--active' : ''}`}
                 >
                   <span className="phrase-number">{i + 1}</span>
-                  <div className="phrase-col phrase-col--1">{singer === 1 && phraseEl}</div>
+                  <div className="phrase-col phrase-col--1">{(singer === 1 || singer === 3) && phraseEl}</div>
                   <button
-                    className={`assign-btn assign-btn--${singer === 1 ? 'to2' : 'to1'}`}
+                    className={`assign-btn assign-btn--${singer === 1 ? 'to2' : singer === 2 ? 'to1' : 'both'}`}
                     onClick={() => toggleSinger(i)}
-                    title={singer === 1 ? 'Zu Sänger 2 verschieben' : 'Zu Sänger 1 verschieben'}
+                    title={singer === 1 ? 'Zu Sänger:in 2' : singer === 2 ? 'Zu Sänger:in 1' : 'Beide singen'}
                   >
-                    {singer === 1 ? '→' : '←'}
+                    {singer === 1 ? '→' : singer === 2 ? '←' : '⇔'}
                   </button>
-                  <div className="phrase-col phrase-col--2">{singer === 2 && phraseEl}</div>
+                  <div className="phrase-col phrase-col--2">{(singer === 2 || singer === 3) && phraseEl}</div>
                 </div>
               )
             })}
