@@ -27,6 +27,9 @@ export interface UsdxHeader {
   artist: string
   bpm: number
   gap: number
+  /** Offset in seconds between the start of the video file and the start of the song.
+   *  Positive value = the video has intro footage before the song begins. */
+  videoGap?: number
   audio?: string
   video?: string
   cover?: string
@@ -37,6 +40,7 @@ export interface UsdxHeader {
   edition?: string
   creator?: string
   previewStart?: number
+  comment?: string
   [key: string]: unknown
 }
 
@@ -127,6 +131,9 @@ export function parseUsdx(content: string): UsdxSong {
         case 'GAP':
           header.gap = parseNumber(value)
           break
+        case 'VIDEOGAP':
+          header.videoGap = parseNumber(value)
+          break
         case 'AUDIO':
         case 'MP3':
           header.audio = value
@@ -157,6 +164,9 @@ export function parseUsdx(content: string): UsdxSong {
           break
         case 'PREVIEWSTART':
           header.previewStart = parseNumber(value)
+          break
+        case 'COMMENT':
+          header.comment = value
           break
         case 'P1':
           flushTrack(currentPlayer)
@@ -195,9 +205,11 @@ export function parseUsdx(content: string): UsdxSong {
       const beat = parseInt(parts[0], 10)
       const length = parseInt(parts[1], 10)
       const pitch = parseInt(parts[2], 10)
-      // Syllable is everything after the 3 numbers (preserves leading space)
-      const syllableStart = rest.indexOf(' ', rest.indexOf(' ', rest.indexOf(' ') + 1) + 1)
-      const syllable = syllableStart !== -1 ? rest.slice(syllableStart + 1) : ''
+      // Syllable is extracted from the raw line (only newlines stripped) so that
+      // trailing spaces — used as word-boundary markers in some USDX files — are preserved.
+      const rawRest = line.replace(/[\r\n]+$/, '').trimStart().slice(spaceAfterType + 1)
+      const syllableStart = rawRest.indexOf(' ', rawRest.indexOf(' ', rawRest.indexOf(' ') + 1) + 1)
+      const syllable = syllableStart !== -1 ? rawRest.slice(syllableStart + 1) : ''
 
       currentNotes.push({ type: firstChar as NoteType, beat, length, pitch, syllable })
     }

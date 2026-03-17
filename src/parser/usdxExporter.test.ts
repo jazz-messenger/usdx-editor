@@ -56,4 +56,17 @@ describe('exportUsdx', () => {
     const output = exportUsdx(song, {})
     expect(output).toContain('#VERSION:1.1.0')
   })
+
+  it('writes #COMMENT when present in header', () => {
+    const song = parseUsdx(SONG)
+    song.header.comment = 'edited with usdx-editor on 2026-03-16, http://korczak.at/usdx-editor'
+    const output = exportUsdx(song, {})
+    expect(output).toContain('#COMMENT:edited with usdx-editor on 2026-03-16, http://korczak.at/usdx-editor')
+  })
+
+  it('parses #COMMENT from input', () => {
+    const src = `#ARTIST:A\n#TITLE:T\n#BPM:120\n#GAP:0\n#COMMENT:original comment\n: 0 4 60 Hi\nE`
+    const song = parseUsdx(src)
+    expect(song.header.comment).toBe('original comment')
+  })
 })

@@ -34,6 +34,7 @@ export function exportUsdx(
   if (header.audio) lines.push(`#AUDIO:${header.audio}`)
   lines.push(`#BPM:${header.bpm}`)
   lines.push(`#GAP:${header.gap}`)
+  if (header.videoGap)      lines.push(`#VIDEOGAP:${header.videoGap}`)
   if (header.video)         lines.push(`#VIDEO:${header.video}`)
   if (header.cover)         lines.push(`#COVER:${header.cover}`)
   if (header.background)    lines.push(`#BACKGROUND:${header.background}`)
@@ -43,6 +44,7 @@ export function exportUsdx(
   if (header.edition)       lines.push(`#EDITION:${header.edition}`)
   if (header.creator)       lines.push(`#CREATOR:${header.creator}`)
   if (header.previewStart !== undefined) lines.push(`#PREVIEWSTART:${header.previewStart}`)
+  if (header.comment)       lines.push(`#COMMENT:${header.comment}`)
 
   const track = song.tracks[0]
   if (!track) {

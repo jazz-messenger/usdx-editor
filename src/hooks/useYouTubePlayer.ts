@@ -6,6 +6,9 @@ interface YTPlayerInstance {
   getCurrentTime(): number
   destroy(): void
   loadVideoById(videoId: string): void
+  seekTo(seconds: number, allowSeekAhead: boolean): void
+  playVideo(): void
+  pauseVideo(): void
 }
 
 declare global {
@@ -90,6 +93,9 @@ export function useYouTubePlayer(videoId: string | null) {
   }, [videoId])
 
   const getCurrentTime = (): number => playerRef.current?.getCurrentTime() ?? 0
+  const seekTo = (seconds: number) => playerRef.current?.seekTo(seconds, true)
+  const play = () => playerRef.current?.playVideo()
+  const pause = () => playerRef.current?.pauseVideo()
 
-  return { containerRef, playerState, isPlaying, getCurrentTime }
+  return { containerRef, playerState, isPlaying, getCurrentTime, seekTo, play, pause }
 }

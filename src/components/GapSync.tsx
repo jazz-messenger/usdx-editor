@@ -1,9 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useYouTubePlayer } from '../hooks/useYouTubePlayer'
 
 function extractYouTubeId(url: string): string | null {
   const match = url.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/)
   return match?.[1] ?? null
+}
+
+function decodeHtml(str: string): string {
+  const el = document.createElement('textarea')
+  el.innerHTML = str
+  return el.value
 }
 
 // ── YouTube search via Data API v3 ────────────────────────────────────────────
@@ -48,8 +54,8 @@ async function searchYouTube(query: string): Promise<SearchOutcome> {
       snippet: { title: string; channelTitle: string; publishedAt?: string }
     }) => ({
       videoId: item.id.videoId,
-      title: item.snippet.title,
-      author: item.snippet.channelTitle,
+      title: decodeHtml(item.snippet.title),
+      author: decodeHtml(item.snippet.channelTitle),
       year: item.snippet.publishedAt
         ? new Date(item.snippet.publishedAt).getFullYear().toString()
         : '',
@@ -71,35 +77,103 @@ function openYouTubeSearch(artist: string | undefined, title: string | undefined
 interface GapSyncProps {
   gap: number
   onChange: (gap: number) => void
+  /** Offset in seconds between video start and song start (from #VIDEOGAP). */
+  videoGap: number
+  onVideoGapChange: (vg: number) => void
   onTimeUpdate?: (currentMs: number) => void
   backgroundUrl?: string
+  /** Object URL for a local video file (#VIDEO). Takes priority over YouTube. */
+  videoUrl?: string
   artist?: string
   title?: string
 }
 
-export function GapSync({ gap, onChange, onTimeUpdate, backgroundUrl, artist, title }: GapSyncProps) {
+export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdate, backgroundUrl, videoUrl, artist, title }: GapSyncProps) {
+
+  // ── YouTube player ──────────────────────────────────────────────────────────
   const [youtubeUrl, setYoutubeUrl] = useState('')
   const videoId = extractYouTubeId(youtubeUrl)
-  const { containerRef, playerState, isPlaying, getCurrentTime } = useYouTubePlayer(videoId)
+  const {
+    containerRef,
+    playerState: ytPlayerState,
+    isPlaying: ytIsPlaying,
+    getCurrentTime: ytGetCurrentTime,
+    seekTo: ytSeekTo,
+    play: ytPlay,
+    pause: ytPause,
+  } = useYouTubePlayer(videoId)
 
+  // ── Local video player ──────────────────────────────────────────────────────
+  const localVideoRef = useRef<HTMLVideoElement>(null)
+  const [localPlayerState, setLocalPlayerState] = useState<'idle' | 'ready' | 'error'>('idle')
+  const [localIsPlaying, setLocalIsPlaying] = useState(false)
+
+  // Reset local player state whenever the source changes
+  useEffect(() => {
+    setLocalPlayerState('idle')
+    setLocalIsPlaying(false)
+  }, [videoUrl])
+
+  const localGetCurrentTime = useCallback(() => localVideoRef.current?.currentTime ?? 0, [])
+  const localSeekTo = useCallback((s: number) => { if (localVideoRef.current) localVideoRef.current.currentTime = s }, [])
+  const localPlay = useCallback(() => { localVideoRef.current?.play() }, [])
+  const localPause = useCallback(() => { localVideoRef.current?.pause() }, [])
+
+  // ── Video source preference ─────────────────────────────────────────────────
+  // When a local file is present it is used by default. The user can toggle to
+  // YouTube; preferYoutube=true makes the YouTube player the active source.
+  const [preferYoutube, setPreferYoutube] = useState(false)
+
+  // ── Unified player API — local file wins unless the user chose YouTube ──────
+  const useLocal = Boolean(videoUrl) && !preferYoutube
+  const playerState    = useLocal ? localPlayerState    : ytPlayerState
+  const isPlaying      = useLocal ? localIsPlaying      : ytIsPlaying
+  const getCurrentTime = useLocal ? localGetCurrentTime : ytGetCurrentTime
+  const seekTo         = useLocal ? localSeekTo         : ytSeekTo
+  const play           = useLocal ? localPlay           : ytPlay
+  const pause          = useLocal ? localPause          : ytPause
+
+  // ── Search state ────────────────────────────────────────────────────────────
   const [searchResults, setSearchResults] = useState<YtResult[] | null>(null)
   const [isSearching, setIsSearching] = useState(false)
   const [searchMsg, setSearchMsg] = useState<string | null>(null)
+  // Displayed video clock — updated by RAF while playing, or after seeks
+  const [videoTime, setVideoTime] = useState(0)
 
-  // Drive highlight updates via requestAnimationFrame while playing (~60fps)
+  // Drive highlight updates and video clock via requestAnimationFrame (~60 fps).
   useEffect(() => {
-    if (!isPlaying || !onTimeUpdate) return
+    if (!isPlaying) return
     let rafId: number
     const tick = () => {
-      onTimeUpdate(getCurrentTime() * 1000)
+      const t = getCurrentTime()
+      setVideoTime(t)
+      onTimeUpdate?.((t - videoGap) * 1000)
       rafId = requestAnimationFrame(tick)
     }
     rafId = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(rafId)
-  }, [isPlaying, onTimeUpdate, getCurrentTime])
+  }, [isPlaying, onTimeUpdate, getCurrentTime, videoGap])
 
+  // Seek to VIDEOGAP position and start — puts video right at song beat 0.
+  const handleStart = () => {
+    seekTo(videoGap)
+    play()
+  }
+
+  // Changing VIDEOGAP: update state AND immediately seek so the video frame
+  // jumps to the new position for instant visual feedback.
+  const handleVideoGapChange = (value: number) => {
+    onVideoGapChange(value)
+    if (playerState === 'ready') {
+      seekTo(value)
+      setTimeout(() => setVideoTime(getCurrentTime()), 200)
+    }
+  }
+
+  // Set GAP from the current video position, corrected for VIDEOGAP.
+  // GAP (ms into audio) = (videoTime − videoGap) × 1000
   const handleSync = () => {
-    const ms = Math.round(getCurrentTime() * 1000)
+    const ms = Math.round((getCurrentTime() - videoGap) * 1000)
     onChange(ms)
   }
 
@@ -115,7 +189,6 @@ export function GapSync({ gap, onChange, onTimeUpdate, backgroundUrl, artist, ti
     if (outcome.kind === 'results' && outcome.items.length > 0) {
       setSearchResults(outcome.items)
     } else if (outcome.kind === 'quota') {
-      // Quota exceeded → fall back to YouTube search tab
       setSearchMsg('Tageslimit erreicht — YouTube wird im neuen Tab geöffnet.')
       openYouTubeSearch(artist, title)
     } else {
@@ -129,12 +202,14 @@ export function GapSync({ gap, onChange, onTimeUpdate, backgroundUrl, artist, ti
     setSearchMsg(null)
   }
 
+  const isPlayerReady = playerState === 'ready'
+
   return (
     <div className="gap-sync">
-      <div className="gap-sync-row">
-        <label className="gap-sync-label" htmlFor="gap-input">
-          GAP
-        </label>
+
+      {/* ── Timing fields: 3-column grid — label | input+unit | [⏱ Jetzt!] ── */}
+      <div className="gap-timing-grid">
+        <label className="gap-sync-label" htmlFor="gap-input">GAP</label>
         <div className="gap-input-group">
           <input
             id="gap-input"
@@ -146,37 +221,78 @@ export function GapSync({ gap, onChange, onTimeUpdate, backgroundUrl, artist, ti
           />
           <span className="gap-unit">ms</span>
         </div>
+        {isPlayerReady
+          ? (
+            <button
+              className="btn-sync"
+              onClick={handleSync}
+              title="Aktuellen Abspielzeitpunkt als GAP übernehmen"
+            >
+              ⏱ Jetzt!
+            </button>
+          )
+          : <span />
+        }
 
-        <div className="gap-sync-divider" />
-
-        <input
-          type="url"
-          className="youtube-input"
-          placeholder="YouTube-URL zum Überprüfen (optional)"
-          value={youtubeUrl}
-          onChange={(e) => {
-            setYoutubeUrl(e.target.value)
-            setSearchResults(null)
-            setSearchMsg(null)
-          }}
-        />
-
-        {playerState === 'ready' && (
-          <button className="btn-sync" onClick={handleSync} title="Aktuellen Abspielzeitpunkt als GAP übernehmen">
-            ⏱ Jetzt!
-          </button>
-        )}
-        {!videoId && (artist || title) && (
-          <button
-            className="btn-yt-search"
-            onClick={handleSearch}
-            disabled={isSearching}
-            title="Nach Official Video suchen"
-          >
-            {isSearching ? '…' : '🔍'}
-          </button>
-        )}
+        <label className="gap-sync-label" htmlFor="videogap-input">VIDEOGAP</label>
+        <div className="gap-input-group">
+          <input
+            id="videogap-input"
+            type="number"
+            className="gap-input"
+            value={videoGap}
+            step={0.1}
+            onChange={(e) => handleVideoGapChange(Number(e.target.value))}
+          />
+          <span className="gap-unit">s</span>
+        </div>
+        <span />
       </div>
+
+      {/* ── Source switcher — only shown when a local video file is present ── */}
+      {videoUrl && (
+        <div className="video-source-switcher">
+          <button
+            className={`vsw-btn${!preferYoutube ? ' vsw-btn--active' : ''}`}
+            onClick={() => setPreferYoutube(false)}
+          >
+            📁 Lokale Datei
+          </button>
+          <button
+            className={`vsw-btn${preferYoutube ? ' vsw-btn--active' : ''}`}
+            onClick={() => setPreferYoutube(true)}
+          >
+            ▶ YouTube
+          </button>
+        </div>
+      )}
+
+      {/* ── YouTube URL row (shown without local video, or when user chose YouTube) ── */}
+      {(!videoUrl || preferYoutube) && (
+        <div className="gap-sync-row">
+          <input
+            type="url"
+            className="youtube-input"
+            placeholder="YouTube-URL (optional)"
+            value={youtubeUrl}
+            onChange={(e) => {
+              setYoutubeUrl(e.target.value)
+              setSearchResults(null)
+              setSearchMsg(null)
+            }}
+          />
+          {!videoId && (artist || title) && (
+            <button
+              className="btn-yt-search"
+              onClick={handleSearch}
+              disabled={isSearching}
+              title="Nach Official Video suchen"
+            >
+              {isSearching ? '…' : '🔍'}
+            </button>
+          )}
+        </div>
+      )}
 
       {/* Feedback message (quota / no results) */}
       {searchMsg && <div className="yt-search-msg">{searchMsg}</div>}
@@ -201,24 +317,63 @@ export function GapSync({ gap, onChange, onTimeUpdate, backgroundUrl, artist, ti
         </div>
       )}
 
-      {!videoId && backgroundUrl && (
+      {/* Background image preview (only when no video source is active) */}
+      {!useLocal && !videoId && backgroundUrl && (
         <div className="bg-preview-wrap">
           <img className="bg-preview" src={backgroundUrl} alt="Background" />
           <span className="bg-preview-label">Hintergrundbild</span>
         </div>
       )}
 
-      {videoId && (
+      {/* ── Local video player (always mounted when videoUrl exists, hidden when YouTube is active) ── */}
+      {videoUrl && (
+        <div className={`local-video-wrap${!useLocal ? ' local-video-wrap--hidden' : ''}`}>
+          {localPlayerState === 'error' && (
+            <div className="yt-error">Video konnte nicht geladen werden.</div>
+          )}
+          <video
+            ref={localVideoRef}
+            className="local-video"
+            src={videoUrl}
+            onCanPlay={() => setLocalPlayerState('ready')}
+            onError={() => setLocalPlayerState('error')}
+            onPlay={() => setLocalIsPlaying(true)}
+            onPause={() => setLocalIsPlaying(false)}
+            onEnded={() => setLocalIsPlaying(false)}
+          />
+        </div>
+      )}
+
+      {/* ── YouTube player ── */}
+      {(!videoUrl || preferYoutube) && videoId && (
         <div className="yt-player-wrap">
-          {playerState === 'error' && (
+          {ytPlayerState === 'error' && (
             <div className="yt-error">Video konnte nicht geladen werden.</div>
           )}
           <div ref={containerRef} className="yt-player" />
-          {playerState === 'ready' && (
-            <p className="yt-hint">
-              Video abspielen → beim ersten gesungenen Wort auf <strong>⏱ Jetzt!</strong> klicken.
-              {isPlaying && <span className="yt-hint-live"> Lyrics werden live hervorgehoben.</span>}
-            </p>
+        </div>
+      )}
+
+      {/* ── Transport controls — shown below the video frame once player is ready ── */}
+      {isPlayerReady && (
+        <div className="gap-sync-transport">
+          <button
+            className="btn-transport"
+            onClick={handleStart}
+            title={videoGap > 0 ? `Video zu ${videoGap}s springen und abspielen` : 'Von Anfang abspielen'}
+          >
+            ▶ {videoGap > 0 ? `${videoGap}s` : 'Start'}
+          </button>
+          {isPlaying && (
+            <button className="btn-transport" onClick={pause} title="Pause">
+              ⏸
+            </button>
+          )}
+          <span className="video-clock" title="Aktuelle Videoposition">
+            {videoTime.toFixed(1)}s
+          </span>
+          {isPlaying && (
+            <span className="yt-hint-live">Lyrics werden live hervorgehoben.</span>
           )}
         </div>
       )}

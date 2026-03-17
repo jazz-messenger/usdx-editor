@@ -31,11 +31,40 @@ function isValidUtf8(bytes: Uint8Array): boolean {
   return true
 }
 
+function detectEncoding(bytes: Uint8Array): string {
+  if (isValidUtf8(bytes)) return 'utf-8'
+
+  // Distinguish Mac Roman from Windows-1252 by looking for bytes that are
+  // accented letters in Mac Roman but very uncommon symbols in Windows-1252.
+  //
+  // Excluded: 0x80 (€), 0x82 (‚), 0x84 („), 0x85 (…), and the range 0x90–0x99
+  // (curly quotes ', ', ", ", bullets, en/em dashes, ™) plus 0x9B–0x9E — all
+  // normal Windows-1252 punctuation that appears in English lyrics and would
+  // cause false-positive Mac Roman detection (the apostrophe bug: 0x92 = ' in
+  // Windows-1252 but í in Mac Roman).
+  //
+  // Mac Roman → Windows-1252 meaning for each included byte:
+  //   0x81 Å → (undef)  0x83 É → ƒ    0x86 Ü → †
+  //   0x87 á → ‡        0x88 à → ˆ    0x89 â → ‰
+  //   0x8A ä → Š        0x8B ã → ‹    0x8C å → Œ
+  //   0x8D ç → (undef)  0x8E é → Ž    0x8F è → (undef)
+  //   0x9A ö → š        0x9F ü → Ÿ
+  const MAC_ROMAN_INDICATORS = new Set([
+    0x81, 0x83, 0x86,
+    0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F,
+    0x9A, 0x9F,
+  ])
+
+  for (const b of bytes) {
+    if (MAC_ROMAN_INDICATORS.has(b)) return 'macintosh'
+  }
+  return 'windows-1252'
+}
+
 async function readTxtFile(file: File): Promise<string> {
   const buf = await file.arrayBuffer()
   const bytes = new Uint8Array(buf)
-  const enc = isValidUtf8(bytes) ? 'utf-8' : 'windows-1252'
-  return new TextDecoder(enc).decode(buf)
+  return new TextDecoder(detectEncoding(bytes)).decode(buf)
 }
 
 async function readDroppedEntry(entry: FileSystemEntry): Promise<SongFileMap> {
@@ -59,6 +88,14 @@ async function readDroppedEntry(entry: FileSystemEntry): Promise<SongFileMap> {
 }
 
 // ── Cover resolution ─────────────────────────────────────────────────────────
+
+function findVideoFile(header: UsdxHeader, files: SongFileMap): File | null {
+  if (header.video) {
+    const f = files.get(header.video.toLowerCase())
+    if (f) return f
+  }
+  return null
+}
 
 function findBackgroundFile(header: UsdxHeader, files: SongFileMap): File | null {
   if (header.background) {
@@ -230,17 +267,23 @@ function CoverArt({ header, files }: { header: UsdxHeader; files: SongFileMap })
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-interface ActivePos { phraseIndex: number; noteIndex: number }
+interface ActivePos { phraseIndex: number; beat: number }
 
 function findActivePos(track: Track, beat: number): ActivePos | null {
   for (let pi = 0; pi < track.phrases.length; pi++) {
     const phrase = track.phrases[pi]
-    for (let ni = 0; ni < phrase.notes.length; ni++) {
-      const note = phrase.notes[ni]
-      if (beat >= note.beat && beat < note.beat + note.length) {
-        return { phraseIndex: pi, noteIndex: ni }
-      }
-    }
+    if (!phrase.notes.length) continue
+
+    const firstBeat = phrase.notes[0].beat
+    // Phrase window ends when the next phrase starts (or at lineBreakBeat)
+    const phraseEndBeat =
+      phrase.lineBreakBeat ??
+      track.phrases[pi + 1]?.notes[0]?.beat ??
+      Infinity
+
+    if (beat < firstBeat || beat >= phraseEndBeat) continue
+
+    return { phraseIndex: pi, beat }
   }
   return null
 }
@@ -257,6 +300,12 @@ function SongView({ song, filename, files, onReset }: {
   const track = tracks[0]
   const phraseCount = track?.phrases.length ?? 0
 
+  const videoFile = useMemo(() => findVideoFile(header, files), [header, files])
+  const videoUrl = useMemo(
+    () => (videoFile ? URL.createObjectURL(videoFile) : null),
+    [videoFile]
+  )
+
   const backgroundFile = useMemo(() => findBackgroundFile(header, files), [header, files])
   const backgroundUrl = useMemo(
     () => (backgroundFile ? URL.createObjectURL(backgroundFile) : null),
@@ -266,7 +315,10 @@ function SongView({ song, filename, files, onReset }: {
   const [highlightGolden, setHighlightGolden] = useState(false)
   const [singerMap, setSingerMap] = useState<Record<number, 1 | 2>>({})
   const [singerNames, setSingerNames] = useState<[string, string]>(['', ''])
+  const [editTitle, setEditTitle] = useState(header.title)
+  const [editArtist, setEditArtist] = useState(header.artist)
   const [gap, setGap] = useState(header.gap)
+  const [videoGap, setVideoGap] = useState(header.videoGap ?? 0)
   const [activePos, setActivePos] = useState<ActivePos | null>(null)
   const activePhraseRef = useRef<HTMLDivElement | null>(null)
   const [warningDismissed, setWarningDismissed] = useState(false)
@@ -292,14 +344,45 @@ function SongView({ song, filename, files, onReset }: {
     setActivePos(pos)
   }, [track, header.bpm, gap])
 
-  const handleDownload = () => {
-    const exportHeader = { ...header, gap }
+  const handleDownload = async () => {
+    const today = new Date().toISOString().slice(0, 10)
+    const exportHeader = {
+      ...header,
+      title: editTitle,
+      artist: editArtist,
+      gap,
+      videoGap: videoGap || undefined,
+      comment: `edited with usdx-editor on ${today}, http://korczak.at/usdx-editor`,
+    }
     if (backgroundFile && !exportHeader.background) {
       exportHeader.background = backgroundFile.name
     }
     const songWithGap = { ...song, header: exportHeader }
     const content = exportUsdx(songWithGap, singerMap, singerNames)
     const blob = new Blob([content], { type: 'text/plain;charset=utf-8' })
+
+    // Use the native save dialog when available (Chrome / Edge).
+    // The browser pre-fills the filename; subsequent saves typically reopen
+    // the same folder because the browser remembers the last-used directory.
+    if ('showSaveFilePicker' in window) {
+      try {
+        const handle = await (window as Window & { showSaveFilePicker: (opts: object) => Promise<FileSystemFileHandle> })
+          .showSaveFilePicker({
+            suggestedName: filename,
+            types: [{ description: 'UltraStar Text File', accept: { 'text/plain': ['.txt'] } }],
+          })
+        const writable = await handle.createWritable()
+        await writable.write(blob)
+        await writable.close()
+        return
+      } catch (e) {
+        // AbortError = user cancelled the dialog — do nothing
+        if (e instanceof DOMException && e.name === 'AbortError') return
+        // Any other error (e.g. write permission denied) → fall through to download
+      }
+    }
+
+    // Fallback for Firefox / Safari: trigger a regular file download
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
@@ -320,8 +403,18 @@ function SongView({ song, filename, files, onReset }: {
       <div className="song-meta">
         <CoverArt header={header} files={files} />
         <div className="song-title-block">
-          <div className="song-title">{header.title}</div>
-          <div className="song-artist">{header.artist}</div>
+          <input
+            className="song-title song-title-input"
+            value={editTitle}
+            onChange={e => setEditTitle(e.target.value)}
+            aria-label="Titel"
+          />
+          <input
+            className="song-artist song-artist-input"
+            value={editArtist}
+            onChange={e => setEditArtist(e.target.value)}
+            aria-label="Künstler"
+          />
         </div>
         <div className="song-tags">
           {header.year && <span className="tag">{header.year}</span>}
@@ -385,7 +478,11 @@ function SongView({ song, filename, files, onReset }: {
               const phraseEl = (
                 <span className="phrase-text">
                   {syllables.map((s, j) => {
-                    const isActiveNote = isActivePhrase && activePos?.noteIndex === j
+                    const isActiveNote =
+                      isActivePhrase &&
+                      activePos !== null &&
+                      activePos.beat >= s.startBeat &&
+                      activePos.beat < s.endBeat
                     return (
                       <span
                         key={j}
@@ -432,7 +529,7 @@ function SongView({ song, filename, files, onReset }: {
 
         {/* Right: sticky video + GAP sidebar */}
         <aside className="video-sidebar">
-          <GapSync gap={gap} onChange={setGap} onTimeUpdate={handleTimeUpdate} backgroundUrl={backgroundUrl ?? undefined} artist={header.artist} title={header.title} />
+          <GapSync gap={gap} onChange={setGap} videoGap={videoGap} onVideoGapChange={setVideoGap} onTimeUpdate={handleTimeUpdate} videoUrl={videoUrl ?? undefined} backgroundUrl={backgroundUrl ?? undefined} artist={header.artist} title={header.title} />
         </aside>
       </div>
     </div>
