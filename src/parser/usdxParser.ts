@@ -41,6 +41,9 @@ export interface UsdxHeader {
   creator?: string
   previewStart?: number
   comment?: string
+  singerP1?: string
+  singerP2?: string
+  tags?: string
   [key: string]: unknown
 }
 
@@ -159,6 +162,9 @@ export function parseUsdx(content: string): UsdxSong {
         case 'EDITION':
           header.edition = value
           break
+        case 'TAGS':
+          header.tags = value
+          break
         case 'CREATOR':
           header.creator = value
           break
@@ -169,18 +175,20 @@ export function parseUsdx(content: string): UsdxSong {
           header.comment = value
           break
         case 'P1':
-          flushTrack(currentPlayer)
-          currentPlayer = 1
+          if (value) header.singerP1 = value
           break
         case 'P2':
-          flushTrack(currentPlayer)
-          currentPlayer = 2
+          if (value) header.singerP2 = value
           break
         default:
           header[tag.toLowerCase()] = value
       }
       continue
     }
+
+    // Player section markers (bare P1 / P2 without # prefix)
+    if (trimmed === 'P1') { flushTrack(currentPlayer); currentPlayer = 1; continue }
+    if (trimmed === 'P2') { flushTrack(currentPlayer); currentPlayer = 2; continue }
 
     // End of song
     if (trimmed === 'E') {
