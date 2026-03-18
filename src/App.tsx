@@ -480,7 +480,7 @@ function DropZone({ onLoad }: { onLoad: (song: UsdxSong, filename: string, files
 
 // ── CoverArt ─────────────────────────────────────────────────────────────────
 
-function CoverArt({ header, files }: { header: UsdxHeader; files: SongFileMap }) {
+function CoverArt({ header, files, onCoverUrl }: { header: UsdxHeader; files: SongFileMap; onCoverUrl?: (url: string) => void }) {
   const localFile = useMemo(() => findCoverFile(header, files), [header, files])
   const localUrl = useMemo(
     () => (localFile ? URL.createObjectURL(localFile) : null),
@@ -497,21 +497,23 @@ function CoverArt({ header, files }: { header: UsdxHeader; files: SongFileMap })
       setLoading(true)
       fetchRemoteCover(header.artist, header.title).then((url) => {
         setRemoteUrl(url)
-        if (url) setShowRemote(true)
+        if (url) { setShowRemote(true); onCoverUrl?.(url) }
         setLoading(false)
       })
     }
-  }, [localFile, header.artist, header.title])
+  }, [localFile, header.artist, header.title]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleFlip = () => {
     if (remoteUrl) {
-      setShowRemote((v) => !v)
+      const next = !showRemote
+      setShowRemote(next)
+      if (next) onCoverUrl?.(remoteUrl)
       return
     }
     setLoading(true)
     fetchRemoteCover(header.artist, header.title).then((url) => {
       setRemoteUrl(url)
-      if (url) setShowRemote(true)
+      if (url) { setShowRemote(true); onCoverUrl?.(url) }
       setLoading(false)
     })
   }
@@ -673,6 +675,8 @@ function SongView({ song, filename, files, onReset }: {
   )
   const [gap, setGap] = useState(header.gap)
   const [videoGap, setVideoGap] = useState(header.videoGap ?? 0)
+  const [editVideoUrl, setEditVideoUrl] = useState(header.videoUrl ?? '')
+  const [editCoverUrl, setEditCoverUrl] = useState(header.coverUrl ?? '')
   const [activePos, setActivePos] = useState<ActivePos | null>(null)
   const activePhraseRef = useRef<HTMLDivElement | null>(null)
   const [warningDismissed, setWarningDismissed] = useState(false)
@@ -724,6 +728,8 @@ function SongView({ song, filename, files, onReset }: {
       tags: editTags.trim() || undefined,
       gap,
       videoGap: videoGap || undefined,
+      videoUrl: editVideoUrl || undefined,
+      coverUrl: editCoverUrl || undefined,
       comment: `edited with usdx-editor on ${today}, http://korczak.at/usdx-editor`,
     }
     if (backgroundFile && !exportHeader.background) {
@@ -778,7 +784,7 @@ function SongView({ song, filename, files, onReset }: {
     <div className="song-view">
       {/* ── Top bar: meta + actions ── */}
       <div className="song-meta">
-        <CoverArt header={header} files={files} />
+        <CoverArt header={header} files={files} onCoverUrl={setEditCoverUrl} />
         <div className="song-title-block">
           <input
             className="song-title song-title-input"
@@ -986,7 +992,7 @@ function SongView({ song, filename, files, onReset }: {
 
         {/* Right: sticky video + GAP sidebar */}
         <aside className="video-sidebar">
-          <GapSync gap={gap} onChange={setGap} videoGap={videoGap} onVideoGapChange={setVideoGap} onTimeUpdate={handleTimeUpdate} videoUrl={videoUrl ?? undefined} backgroundUrl={backgroundUrl ?? undefined} artist={header.artist} title={header.title} />
+          <GapSync gap={gap} onChange={setGap} videoGap={videoGap} onVideoGapChange={setVideoGap} onTimeUpdate={handleTimeUpdate} videoUrl={videoUrl ?? undefined} backgroundUrl={backgroundUrl ?? undefined} initialVideoUrl={editVideoUrl || undefined} onVideoUrlChange={setEditVideoUrl} artist={header.artist} title={header.title} />
         </aside>
       </div>
     </div>

@@ -34,6 +34,10 @@ export interface UsdxHeader {
   video?: string
   cover?: string
   background?: string
+  /** URL of the video (e.g. YouTube) — UltraStar format spec v1.2.0 #VIDEOURL */
+  videoUrl?: string
+  /** URL of the cover image — UltraStar format spec v1.2.0 #COVERURL */
+  coverUrl?: string
   language?: string
   genre?: string
   year?: number
@@ -149,6 +153,12 @@ export function parseUsdx(content: string): UsdxSong {
           break
         case 'BACKGROUND':
           header.background = value
+          break
+        case 'VIDEOURL':
+          header.videoUrl = value
+          break
+        case 'COVERURL':
+          header.coverUrl = value
           break
         case 'LANGUAGE':
           header.language = value
