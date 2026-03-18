@@ -424,18 +424,22 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
       {/* ── Transport controls — shown below the video frame once player is ready ── */}
       {isPlayerReady && (
         <div className="gap-sync-transport">
+          {/* Reset-to-start: always seeks to videoGap position */}
           <button
             className="btn-transport"
             onClick={handleStart}
-            title={videoGap > 0 ? `Video zu ${videoGap}s springen und abspielen` : 'Von Anfang abspielen'}
+            title={videoGap > 0 ? `Zu ${videoGap}s springen und abspielen` : 'Von Anfang abspielen'}
           >
-            ▶ {videoGap > 0 ? `${videoGap}s` : 'Start'}
+            ↩ {videoGap > 0 ? `${videoGap}s` : 'Start'}
           </button>
-          {isPlaying && (
-            <button className="btn-transport" onClick={pause} title="Pause">
-              ⏸
-            </button>
-          )}
+          {/* Play/Pause toggle: resumes/pauses at current slider position */}
+          <button
+            className="btn-transport"
+            onClick={isPlaying ? pause : play}
+            title={isPlaying ? 'Pause' : 'Abspielen ab aktueller Position'}
+          >
+            {isPlaying ? '⏸' : '▶'}
+          </button>
           <span className="video-clock" title="Aktuelle Videoposition">
             {videoTime.toFixed(1)}s
           </span>
