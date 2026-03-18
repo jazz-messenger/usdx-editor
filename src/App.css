@@ -487,7 +487,7 @@
   font-size: 14px;
   width: 24px;
   height: 24px;
-  border-radius: var(--radius-sm);
+  border-radius: 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
