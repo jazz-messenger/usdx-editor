@@ -20,8 +20,17 @@ describe('phraseToSyllables', () => {
 
   it('skips ~ without affecting word boundaries', () => {
     // ~ is a musical hold only — it does NOT create a word boundary.
-    // If the next syllable starts a new word, it must have a leading space.
-    const phrase = makePhrase(['bo', '~', 'dy'])
+    // Real melismas have a small gap before the ~ (here 2 beats, matching
+    // actual BSB file patterns). Only holds that start at gap=0 are treated
+    // as word-boundary holds.
+    const phrase: Phrase = {
+      notes: [
+        { type: ':', beat: 0,  length: 4, pitch: 60, syllable: 'bo' },
+        { type: ':', beat: 6,  length: 4, pitch: 60, syllable: '~' },  // pre-gap = 2
+        { type: ':', beat: 12, length: 4, pitch: 60, syllable: 'dy' },
+      ],
+      text: '',
+    }
     const result = phraseToSyllables(phrase)
     expect(result).toHaveLength(2)       // ~ filtered out
     expect(result[1].text).toBe('dy')
@@ -128,6 +137,22 @@ describe('phraseToText', () => {
       text: '',
     }
     expect(phraseToText(phrase)).toBe('Rock your body right!')
+  })
+
+  it('hold note with zero pre-gap signals word boundary: Whispers in the powder room', () => {
+    // Real Teardrops data: pers (beat 861, len 4, ends 865) → ~ (beat 865, pre-gap=0)
+    // → in (beat 873). The ~ starts exactly where pers ends → word boundary hold.
+    const phrase: Phrase = {
+      notes: [
+        { type: ':', beat: 853, length: 3, pitch: 66, syllable: 'Whis' },
+        { type: ':', beat: 861, length: 4, pitch: 62, syllable: 'pers' },
+        { type: ':', beat: 865, length: 7, pitch: 61, syllable: '~' },
+        { type: ':', beat: 873, length: 2, pitch: 59, syllable: 'in' },
+        { type: ':', beat: 877, length: 2, pitch: 56, syllable: ' the' },
+      ],
+      text: '',
+    }
+    expect(phraseToText(phrase)).toBe('Whispers in the')
   })
 
   it('hold note with beat gap signals word boundary: Footsteps on the dance floor', () => {

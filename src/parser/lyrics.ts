@@ -29,6 +29,8 @@ export interface DisplaySyllable {
 export function phraseToSyllables(phrase: Phrase): DisplaySyllable[] {
   const result: DisplaySyllable[] = []
   let prevHadTrailingSpace = false
+  let prevSyllableEnd = 0  // end beat of the last real syllable
+  let chainPreGap = -1     // gap between prevSyllableEnd and the first ~ in the current chain
 
   for (let ni = 0; ni < phrase.notes.length; ni++) {
     const note = phrase.notes[ni]
@@ -43,17 +45,18 @@ export function phraseToSyllables(phrase: Phrase): DisplaySyllable[] {
         const holdEnd = note.beat + note.length
         if (holdEnd > last.endBeat) last.endBeat = holdEnd
 
-        // Beat-gap heuristic: when a hold note is the last in its chain
-        // (next note is a real syllable, not another ~) and the gap to that
-        // next note is > 2 beats, treat it as a word boundary.
-        // This handles files that omit space markers between words separated
-        // by a hold (e.g. "steps ~ on" in Teardrops, gap = 4).
-        // Melismas within a word have gaps of ≤ 2 beats and are unaffected.
+        // Pre-gap heuristic: record the gap between the preceding syllable's end
+        // and the first ~ in this chain. A gap of 0 means the ~ immediately
+        // follows the syllable — characteristic of a word-boundary hold (the singer
+        // holds the last vowel while transitioning to the next word). Melismas
+        // within a word typically start after a small gap (≥ 2 beats in real files).
+        if (chainPreGap === -1) chainPreGap = note.beat - prevSyllableEnd
+
+        // At the end of the chain (next note is a real syllable), fire the heuristic.
         const nextNote = phrase.notes[ni + 1]
         if (nextNote) {
           const nextRaw = nextNote.syllable.replace(/^~/, '').replace(/~$/, '')
-          const isChainEnd = nextRaw !== ''
-          if (isChainEnd && nextNote.beat - holdEnd > 2) {
+          if (nextRaw !== '' && chainPreGap === 0) {
             prevHadTrailingSpace = true
           }
         }
@@ -69,6 +72,8 @@ export function phraseToSyllables(phrase: Phrase): DisplaySyllable[] {
       endBeat: note.beat + note.length,
     })
     prevHadTrailingSpace = raw.endsWith(' ')
+    prevSyllableEnd = note.beat + note.length
+    chainPreGap = -1  // reset for the next ~ chain
   }
 
   return result
