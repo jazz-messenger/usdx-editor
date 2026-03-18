@@ -84,29 +84,44 @@ interface GapSyncProps {
   backgroundUrl?: string
   /** Object URL for a local video file (#VIDEO). Takes priority over YouTube. */
   videoUrl?: string
+  /** Initial YouTube URL loaded from #VIDEOURL in the song file. */
+  initialVideoUrl?: string
+  /** Called whenever the user selects or clears a YouTube URL. */
+  onVideoUrlChange?: (url: string) => void
   artist?: string
   title?: string
 }
 
-export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdate, backgroundUrl, videoUrl, artist, title }: GapSyncProps) {
+export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdate, backgroundUrl, videoUrl, initialVideoUrl, onVideoUrlChange, artist, title }: GapSyncProps) {
 
   // ── YouTube player ──────────────────────────────────────────────────────────
-  const [youtubeUrl, setYoutubeUrl] = useState('')
+  const [youtubeUrl, setYoutubeUrl] = useState(initialVideoUrl ?? '')
+  const updateYoutubeUrl = (url: string) => { setYoutubeUrl(url); onVideoUrlChange?.(url) }
   const videoId = extractYouTubeId(youtubeUrl)
   const {
     containerRef,
     playerState: ytPlayerState,
     isPlaying: ytIsPlaying,
     getCurrentTime: ytGetCurrentTime,
+    getDuration: ytGetDuration,
     seekTo: ytSeekTo,
     play: ytPlay,
     pause: ytPause,
   } = useYouTubePlayer(videoId)
 
+  const [ytDuration, setYtDuration] = useState(0)
+  useEffect(() => {
+    if (ytPlayerState === 'ready') setYtDuration(ytGetDuration())
+    else setYtDuration(0)
+  }, [ytPlayerState, ytGetDuration])
+
   // ── Local video player ──────────────────────────────────────────────────────
   const localVideoRef = useRef<HTMLVideoElement>(null)
   const [localPlayerState, setLocalPlayerState] = useState<'idle' | 'ready' | 'error'>('idle')
   const [localIsPlaying, setLocalIsPlaying] = useState(false)
+  const [localDuration, setLocalDuration] = useState(0)
+  // Prevent RAF from overwriting videoTime while the user is dragging the slider
+  const isDraggingSlider = useRef(false)
 
   // Reset local player state whenever the source changes
   useEffect(() => {
@@ -153,7 +168,7 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
     let rafId: number
     const tick = () => {
       const t = getCurrentTime()
-      setVideoTime(t)
+      if (!isDraggingSlider.current) setVideoTime(t)
       onTimeUpdate?.((t - videoGap) * 1000)
       rafId = requestAnimationFrame(tick)
     }
@@ -205,7 +220,7 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
   }
 
   const selectVideo = (vid: string) => {
-    setYoutubeUrl(`https://www.youtube.com/watch?v=${vid}`)
+    updateYoutubeUrl(`https://www.youtube.com/watch?v=${vid}`)
     setShowResults(false)   // hide list, but keep results cached for "andere Auswahl"
     setSearchMsg(null)
   }
@@ -284,7 +299,7 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
             placeholder="YouTube-URL (optional)"
             value={youtubeUrl}
             onChange={(e) => {
-              setYoutubeUrl(e.target.value)
+              updateYoutubeUrl(e.target.value)
               setShowResults(false)
               setSearchMsg(null)
             }}
@@ -295,7 +310,7 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
               <button
                 className="btn-yt-clear"
                 onClick={() => {
-                  setYoutubeUrl('')
+                  updateYoutubeUrl('')
                   setShowResults(searchResults !== null && searchResults.length > 0)
                 }}
                 title="Video-Auswahl zurücksetzen"
@@ -365,6 +380,7 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
             ref={localVideoRef}
             className="local-video"
             src={videoUrl}
+            onLoadedMetadata={() => setLocalDuration(localVideoRef.current?.duration ?? 0)}
             onCanPlay={() => setLocalPlayerState('ready')}
             onError={() => setLocalPlayerState('error')}
             onPlay={() => setLocalIsPlaying(true)}
@@ -383,6 +399,26 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
           )}
           <div ref={containerRef} className="yt-player" />
         </div>
+      )}
+
+      {/* ── Seek slider — unified for local and YouTube, directly below the active video ── */}
+      {isPlayerReady && (useLocal ? localDuration : ytDuration) > 0 && (
+        <input
+          type="range"
+          className="seek-slider"
+          min={0}
+          max={useLocal ? localDuration : ytDuration}
+          step={0.1}
+          value={videoTime}
+          onPointerDown={() => { isDraggingSlider.current = true }}
+          onChange={(e) => {
+            const t = Number(e.target.value)
+            setVideoTime(t)
+            seekTo(t)
+          }}
+          onPointerUp={() => { isDraggingSlider.current = false }}
+          title="Vorspulen"
+        />
       )}
 
       {/* ── Transport controls — shown below the video frame once player is ready ── */}
@@ -408,6 +444,7 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
           )}
         </div>
       )}
+
     </div>
   )
 }

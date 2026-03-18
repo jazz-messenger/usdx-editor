@@ -824,6 +824,13 @@
   box-shadow: var(--glow-orange);
 }
 
+.seek-slider {
+  width: 100%;
+  margin-top: 6px;
+  accent-color: rgb(var(--accent-primary));
+  cursor: pointer;
+}
+
 .video-clock {
   font-size: 12px;
   font-variant-numeric: tabular-nums;
