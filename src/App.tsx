@@ -584,12 +584,14 @@ function SongView({ song, filename, files, onReset }: {
 }) {
   const { header, tracks } = song
 
-  // Merge all tracks into one flat phrase list for display.
-  // For duet files the parser produces separate tracks per player.
+  // Merge all tracks into one flat phrase list for display, sorted by time.
+  // For duet files the parser produces separate tracks per player; without
+  // sorting, all P1 phrases would appear before all P2 phrases.
   const track = useMemo(() => {
     if (tracks.length <= 1) return tracks[0]
-    const allPhrases = tracks.flatMap(t => t.phrases)
-    return { player: 1 as const, phrases: allPhrases }
+    const tagged = tracks.flatMap(t => t.phrases.map(p => ({ phrase: p, player: t.player })))
+    tagged.sort((a, b) => (a.phrase.notes[0]?.beat ?? 0) - (b.phrase.notes[0]?.beat ?? 0))
+    return { player: 1 as const, phrases: tagged.map(x => x.phrase) }
   }, [tracks])
   const phraseCount = track?.phrases.length ?? 0
 
@@ -607,16 +609,13 @@ function SongView({ song, filename, files, onReset }: {
 
   const [highlightGolden, setHighlightGolden] = useState(false)
   const [singerMap, setSingerMap] = useState<Record<number, 1 | 2 | 3>>(() => {
-    // For duet files: assign phrases from P2 track to singer 2
+    // For duet files: assign phrases from P2 track to singer 2.
+    // Must use the same time-sorted order as the track useMemo above.
     if (tracks.length <= 1) return {}
+    const tagged = tracks.flatMap(t => t.phrases.map(p => ({ phrase: p, player: t.player })))
+    tagged.sort((a, b) => (a.phrase.notes[0]?.beat ?? 0) - (b.phrase.notes[0]?.beat ?? 0))
     const map: Record<number, 1 | 2 | 3> = {}
-    let offset = 0
-    for (const t of tracks) {
-      if (t.player === 2) {
-        for (let i = 0; i < t.phrases.length; i++) map[offset + i] = 2
-      }
-      offset += t.phrases.length
-    }
+    tagged.forEach(({ player }, i) => { if (player === 2) map[i] = 2 })
     return map
   })
   const [singerNames, setSingerNames] = useState<[string, string]>([
