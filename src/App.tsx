@@ -8,6 +8,7 @@ import { phraseToSyllables } from './parser/lyrics'
 import { exportUsdx } from './parser/usdxExporter'
 import { GapSync } from './components/GapSync'
 import { msToBeat } from './parser/timing'
+import { lookupReleaseYear } from './utils/musicbrainz'
 
 const GENRE_SUGGESTIONS = [
   'Blues', 'Country', 'Darkwave', 'Electronic', 'Folk', 'Funk',
@@ -652,6 +653,7 @@ function SongView({ song, filename, files, onReset }: {
   const [editTitle, setEditTitle] = useState(header.title)
   const [editArtist, setEditArtist] = useState(header.artist)
   const [editYear, setEditYear] = useState<number | ''>(header.year ?? '')
+  const [suggestedYear, setSuggestedYear] = useState<number | null>(null)
   const [editGenres, setEditGenres] = useState<string[]>(
     header.genre ? header.genre.split(',').map((g) => g.trim()).filter(Boolean) : []
   )
@@ -669,6 +671,13 @@ function SongView({ song, filename, files, onReset }: {
   const [activePos, setActivePos] = useState<ActivePos | null>(null)
   const activePhraseRef = useRef<HTMLDivElement | null>(null)
   const [warningDismissed, setWarningDismissed] = useState(false)
+
+  // MusicBrainz year lookup — runs once when the song is loaded
+  useEffect(() => {
+    lookupReleaseYear(header.artist, header.title).then(year => {
+      if (year !== null) setSuggestedYear(year)
+    })
+  }, [header.artist, header.title])
 
   const missingFiles = useMemo(() => {
     const missing: { tag: string; filename: string }[] = []
@@ -783,6 +792,22 @@ function SongView({ song, filename, files, onReset }: {
               aria-label="Jahr"
               placeholder="Jahr"
             />
+            {suggestedYear !== null && suggestedYear !== editYear && (
+              <span className="year-suggestion">
+                <button
+                  className="year-suggestion-accept"
+                  onClick={() => { setEditYear(suggestedYear); setSuggestedYear(null) }}
+                  title="Jahr aus MusicBrainz übernehmen"
+                >
+                  {suggestedYear} übernehmen?
+                </button>
+                <button
+                  className="year-suggestion-dismiss"
+                  onClick={() => setSuggestedYear(null)}
+                  aria-label="Vorschlag verwerfen"
+                >×</button>
+              </span>
+            )}
             <TagEditor
               tags={editLanguages}
               onChange={setEditLanguages}
