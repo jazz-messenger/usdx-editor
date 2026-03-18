@@ -34,5 +34,5 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/
           server-dir: ${{ secrets.FTP_TARGET_DIR }}
-          # Only upload changed files (faster deploys)
-          dangerous-clean-slate: false
+          # Force full re-upload to recover from cache/path mismatches
+          dangerous-clean-slate: true
