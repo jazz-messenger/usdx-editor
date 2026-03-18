@@ -130,6 +130,23 @@ describe('phraseToText', () => {
     expect(phraseToText(phrase)).toBe('Rock your body right!')
   })
 
+  it('hold note with beat gap signals word boundary: Footsteps on the dance floor', () => {
+    // Real Teardrops data: steps (beat 605, len 4) → ~ (beat 609, len 4, holdEnd 613)
+    // → on (beat 617). Gap = 4 beats — large enough to be a word boundary,
+    // not a melisma. Neither note has a space marker.
+    const phrase: Phrase = {
+      notes: [
+        { type: ':', beat: 597, length: 3, pitch: 66, syllable: 'Foot' },
+        { type: ':', beat: 605, length: 4, pitch: 62, syllable: 'steps' },
+        { type: ':', beat: 609, length: 4, pitch: 61, syllable: '~' },
+        { type: ':', beat: 617, length: 2, pitch: 59, syllable: 'on' },
+        { type: ':', beat: 621, length: 2, pitch: 56, syllable: ' the' },
+      ],
+      text: '',
+    }
+    expect(phraseToText(phrase)).toBe('Footsteps on the')
+  })
+
   it('trailing-space convention: Backstreet\'s back! Alright!', () => {
     const phrase: Phrase = {
       notes: [
