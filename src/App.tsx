@@ -605,16 +605,16 @@ function findActivePos(track: Track, beat: number): ActivePos | null {
     const phrase = track.phrases[pi]
     if (!phrase.notes.length) continue
 
-    const firstBeat = phrase.notes[0].beat
     // Phrase window ends when the next phrase starts (or at lineBreakBeat)
     const phraseEndBeat =
       phrase.lineBreakBeat ??
       track.phrases[pi + 1]?.notes[0]?.beat ??
       Infinity
 
-    if (beat < firstBeat || beat >= phraseEndBeat) continue
-
-    return { phraseIndex: pi, beat }
+    // Return the first phrase where beat < phraseEndBeat — this is either the
+    // currently active phrase, the next upcoming one (gap after lineBreakBeat),
+    // or the first phrase (when beat is before the song starts).
+    if (beat < phraseEndBeat) return { phraseIndex: pi, beat }
   }
   return null
 }
@@ -668,7 +668,7 @@ function SongView({ song, filename, files, onReset }: {
     header.language ? header.language.split(',').map((l) => l.trim()).filter(Boolean) : []
   )
   const [editEdition, setEditEdition] = useState<string[]>(
-    header.edition ? [header.edition] : []
+    header.edition ? header.edition.split(',').map(s => s.trim()).filter(Boolean) : []
   )
   const [editTags, setEditTags] = useState<string>(
     (header.tags as string | undefined) ?? ''
@@ -679,6 +679,7 @@ function SongView({ song, filename, files, onReset }: {
   const [editCoverUrl, setEditCoverUrl] = useState(header.coverUrl ?? '')
   const [activePos, setActivePos] = useState<ActivePos | null>(null)
   const activePhraseRef = useRef<HTMLDivElement | null>(null)
+  const firstPhraseRef = useRef<HTMLDivElement | null>(null)
   const [warningDismissed, setWarningDismissed] = useState(false)
 
   // MusicBrainz year lookup — runs once when the song is loaded
@@ -724,7 +725,7 @@ function SongView({ song, filename, files, onReset }: {
       year: editYear !== '' ? Number(editYear) : undefined,
       genre: editGenres.join(', ') || undefined,
       language: editLanguages.join(', ') || undefined,
-      edition: editEdition[0] || undefined,
+      edition: editEdition.length > 0 ? editEdition.join(', ') : undefined,
       tags: editTags.trim() || undefined,
       gap,
       videoGap: videoGap || undefined,
@@ -842,7 +843,7 @@ function SongView({ song, filename, files, onReset }: {
               onChange={setEditEdition}
               suggestions={EDITION_SUGGESTIONS}
               label="Edition"
-              maxTags={1}
+
               warnTags={editEdition.filter(t => {
                 // Only evaluate tags that look like a SingStar edition
                 if (!t.toLowerCase().includes('singstar')) return false
@@ -966,12 +967,13 @@ function SongView({ song, filename, files, onReset }: {
               return (
                 <div
                   key={i}
-                  ref={isActivePhrase ? (el) => {
-                    if (el && el !== activePhraseRef.current) {
+                  ref={(el) => {
+                    if (i === 0) firstPhraseRef.current = el
+                    if (isActivePhrase && el && el !== activePhraseRef.current) {
                       activePhraseRef.current = el
-                      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+                      el.scrollIntoView({ behavior: 'smooth', block: 'center' })
                     }
-                  } : undefined}
+                  }}
                   className={`phrase phrase--singer-${singer}${isActivePhrase ? ' phrase--active' : ''}`}
                 >
                   <span className="phrase-number">{i + 1}</span>
@@ -992,7 +994,7 @@ function SongView({ song, filename, files, onReset }: {
 
         {/* Right: sticky video + GAP sidebar */}
         <aside className="video-sidebar">
-          <GapSync gap={gap} onChange={setGap} videoGap={videoGap} onVideoGapChange={setVideoGap} onTimeUpdate={handleTimeUpdate} videoUrl={videoUrl ?? undefined} backgroundUrl={backgroundUrl ?? undefined} initialVideoUrl={editVideoUrl || undefined} onVideoUrlChange={setEditVideoUrl} artist={header.artist} title={header.title} />
+          <GapSync gap={gap} onChange={setGap} videoGap={videoGap} onVideoGapChange={setVideoGap} onTimeUpdate={handleTimeUpdate} videoUrl={videoUrl ?? undefined} backgroundUrl={backgroundUrl ?? undefined} initialVideoUrl={editVideoUrl || undefined} onVideoUrlChange={setEditVideoUrl} onReset={() => { setActivePos(null); firstPhraseRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }} artist={header.artist} title={header.title} />
         </aside>
       </div>
     </div>
