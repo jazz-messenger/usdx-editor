@@ -88,11 +88,13 @@ interface GapSyncProps {
   initialVideoUrl?: string
   /** Called whenever the user selects or clears a YouTube URL. */
   onVideoUrlChange?: (url: string) => void
+  /** Called when the user clicks ↩ Start — App can use this to scroll to phrase 0. */
+  onReset?: () => void
   artist?: string
   title?: string
 }
 
-export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdate, backgroundUrl, videoUrl, initialVideoUrl, onVideoUrlChange, artist, title }: GapSyncProps) {
+export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdate, backgroundUrl, videoUrl, initialVideoUrl, onVideoUrlChange, onReset, artist, title }: GapSyncProps) {
 
   // ── YouTube player ──────────────────────────────────────────────────────────
   const [youtubeUrl, setYoutubeUrl] = useState(initialVideoUrl ?? '')
@@ -180,6 +182,7 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
   const handleStart = () => {
     seekTo(videoGap)
     play()
+    onReset?.()
   }
 
   // Changing VIDEOGAP: update state AND immediately seek so the video frame
@@ -415,6 +418,8 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
             const t = Number(e.target.value)
             setVideoTime(t)
             seekTo(t)
+            // Notify App even while paused so activePos updates and lyrics scroll
+            onTimeUpdate?.((t - videoGap) * 1000)
           }}
           onPointerUp={() => { isDraggingSlider.current = false }}
           title="Vorspulen"
