@@ -32,7 +32,8 @@
   --shadow-sm: 0 1px 3px rgb(0 0 0 / .40), 0 1px 2px rgb(0 0 0 / .30);
 
   /* Glows */
-  --glow-orange: 0 0 20px rgb(var(--accent-primary) / .35), 0 0 8px rgb(var(--accent-primary) / .20);
+  --glow-orange:  0 0 20px rgb(var(--accent-primary) / .35), 0 0 8px rgb(var(--accent-primary) / .20);
+  --glow-golden:  0 0 10px rgb(var(--accent-golden) / .9), 0 0 24px rgb(var(--accent-golden) / .5);
 
   /* Motion */
   --transition-fast: 150ms ease;
@@ -1242,16 +1243,6 @@
 .assign-btn--to1   { color: rgb(126 90 126); }
 .assign-btn--both  { color: rgb(var(--accent-primary)); font-size: 12px; }
 
-/* ─── Singer tinting ─────────────────────────────────────────────────────── */
-.phrase--singer-2 .phrase-col--2 {
-  background: rgb(var(--accent-singer2) / .04);
-  border-radius: 0 6px 6px 0;
-}
-
-.phrase--singer-3 .phrase-col--1,
-.phrase--singer-3 .phrase-col--2 {
-  background: rgb(var(--accent-primary) / .04);
-}
 
 /* ─── Active phrase & syllable ───────────────────────────────────────────── */
 .phrase--active {
@@ -1280,7 +1271,10 @@
 
 .phrase-text .syllable { display: inline; }
 
-.phrase-text .syllable.golden  { color: rgb(var(--accent-golden)); }
+.phrase-text .syllable.golden  {
+  color: rgb(var(--accent-golden));
+  text-shadow: var(--glow-golden);
+}
 
 .phrase-text .syllable.freestyle {
   color: rgb(var(--accent-singer1));
