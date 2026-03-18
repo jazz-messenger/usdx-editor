@@ -9,6 +9,8 @@ import { exportUsdx } from './parser/usdxExporter'
 import { GapSync } from './components/GapSync'
 import { msToBeat } from './parser/timing'
 import { lookupReleaseYear } from './utils/musicbrainz'
+import { lookupSingStarEdition, KNOWN_SINGSTAR_GAMES } from './utils/singstarEditions'
+import type { SingStarEditionMatch } from './utils/singstarEditions'
 
 const GENRE_SUGGESTIONS = [
   'Blues', 'Country', 'Darkwave', 'Electronic', 'Folk', 'Funk',
@@ -281,6 +283,7 @@ interface TagEditorProps {
   onChange: (tags: string[]) => void
   suggestions: string[] | SuggestionGroup[]
   label: string
+  warnTags?: string[]
   /** When set, limits the number of tags; selecting a new one replaces the existing one */
   maxTags?: number
 }
@@ -292,7 +295,7 @@ function flatItems(suggestions: string[] | SuggestionGroup[]): string[] {
     : (suggestions as SuggestionGroup[]).flatMap((g) => g.items)
 }
 
-function TagEditor({ tags, onChange, suggestions, label, maxTags }: TagEditorProps) {
+function TagEditor({ tags, onChange, suggestions, label, maxTags, warnTags = [] }: TagEditorProps) {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const wrapRef = useRef<HTMLDivElement>(null)
@@ -353,7 +356,8 @@ function TagEditor({ tags, onChange, suggestions, label, maxTags }: TagEditorPro
   return (
     <div className="tag-editor" ref={wrapRef}>
       {tags.map((t) => (
-        <span key={t} className="tag tag--editable">
+        <span key={t} className={`tag tag--editable${warnTags.includes(t) ? ' tag--warn' : ''}`}>
+          {warnTags.includes(t) && <span className="tag-warn-icon" title="Dieser Wert ist uns nicht bekannt">⚠</span>}
           {t}
           <button
             className="tag-remove"
@@ -654,6 +658,7 @@ function SongView({ song, filename, files, onReset }: {
   const [editArtist, setEditArtist] = useState(header.artist)
   const [editYear, setEditYear] = useState<number | ''>(header.year ?? '')
   const [suggestedYear, setSuggestedYear] = useState<number | null>(null)
+  const [singstarMatch, setSingstarMatch] = useState<SingStarEditionMatch | null>(null)
   const [editGenres, setEditGenres] = useState<string[]>(
     header.genre ? header.genre.split(',').map((g) => g.trim()).filter(Boolean) : []
   )
@@ -678,6 +683,12 @@ function SongView({ song, filename, files, onReset }: {
       if (year !== null) setSuggestedYear(year)
     })
   }, [header.artist, header.title])
+
+  // SingStar edition lookup — synchronous map lookup, no network needed.
+  // Reacts to editArtist/editTitle so a corrected title immediately triggers a new check.
+  useEffect(() => {
+    setSingstarMatch(lookupSingStarEdition(editArtist, editTitle))
+  }, [editArtist, editTitle])
 
   const missingFiles = useMemo(() => {
     const missing: { tag: string; filename: string }[] = []
@@ -826,7 +837,34 @@ function SongView({ song, filename, files, onReset }: {
               suggestions={EDITION_SUGGESTIONS}
               label="Edition"
               maxTags={1}
+              warnTags={editEdition.filter(t => {
+                // Only evaluate tags that look like a SingStar edition
+                if (!t.toLowerCase().includes('singstar')) return false
+                // Tag exactly matches a known game name → no warning
+                if (KNOWN_SINGSTAR_GAMES.has(t)) return false
+                // Tag contains "SingStar" but is not in our known games list → warn
+                return true
+              })}
             />
+            {singstarMatch !== null && !editEdition.includes(singstarMatch.suggestedEdition) && (
+              <span className="year-suggestion">
+                <button
+                  className="year-suggestion-accept"
+                  onClick={() => {
+                    setEditEdition([singstarMatch.suggestedEdition])
+                    setSingstarMatch(null)
+                  }}
+                  title={`Gefunden in SingStar (${singstarMatch.platforms.join(', ')})`}
+                >
+                  {singstarMatch.suggestedEdition} übernehmen?
+                </button>
+                <button
+                  className="year-suggestion-dismiss"
+                  onClick={() => setSingstarMatch(null)}
+                  aria-label="Vorschlag verwerfen"
+                >×</button>
+              </span>
+            )}
           </div>
           {(editTags || true) && (
             <input

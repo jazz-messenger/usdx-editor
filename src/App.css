@@ -447,6 +447,17 @@
   border: 1px solid rgb(var(--border-mid));
 }
 
+/* ─── Warn tag (unknown value) ───────────────────────────────────────────── */
+.tag--warn {
+  border-color: rgb(var(--accent-primary) / 0.6);
+  color: rgb(var(--accent-primary-2));
+}
+
+.tag-warn-icon {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
 /* ─── Editable tag (with ✕) ──────────────────────────────────────────────── */
 .tag--editable {
   display: inline-flex;
