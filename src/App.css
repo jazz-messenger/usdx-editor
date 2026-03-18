@@ -436,8 +436,11 @@
 }
 
 .tag {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
   font-size: 12px;
-  padding: 3px 10px;
+  padding: 0 10px;
   border-radius: 20px;
   background: rgb(var(--bg-elevated));
   color: rgb(var(--text-muted));
@@ -484,7 +487,7 @@
   background: rgb(var(--bg-elevated));
   border: 1px dashed rgb(var(--border-mid));
   color: rgb(var(--text-muted));
-  font-size: 14px;
+  font-size: 12px;
   width: 24px;
   height: 24px;
   border-radius: 20px;
