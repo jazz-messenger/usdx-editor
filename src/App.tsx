@@ -553,6 +553,44 @@ function CoverArt({ header, files }: { header: UsdxHeader; files: SongFileMap })
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
+/** Merge duet tracks into a time-sorted phrase list, deduplicating identical
+ *  phrases that appear in both P1 and P2 (exported with singer=3 / "both"). */
+function mergeDuetTracks(tracks: Track[]): { phrases: Phrase[]; singerMap: Record<number, 1 | 2 | 3> } {
+  const tagged = tracks.flatMap(t => t.phrases.map(p => ({ phrase: p, player: t.player })))
+  tagged.sort((a, b) => (a.phrase.notes[0]?.beat ?? 0) - (b.phrase.notes[0]?.beat ?? 0))
+
+  const phrases: Phrase[] = []
+  const singerMap: Record<number, 1 | 2 | 3> = {}
+  let i = 0
+  while (i < tagged.length) {
+    const cur = tagged[i]
+    const nxt = tagged[i + 1]
+    // If two adjacent phrases from different players are note-for-note identical,
+    // they represent a "sung by both" line — collapse them into one entry.
+    if (nxt && cur.player !== nxt.player && phrasesEqual(cur.phrase, nxt.phrase)) {
+      singerMap[phrases.length] = 3
+      phrases.push(cur.phrase)
+      i += 2
+    } else {
+      if (cur.player === 2) singerMap[phrases.length] = 2
+      phrases.push(cur.phrase)
+      i++
+    }
+  }
+  return { phrases, singerMap }
+}
+
+function phrasesEqual(a: Phrase, b: Phrase): boolean {
+  if (a.notes.length !== b.notes.length) return false
+  return a.notes.every((n, i) =>
+    n.beat === b.notes[i].beat &&
+    n.length === b.notes[i].length &&
+    n.pitch === b.notes[i].pitch &&
+    n.syllable === b.notes[i].syllable &&
+    n.type === b.notes[i].type
+  )
+}
+
 interface ActivePos { phraseIndex: number; beat: number }
 
 function findActivePos(track: Track, beat: number): ActivePos | null {
@@ -584,15 +622,11 @@ function SongView({ song, filename, files, onReset }: {
 }) {
   const { header, tracks } = song
 
-  // Merge all tracks into one flat phrase list for display, sorted by time.
-  // For duet files the parser produces separate tracks per player; without
-  // sorting, all P1 phrases would appear before all P2 phrases.
+  const mergedDuet = useMemo(() => tracks.length > 1 ? mergeDuetTracks(tracks) : null, [tracks])
   const track = useMemo(() => {
-    if (tracks.length <= 1) return tracks[0]
-    const tagged = tracks.flatMap(t => t.phrases.map(p => ({ phrase: p, player: t.player })))
-    tagged.sort((a, b) => (a.phrase.notes[0]?.beat ?? 0) - (b.phrase.notes[0]?.beat ?? 0))
-    return { player: 1 as const, phrases: tagged.map(x => x.phrase) }
-  }, [tracks])
+    if (mergedDuet) return { player: 1 as const, phrases: mergedDuet.phrases }
+    return tracks[0]
+  }, [tracks, mergedDuet])
   const phraseCount = track?.phrases.length ?? 0
 
   const videoFile = useMemo(() => findVideoFile(header, files), [header, files])
@@ -608,16 +642,9 @@ function SongView({ song, filename, files, onReset }: {
   )
 
   const [highlightGolden, setHighlightGolden] = useState(false)
-  const [singerMap, setSingerMap] = useState<Record<number, 1 | 2 | 3>>(() => {
-    // For duet files: assign phrases from P2 track to singer 2.
-    // Must use the same time-sorted order as the track useMemo above.
-    if (tracks.length <= 1) return {}
-    const tagged = tracks.flatMap(t => t.phrases.map(p => ({ phrase: p, player: t.player })))
-    tagged.sort((a, b) => (a.phrase.notes[0]?.beat ?? 0) - (b.phrase.notes[0]?.beat ?? 0))
-    const map: Record<number, 1 | 2 | 3> = {}
-    tagged.forEach(({ player }, i) => { if (player === 2) map[i] = 2 })
-    return map
-  })
+  const [singerMap, setSingerMap] = useState<Record<number, 1 | 2 | 3>>(
+    () => mergedDuet?.singerMap ?? {}
+  )
   const [singerNames, setSingerNames] = useState<[string, string]>([
     header.singerP1 ?? '',
     header.singerP2 ?? '',
