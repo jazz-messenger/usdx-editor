@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import type { DragEvent } from 'react'
-import type { Track, UsdxHeader } from './parser/usdxParser'
+import type { Track, Phrase, UsdxHeader } from './parser/usdxParser'
 import './App.css'
 import { parseUsdx } from './parser/usdxParser'
 import type { UsdxSong } from './parser/usdxParser'
