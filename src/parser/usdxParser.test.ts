@@ -72,4 +72,41 @@ describe('parseUsdx', () => {
       expect(notes[2].syllable).toBe('bo')
     })
   })
+
+  describe('duet', () => {
+    const DUET = `#ARTIST:Die Fantastischen Vier
+#TITLE:Die Da
+#BPM:120
+#GAP:0
+#P1:Smudo
+#P2:Thomas D.
+P1
+: 0 4 60 Hello
+- 10
+P2
+: 20 4 62 World
+- 30
+E`
+
+    it('creates two tracks for P1/P2 section markers', () => {
+      const song = parseUsdx(DUET)
+      expect(song.tracks).toHaveLength(2)
+      expect(song.tracks[0].player).toBe(1)
+      expect(song.tracks[1].player).toBe(2)
+    })
+
+    it('assigns notes to the correct track', () => {
+      const song = parseUsdx(DUET)
+      expect(song.tracks[0].phrases[0].notes[0].syllable).toBe('Hello')
+      expect(song.tracks[1].phrases[0].notes[0].syllable).toBe('World')
+    })
+
+    it('parses #P1/#P2 singer names without switching tracks', () => {
+      const song = parseUsdx(DUET)
+      expect(song.header.singerP1).toBe('Smudo')
+      expect(song.header.singerP2).toBe('Thomas D.')
+      // Singer name headers must NOT put notes into the wrong track
+      expect(song.tracks[0].phrases[0].notes[0].syllable).toBe('Hello')
+    })
+  })
 })

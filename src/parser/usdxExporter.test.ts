@@ -70,4 +70,40 @@ describe('exportUsdx', () => {
     const song = parseUsdx(src)
     expect(song.header.comment).toBe('original comment')
   })
+
+  it('writes singer names as #P1/#P2 in header for duets', () => {
+    const song = parseUsdx(SONG)
+    const output = exportUsdx(song, { 1: 2 }, ['Smudo', 'Thomas D.'])
+    expect(output).toContain('#P1:Smudo')
+    expect(output).toContain('#P2:Thomas D.')
+    // Names must appear before the note section
+    expect(output.indexOf('#P1:Smudo')).toBeLessThan(output.indexOf('\nP1\n'))
+  })
+
+  it('singer=3 (both) appears in both P1 and P2 blocks', () => {
+    const song = parseUsdx(SONG)
+    // phrase 0 = both singers, phrase 1 = singer 2
+    const output = exportUsdx(song, { 0: 3, 1: 2 })
+    const p1Start = output.indexOf('\nP1\n')
+    const p2Start = output.indexOf('\nP2\n')
+    // "Hello" is singer 3 → must appear in P1 block
+    expect(output.indexOf('Hello')).toBeGreaterThan(p1Start)
+    expect(output.indexOf('Hello')).toBeLessThan(p2Start)
+    // "Hello" is singer 3 → must ALSO appear in P2 block
+    const helloInP2 = output.indexOf('Hello', p2Start)
+    expect(helloInP2).toBeGreaterThan(p2Start)
+    // "Foo" is singer 2 → only in P2 block, not in P1
+    expect(output.indexOf('Foo')).toBeGreaterThan(p2Start)
+  })
+
+  it('round-trips a duet: parse exported duet back to same structure', () => {
+    const song = parseUsdx(SONG)
+    const exported = exportUsdx(song, { 1: 2 }, ['P1-Name', 'P2-Name'])
+    const reimported = parseUsdx(exported)
+    expect(reimported.tracks).toHaveLength(2)
+    expect(reimported.header.singerP1).toBe('P1-Name')
+    expect(reimported.header.singerP2).toBe('P2-Name')
+    expect(reimported.tracks[0].phrases[0].notes[0].syllable).toBe('Hello')
+    expect(reimported.tracks[1].phrases[0].notes[0].syllable).toBe('Foo')
+  })
 })
