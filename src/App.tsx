@@ -1017,7 +1017,24 @@ export default function App() {
       <main className="app-main">
         {song
           ? <SongView song={song} filename={filename} files={files} onReset={() => setSong(null)} />
-          : <DropZone onLoad={handleLoad} />
+          : (
+            <div className="landing">
+              <div className="landing-hero">
+                <img src={`${import.meta.env.BASE_URL}icon-logo.png`} className="landing-icon" alt="" />
+                <p className="landing-tagline">Der Browser-Editor für deine UltraStar-Songs.</p>
+                <p className="landing-desc">
+                  Metadaten pflegen, Timings bearbeiten, YouTube verknüpfen –
+                  direkt im Browser, ohne Installation. Deine Dateien verlassen dabei nie deinen Rechner.
+                </p>
+                <div className="landing-badges">
+                  {['Duett-Support', 'Live-Highlighting', 'SingStar-Editions', 'Jahreserkennung', 'YouTube-Suche', 'Optimiert für UltraStar Deluxe'].map(b => (
+                    <span key={b} className="landing-badge">{b}</span>
+                  ))}
+                </div>
+              </div>
+              <DropZone onLoad={handleLoad} />
+            </div>
+          )
         }
       </main>
     </div>
