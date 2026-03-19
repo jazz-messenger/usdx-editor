@@ -648,7 +648,6 @@ function SongView({ song, filename, files, onReset }: {
     [backgroundFile]
   )
 
-  const [highlightGolden, setHighlightGolden] = useState(false)
   const [singerMap, setSingerMap] = useState<Record<number, 1 | 2 | 3>>(
     () => mergedDuet?.singerMap ?? {}
   )
@@ -884,14 +883,7 @@ function SongView({ song, filename, files, onReset }: {
           )}
         </div>
         <div className="meta-actions">
-          <label className="toggle-label">
-            <input
-              type="checkbox"
-              checked={highlightGolden}
-              onChange={(e) => setHighlightGolden(e.target.checked)}
-            />
-            Golden Notes
-          </label>
+
           <button className="btn-primary" onClick={handleDownload}>Speichern</button>
           <button className="btn-secondary" onClick={onReset} title={filename}>Andere Datei</button>
         </div>
@@ -952,7 +944,7 @@ function SongView({ song, filename, files, onReset }: {
                         key={j}
                         className={[
                           'syllable',
-                          highlightGolden && s.type === '*' ? 'golden' : '',
+                          s.type === '*' ? 'golden' : '',
                           s.type === 'F' ? 'freestyle' : '',
                           isActiveNote ? 'active-note' : '',
                         ].filter(Boolean).join(' ')}
