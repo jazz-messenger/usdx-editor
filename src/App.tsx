@@ -11,6 +11,7 @@ import { msToBeat } from './parser/timing'
 import { lookupReleaseYear } from './utils/musicbrainz'
 import { lookupSingStarEdition, KNOWN_SINGSTAR_GAMES } from './utils/singstarEditions'
 import type { SingStarEditionMatch } from './utils/singstarEditions'
+import { version } from '../package.json'
 
 const GENRE_SUGGESTIONS = [
   'Blues', 'Country', 'Darkwave', 'Electronic', 'Folk', 'Funk',
@@ -730,7 +731,7 @@ function SongView({ song, filename, files, onReset }: {
       videoGap: videoGap || undefined,
       videoUrl: editVideoUrl || undefined,
       coverUrl: editCoverUrl || undefined,
-      comment: `edited with usdx-editor on ${today}, http://korczak.at/usdx-editor`,
+      comment: `edited with usdx-editor v${version} on ${today}, http://korczak.at/usdx-editor`,
     }
     if (backgroundFile && !exportHeader.background) {
       exportHeader.background = backgroundFile.name
