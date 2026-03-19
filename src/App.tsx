@@ -5,11 +5,14 @@ import { SongView } from './components/SongView'
 import { DropZone } from './components/DropZone'
 import { KofiWidget } from './components/KofiWidget'
 import type { SongFileMap } from './utils/fileLoader'
+import { useLanguage } from './i18n/LanguageContext'
+import type { Locale } from './i18n/translations'
 
 export default function App() {
   const [song, setSong] = useState<UsdxSong | null>(null)
   const [filename, setFilename] = useState('')
   const [files, setFiles] = useState<SongFileMap>(new Map())
+  const { locale, setLocale, t } = useLanguage()
 
   const handleLoad = useCallback((s: UsdxSong, name: string, f: SongFileMap) => {
     setSong(s)
@@ -20,9 +23,20 @@ export default function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <img src={`${import.meta.env.BASE_URL}icon-logo.png`} alt="USDX Editor" className="app-logo" />
-        <h1>USDX Editor</h1>
-        <span className="subtitle">UltraStar Deluxe Song Editor</span>
+        <img src={`${import.meta.env.BASE_URL}icon-logo.png`} alt={t.app.title} className="app-logo" />
+        <h1>{t.app.title}</h1>
+        <span className="subtitle">{t.app.subtitle}</span>
+        <div className="lang-toggle">
+          {(['de', 'en'] as Locale[]).map(l => (
+            <button
+              key={l}
+              className={`lang-btn${locale === l ? ' lang-btn--active' : ''}`}
+              onClick={() => setLocale(l)}
+            >
+              {l.toUpperCase()}
+            </button>
+          ))}
+        </div>
       </header>
       <main className="app-main">
         {song
@@ -31,21 +45,18 @@ export default function App() {
             <div className="landing">
               <div className="landing-hero">
                 <img src={`${import.meta.env.BASE_URL}icon-logo.png`} className="landing-icon" alt="" />
-                <p className="landing-tagline">Der Browser-Editor für deine UltraStar-Songs.</p>
-                <p className="landing-desc">
-                  Metadaten pflegen, Timings bearbeiten, YouTube verknüpfen –
-                  direkt im Browser, ohne Installation. Deine Dateien verlassen dabei nie deinen Rechner.
-                </p>
+                <p className="landing-tagline">{t.app.tagline}</p>
+                <p className="landing-desc">{t.app.description}</p>
                 <div className="landing-badges">
-                  {['Duett-Support', 'Live-Highlighting', 'SingStar-Editions', 'Jahreserkennung', 'Genre-Vorschläge', 'YouTube-Suche', 'Optimiert für UltraStar Deluxe'].map(b => (
+                  {t.app.badges.map((b: string) => (
                     <span key={b} className="landing-badge">{b}</span>
                   ))}
                 </div>
               </div>
               <DropZone onLoad={handleLoad} />
               <footer className="landing-footer">
-                <a href="/impressum.html">Impressum</a>
-                <a href="/datenschutz.html">Datenschutz</a>
+                <a href="/impressum.html">{t.app.impressum}</a>
+                <a href="/datenschutz.html">{t.app.datenschutz}</a>
               </footer>
             </div>
           )

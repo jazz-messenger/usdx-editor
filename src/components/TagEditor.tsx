@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { useLanguage } from '../i18n/LanguageContext'
 
 export type SuggestionGroup = { group: string; items: string[] }
 
@@ -20,6 +21,7 @@ export function flatItems(suggestions: string[] | SuggestionGroup[]): string[] {
 }
 
 export function TagEditor({ tags, onChange, suggestions, label, maxTags, warnTags = [] }: TagEditorProps) {
+  const { t } = useLanguage()
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const wrapRef = useRef<HTMLDivElement>(null)
@@ -79,14 +81,14 @@ export function TagEditor({ tags, onChange, suggestions, label, maxTags, warnTag
 
   return (
     <div className="tag-editor" ref={wrapRef}>
-      {tags.map((t) => (
-        <span key={t} className={`tag tag--editable${warnTags.includes(t) ? ' tag--warn' : ''}`}>
-          {warnTags.includes(t) && <span className="tag-warn-icon" title="Dieser Wert ist uns nicht bekannt">⚠</span>}
-          {t}
+      {tags.map((tag) => (
+        <span key={tag} className={`tag tag--editable${warnTags.includes(tag) ? ' tag--warn' : ''}`}>
+          {warnTags.includes(tag) && <span className="tag-warn-icon" title={t.tagEditor.unknownTag}>⚠</span>}
+          {tag}
           <button
             className="tag-remove"
-            onClick={() => onChange(tags.filter((x) => x !== t))}
-            title={`${t} entfernen`}
+            onClick={() => onChange(tags.filter((x) => x !== tag))}
+            title={t.tagEditor.removeTag(tag)}
           >
             ✕
           </button>
@@ -96,9 +98,9 @@ export function TagEditor({ tags, onChange, suggestions, label, maxTags, warnTag
         <button
           className={tags.length === 0 ? 'tag-add-btn tag-add-btn--labeled' : 'tag-add-btn'}
           onClick={() => setOpen((v) => !v)}
-          title="Hinzufügen"
+          title={t.tagEditor.addTitle}
         >
-          {tags.length === 0 ? `+ ${label}` : '+'}
+          {tags.length === 0 ? t.tagEditor.addLabelEmpty(label) : t.tagEditor.addLabelHasTags}
         </button>
         {open && (
           <div className="tag-dropdown">
@@ -111,7 +113,7 @@ export function TagEditor({ tags, onChange, suggestions, label, maxTags, warnTag
                 if (e.key === 'Enter' && query.trim()) add(query)
                 if (e.key === 'Escape') { setOpen(false); setQuery('') }
               }}
-              placeholder="Suchen oder eingeben…"
+              placeholder={t.tagEditor.searchPlaceholder}
             />
             <div className="tag-suggestions">
               {renderItems()}
@@ -119,11 +121,11 @@ export function TagEditor({ tags, onChange, suggestions, label, maxTags, warnTag
                 (s) => s.toLowerCase() === query.trim().toLowerCase()
               ) && (
                 <button className="tag-suggestion tag-suggestion--custom" onClick={() => add(query)}>
-                  „{query.trim()}" hinzufügen
+                  {t.tagEditor.addCustom(query.trim())}
                 </button>
               )}
               {filtered.length === 0 && !query.trim() && (
-                <span className="tag-suggestions-empty">Alle Vorschläge bereits verwendet</span>
+                <span className="tag-suggestions-empty">{t.tagEditor.allUsed}</span>
               )}
             </div>
           </div>

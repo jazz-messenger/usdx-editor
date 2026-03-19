@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react'
 import { GapSync } from './GapSync'
 import { HeaderEditor } from './HeaderEditor'
+import { useLanguage } from '../i18n/LanguageContext'
 import { exportUsdx } from '../parser/usdxExporter'
 import { phraseToSyllables } from '../parser/lyrics'
 import { msToBeat } from '../parser/timing'
@@ -22,6 +23,7 @@ interface SongViewProps {
 }
 
 export function SongView({ song, filename, files, onReset }: SongViewProps) {
+  const { t } = useLanguage()
   const { header, tracks } = song
 
   const mergedDuet = useMemo(() => tracks.length > 1 ? mergeDuetTracks(tracks) : null, [tracks])
@@ -192,11 +194,11 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
       {missingFiles.length > 0 && !warningDismissed && (
         <div className="missing-files-banner">
           <span className="missing-files-icon">⚠</span>
-          <span className="missing-files-text">Im Ordner nicht gefunden: </span>
+          <span className="missing-files-text">{t.songview.missingFiles}</span>
           {missingFiles.map(({ tag, filename: fn }) => (
             <span key={tag} className="missing-file-pill">{tag}: {fn}</span>
           ))}
-          <button className="missing-files-dismiss" onClick={() => setWarningDismissed(true)} title="Schließen">✕</button>
+          <button className="missing-files-dismiss" onClick={() => setWarningDismissed(true)} title={t.songview.closeMissing}>✕</button>
         </div>
       )}
 
@@ -209,14 +211,14 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
                 className="singer-name-input singer-name-input--1"
                 value={singerNames[0]}
                 onChange={(e) => setSingerNames([e.target.value, singerNames[1]])}
-                placeholder="Name von Sänger:in 1"
+                placeholder={t.songview.singer1Placeholder}
               />
               <span />
               <input
                 className="singer-name-input singer-name-input--2"
                 value={singerNames[1]}
                 onChange={(e) => setSingerNames([singerNames[0], e.target.value])}
-                placeholder="Name von Sänger:in 2"
+                placeholder={t.songview.singer2Placeholder}
               />
             </div>
           )}
@@ -272,7 +274,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
                   <button
                     className={`assign-btn assign-btn--${singer === 1 ? 'to2' : singer === 2 ? 'to1' : 'both'}`}
                     onClick={() => toggleSinger(i)}
-                    title={singer === 1 ? 'Zu Sänger:in 2' : singer === 2 ? 'Zu Sänger:in 1' : 'Beide singen'}
+                    title={singer === 1 ? t.songview.assignToSinger2 : singer === 2 ? t.songview.assignToSinger1 : t.songview.assignBoth}
                   >
                     {singer === 1 ? '→' : singer === 2 ? '←' : '⇔'}
                   </button>

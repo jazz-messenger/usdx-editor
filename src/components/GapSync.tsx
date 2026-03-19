@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useYouTubePlayer } from '../hooks/useYouTubePlayer'
+import { useLanguage } from '../i18n/LanguageContext'
 
 function extractYouTubeId(url: string): string | null {
   const match = url.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/)
@@ -95,6 +96,7 @@ interface GapSyncProps {
 }
 
 export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdate, backgroundUrl, videoUrl, initialVideoUrl, onVideoUrlChange, onReset, artist, title }: GapSyncProps) {
+  const { t } = useLanguage()
 
   // ── YouTube player ──────────────────────────────────────────────────────────
   const [youtubeUrl, setYoutubeUrl] = useState(initialVideoUrl ?? '')
@@ -216,10 +218,10 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
       setSearchResults(outcome.items)
       setShowResults(true)
     } else if (outcome.kind === 'quota') {
-      setSearchMsg('Tageslimit erreicht — YouTube wird im neuen Tab geöffnet.')
+      setSearchMsg(t.gapsync.quotaExceeded)
       openYouTubeSearch(artist, title)
     } else {
-      setSearchMsg('Keine Ergebnisse — bitte URL manuell einfügen.')
+      setSearchMsg(t.gapsync.noResults)
     }
   }
 
@@ -236,7 +238,7 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
 
       {/* ── Timing fields: 3-column grid — label | input+unit | [⏱ Jetzt!] ── */}
       <div className="gap-timing-grid">
-        <label className="gap-sync-label" htmlFor="gap-input">GAP</label>
+        <label className="gap-sync-label" htmlFor="gap-input">{t.gapsync.gapLabel}</label>
         <div className="gap-input-group">
           <input
             id="gap-input"
@@ -246,22 +248,22 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
             step={10}
             onChange={(e) => onChange(Number(e.target.value))}
           />
-          <span className="gap-unit">ms</span>
+          <span className="gap-unit">{t.gapsync.ms}</span>
         </div>
         {isPlayerReady
           ? (
             <button
               className="btn-sync"
               onClick={handleSync}
-              title="Aktuellen Abspielzeitpunkt als GAP übernehmen"
+              title={t.gapsync.syncTitle}
             >
-              ⏱ Jetzt!
+              {t.gapsync.syncNow}
             </button>
           )
           : <span />
         }
 
-        <label className="gap-sync-label" htmlFor="videogap-input">VIDEOGAP</label>
+        <label className="gap-sync-label" htmlFor="videogap-input">{t.gapsync.videogapLabel}</label>
         <div className="gap-input-group">
           <input
             id="videogap-input"
@@ -271,7 +273,7 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
             step={0.1}
             onChange={(e) => handleVideoGapChange(Number(e.target.value))}
           />
-          <span className="gap-unit">s</span>
+          <span className="gap-unit">{t.gapsync.s}</span>
         </div>
         <span />
       </div>
@@ -283,13 +285,13 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
             className={`vsw-btn${!preferYoutube ? ' vsw-btn--active' : ''}`}
             onClick={() => setPreferYoutube(false)}
           >
-            📁 Lokale Datei
+            {t.gapsync.localFile}
           </button>
           <button
             className={`vsw-btn${preferYoutube ? ' vsw-btn--active' : ''}`}
             onClick={() => setPreferYoutube(true)}
           >
-            ▶ YouTube
+            {t.gapsync.youtube}
           </button>
         </div>
       )}
@@ -300,7 +302,7 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
           <input
             type="url"
             className="youtube-input"
-            placeholder="YouTube-URL (optional)"
+            placeholder={t.gapsync.youtubeUrlPlaceholder}
             value={youtubeUrl}
             onChange={(e) => {
               updateYoutubeUrl(e.target.value)
@@ -317,7 +319,7 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
                   updateYoutubeUrl('')
                   setShowResults(searchResults !== null && searchResults.length > 0)
                 }}
-                title="Video-Auswahl zurücksetzen"
+                title={t.gapsync.clearVideo}
               >
                 ✕
               </button>
@@ -327,7 +329,7 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
                 className="btn-yt-search"
                 onClick={handleSearch}
                 disabled={isSearching}
-                title="Nach Official Video suchen"
+                title={t.gapsync.searchVideo}
               >
                 {isSearching ? '…' : '🔍'}
               </button>
@@ -339,7 +341,7 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
       {/* "Andere Auswahl" — shown when a video is active but cached results exist */}
       {(!videoUrl || preferYoutube) && videoId && searchResults && !showResults && (
         <button className="btn-yt-other" onClick={() => setShowResults(true)}>
-          🔍 Andere Auswahl
+          {t.gapsync.otherResults}
         </button>
       )}
 
@@ -369,8 +371,8 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
       {/* Background image preview (only when no video source is active) */}
       {!useLocal && !videoId && backgroundUrl && (
         <div className="bg-preview-wrap">
-          <img className="bg-preview" src={backgroundUrl} alt="Background" />
-          <span className="bg-preview-label">Hintergrundbild</span>
+          <img className="bg-preview" src={backgroundUrl} alt="" />
+          <span className="bg-preview-label">{t.gapsync.background}</span>
         </div>
       )}
 
@@ -378,7 +380,7 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
       {videoUrl && (
         <div className={`local-video-wrap${!useLocal ? ' local-video-wrap--hidden' : ''}`}>
           {localPlayerState === 'error' && (
-            <div className="yt-error">Video konnte nicht geladen werden.</div>
+            <div className="yt-error">{t.gapsync.videoError}</div>
           )}
           <video
             ref={localVideoRef}
@@ -399,7 +401,7 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
       {videoId && (
         <div className={`yt-player-wrap${useLocal ? ' yt-player-wrap--hidden' : ''}`}>
           {ytPlayerState === 'error' && (
-            <div className="yt-error">Video konnte nicht geladen werden.</div>
+            <div className="yt-error">{t.gapsync.videoError}</div>
           )}
           <div ref={containerRef} className="yt-player" />
         </div>
@@ -423,7 +425,7 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
             onTimeUpdate?.((t - videoGap) * 1000)
           }}
           onPointerUp={() => { isDraggingSlider.current = false }}
-          title="Vorspulen"
+          title={t.gapsync.seekTitle}
         />
       )}
 
@@ -434,25 +436,25 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
           <button
             className="btn-transport"
             onClick={handleStart}
-            title={videoGap > 0 ? `Zu ${videoGap}s springen und abspielen` : 'Von Anfang abspielen'}
+            title={videoGap > 0 ? t.gapsync.startWithGap(videoGap) : t.gapsync.startFromBeginning}
           >
-            ↩ {videoGap > 0 ? `${videoGap}s` : 'Start'}
+            {t.gapsync.startLabel(videoGap)}
           </button>
           {/* Play/Pause toggle: resumes/pauses at current slider position */}
           <button
             className="btn-transport"
             onClick={isPlaying ? pause : play}
-            title={isPlaying ? 'Pause' : 'Abspielen ab aktueller Position'}
+            title={isPlaying ? t.gapsync.pause : t.gapsync.play}
           >
             {isPlaying ? '⏸' : '▶'}
           </button>
           {videoTime > 0 && (
-            <span className="video-clock" title="Aktuelle Videoposition">
+            <span className="video-clock" title={t.gapsync.clockTitle}>
               {videoTime.toFixed(1)}s
             </span>
           )}
           {isPlaying && (
-            <span className="yt-hint-live">Lyrics werden live hervorgehoben.</span>
+            <span className="yt-hint-live">{t.gapsync.liveHint}</span>
           )}
         </div>
       )}
