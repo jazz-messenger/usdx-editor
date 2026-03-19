@@ -73,6 +73,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
   const [activePos, setActivePos] = useState<ActivePos | null>(null)
   const activePhraseRef = useRef<HTMLDivElement | null>(null)
   const firstPhraseRef = useRef<HTMLDivElement | null>(null)
+  const skipNextScrollRef = useRef(false)
   const [warningDismissed, setWarningDismissed] = useState(false)
 
   // MusicBrainz lookup — year + genre, runs once when the song is loaded
@@ -257,7 +258,10 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
                     if (i === 0) firstPhraseRef.current = el
                     if (isActivePhrase && el && el !== activePhraseRef.current) {
                       activePhraseRef.current = el
-                      el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                      if (!skipNextScrollRef.current) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                      }
+                      skipNextScrollRef.current = false
                     }
                   }}
                   className={`phrase phrase--singer-${singer}${isActivePhrase ? ' phrase--active' : ''}`}
@@ -291,6 +295,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
             onVideoUrlChange={setEditVideoUrl}
             onReset={() => {
               setActivePos(null)
+              skipNextScrollRef.current = true
               firstPhraseRef.current?.scrollIntoView({ behavior: 'instant', block: 'start' })
             }}
             artist={header.artist}
