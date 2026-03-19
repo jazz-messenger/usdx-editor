@@ -49,6 +49,29 @@ export function findCoverFile(header: UsdxHeader, files: SongFileMap): File | nu
   return null
 }
 
+export function findVideoFile(header: UsdxHeader, files: SongFileMap): File | null {
+  if (header.video) {
+    const f = files.get(header.video.toLowerCase())
+    if (f) return f
+  }
+  return null
+}
+
+export function findBackgroundFile(header: UsdxHeader, files: SongFileMap): File | null {
+  if (header.background) {
+    const f = files.get(header.background.toLowerCase())
+    if (f) return f
+  }
+  for (const [name, file] of files) {
+    if (name.includes('[bg]') && /\.(jpg|jpeg|png|webp)$/.test(name)) return file
+  }
+  for (const name of ['background.jpg', 'background.jpeg', 'background.png', 'background.webp']) {
+    const f = files.get(name)
+    if (f) return f
+  }
+  return null
+}
+
 export function fetchRemoteCover(artist: string, title: string): Promise<string | null> {
   const query = encodeURIComponent(`${artist} ${title}`)
   return fetch(`https://itunes.apple.com/search?term=${query}&entity=song&limit=1`)
