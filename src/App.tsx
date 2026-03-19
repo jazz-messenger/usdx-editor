@@ -37,7 +37,7 @@ export default function App() {
                   direkt im Browser, ohne Installation. Deine Dateien verlassen dabei nie deinen Rechner.
                 </p>
                 <div className="landing-badges">
-                  {['Duett-Support', 'Live-Highlighting', 'SingStar-Editions', 'Jahreserkennung', 'YouTube-Suche', 'Optimiert für UltraStar Deluxe'].map(b => (
+                  {['Duett-Support', 'Live-Highlighting', 'SingStar-Editions', 'Jahreserkennung', 'Genre-Vorschläge', 'YouTube-Suche', 'Optimiert für UltraStar Deluxe'].map(b => (
                     <span key={b} className="landing-badge">{b}</span>
                   ))}
                 </div>
