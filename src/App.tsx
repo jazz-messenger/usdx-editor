@@ -593,6 +593,10 @@ export default function App() {
                 </div>
               </div>
               <DropZone onLoad={handleLoad} />
+              <footer className="landing-footer">
+                <a href="/impressum.html">Impressum</a>
+                <a href="/datenschutz.html">Datenschutz</a>
+              </footer>
             </div>
           )
         }

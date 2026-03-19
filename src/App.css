@@ -1343,6 +1343,22 @@
 }
 
 
+/* ─── Landing footer ─────────────────────────────────────────────────────── */
+.landing-footer {
+  margin-top: 32px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  font-size: 0.8rem;
+}
+.landing-footer a {
+  color: rgb(var(--text-primary) / .35);
+  text-decoration: none;
+}
+.landing-footer a:hover {
+  color: rgb(var(--text-primary) / .65);
+}
+
 /* ─── Ko-fi widget position override ─────────────────────────────────────── */
 .floatingchat-container-wrap,
 .floatingchat-container-wrap-mobi {
