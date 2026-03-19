@@ -1,73 +1,90 @@
-# React + TypeScript + Vite
+# USDX Editor
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Der Browser-Editor für deine UltraStar-Songs.**
 
-Currently, two official plugins are available:
+Ein kostenloser, datenschutzfreundlicher Editor für [UltraStar Deluxe](https://usdx.eu/) Songdateien — direkt im Browser, ohne Installation.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+🔗 **[korczak.at/usdx-editor](https://korczak.at/usdx-editor/)**
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Features
 
-## Expanding the ESLint configuration
+- 🎤 **Metadaten pflegen** — Titel, Künstler, Genre, Jahr, Sprache, Edition und mehr
+- ⏱️ **GAP & VIDEOGAP einstellen** — mit Live-Vorschau und YouTube-Integration
+- 🎵 **Live-Highlighting** — Phrasen werden beim Abspielen hervorgehoben
+- 👥 **Duett-Support** — zwei Stimmen, getrennte Zuweisung, zusammengeführte Ansicht
+- ⭐ **Golden Notes** — visuelles Glow-Highlighting
+- 🎶 **SingStar-Editions-Vorschläge** — automatische Erkennung aus einer kuratierten Songdatenbank
+- 📅 **Jahreserkennung** — automatischer Abruf via MusicBrainz
+- 🔍 **YouTube-Suche** — komfortabler Videolink direkt im Editor
+- 🖼️ **Cover-Art** — automatischer Abruf und lokale Vorschau
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Datenschutz
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+**Deine Dateien verlassen nie deinen Rechner.**
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Der Editor verarbeitet alle Songdateien ausschließlich lokal im Browser. Es findet keine Übertragung von Songdaten, Texten oder Metadaten an externe Server statt.
+
+Externe Verbindungen werden nur hergestellt wenn der Nutzer dies aktiv auslöst:
+- **YouTube** — beim Einbinden eines Videos (Google Privacy Policy)
+- **MusicBrainz** — beim automatischen Jahres-/Genre-Abruf (nur Künstler + Titel)
+
+---
+
+## Urheberrecht & Haftungsausschluss
+
+Der USDX Editor ist ein reines Bearbeitungswerkzeug. **Der Nutzer ist selbst verantwortlich** für die urheberrechtliche Situation der von ihm bearbeiteten Songdateien, Texte, Cover-Bilder und Audiodateien.
+
+Der Betreiber speichert, hostet oder verteilt keine urheberrechtlich geschützten Inhalte.
+
+---
+
+## Datenquellen
+
+Song- und Editionsdaten für SingStar-Vorschläge basieren auf Inhalten der Wikipedia:
+- [List of songs in SingStar games (PlayStation 2)](https://en.wikipedia.org/wiki/List_of_songs_in_SingStar_games_(PlayStation_2))
+- [List of songs in SingStar games (PlayStation 3)](https://en.wikipedia.org/wiki/List_of_songs_in_SingStar_games_(PlayStation_3))
+
+Lizenziert unter [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+
+Metadaten (Jahr, Genre) werden über die [MusicBrainz API](https://musicbrainz.org/) abgerufen (Open Data, CC0).
+
+---
+
+## Lokale Entwicklung
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Für YouTube-Suche wird ein API-Key benötigt:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cp .env.example .env.local
+# VITE_YOUTUBE_API_KEY=dein-key eintragen
 ```
+
+Den YouTube Data API v3 Key in der [Google Cloud Console](https://console.cloud.google.com/) erstellen und auf die eigene Domain einschränken (`korczak.at/*`).
+
+```bash
+npm test        # Unit-Tests
+npm run build   # Produktions-Build
+```
+
+---
+
+## Lizenz
+
+GNU General Public License v3.0 — siehe [LICENSE](./LICENSE).
+
+Kurzfassung: Frei nutzbar und veränderbar, auch kommerziell — aber abgeleitete Werke müssen ebenfalls unter GPL v3 veröffentlicht werden.
+
+---
+
+## Support
+
+Wenn dir der Editor nützlich ist: ☕ [ko-fi.com/jankorczak](https://ko-fi.com/jankorczak)
