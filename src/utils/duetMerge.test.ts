@@ -111,7 +111,6 @@ describe('mergeDuetTracks', () => {
 
   it('collapses identical adjacent phrases from different players into singer=3', () => {
     const sharedNote = makeNote(0, 'Both')
-    const shared = makePhrase([sharedNote])
     // Identical phrase in both tracks
     const t1 = makeTrack(1, [makePhrase([{ ...sharedNote }])])
     const t2 = makeTrack(2, [makePhrase([{ ...sharedNote }])])
