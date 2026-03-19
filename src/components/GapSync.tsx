@@ -180,9 +180,9 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
 
   // Seek to VIDEOGAP position and start — puts video right at song beat 0.
   const handleStart = () => {
+    onReset?.()
     seekTo(videoGap)
     play()
-    onReset?.()
   }
 
   // Changing VIDEOGAP: update state AND immediately seek so the video frame
