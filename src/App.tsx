@@ -547,7 +547,7 @@ function SongView({ song, filename, files, onReset }: {
 
         {/* Right: sticky video + GAP sidebar */}
         <aside className="video-sidebar">
-          <GapSync gap={gap} onChange={setGap} videoGap={videoGap} onVideoGapChange={setVideoGap} onTimeUpdate={handleTimeUpdate} videoUrl={videoUrl ?? undefined} backgroundUrl={backgroundUrl ?? undefined} initialVideoUrl={editVideoUrl || undefined} onVideoUrlChange={setEditVideoUrl} onReset={() => { setActivePos(null); firstPhraseRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }} artist={header.artist} title={header.title} />
+          <GapSync gap={gap} onChange={setGap} videoGap={videoGap} onVideoGapChange={setVideoGap} onTimeUpdate={handleTimeUpdate} videoUrl={videoUrl ?? undefined} backgroundUrl={backgroundUrl ?? undefined} initialVideoUrl={editVideoUrl || undefined} onVideoUrlChange={setEditVideoUrl} onReset={() => { setActivePos(null); firstPhraseRef.current?.scrollIntoView({ behavior: 'instant', block: 'start' }) }} artist={header.artist} title={header.title} />
         </aside>
       </div>
     </div>
