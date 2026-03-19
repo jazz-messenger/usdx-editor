@@ -16,6 +16,7 @@ import { TagEditor } from './components/TagEditor'
 import type { SuggestionGroup } from './components/TagEditor'
 import { DropZone } from './components/DropZone'
 import { CoverArt } from './components/CoverArt'
+import { KofiWidget } from './components/KofiWidget'
 import type { SongFileMap } from './utils/fileLoader'
 
 const GENRE_SUGGESTIONS = [
@@ -596,6 +597,7 @@ export default function App() {
           )
         }
       </main>
+      <KofiWidget />
     </div>
   )
 }
