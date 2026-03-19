@@ -229,7 +229,6 @@
   padding: 3px 10px;
 }
 
-.drop-zone:hover,
 .drop-zone.drag-over {
   border-color: rgb(var(--accent-primary));
   background: rgb(var(--accent-primary) / .05);
@@ -256,6 +255,12 @@
   color: #f87171;
   font-size: 13px;
   margin-top: 8px;
+}
+
+.drop-zone-btn {
+  margin-top: 16px;
+  cursor: pointer;
+  display: inline-block;
 }
 
 /* ─── Song view ──────────────────────────────────────────────────────────── */
