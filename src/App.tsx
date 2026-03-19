@@ -6,7 +6,7 @@ import { phraseToSyllables } from './parser/lyrics'
 import { exportUsdx } from './parser/usdxExporter'
 import { GapSync } from './components/GapSync'
 import { msToBeat } from './parser/timing'
-import { lookupReleaseYear } from './utils/musicbrainz'
+import { lookupReleaseInfo } from './utils/musicbrainz'
 import { lookupSingStarEdition, KNOWN_SINGSTAR_GAMES } from './utils/singstarEditions'
 import type { SingStarEditionMatch } from './utils/singstarEditions'
 import { version } from '../package.json'
@@ -220,6 +220,7 @@ function SongView({ song, filename, files, onReset }: {
   const [editArtist, setEditArtist] = useState(header.artist)
   const [editYear, setEditYear] = useState<number | ''>(header.year ?? '')
   const [suggestedYear, setSuggestedYear] = useState<number | null>(null)
+  const [suggestedGenre, setSuggestedGenre] = useState<string | null>(null)
   const [singstarMatch, setSingstarMatch] = useState<SingStarEditionMatch | null>(null)
   const [editGenres, setEditGenres] = useState<string[]>(
     header.genre ? header.genre.split(',').map((g) => g.trim()).filter(Boolean) : []
@@ -242,10 +243,11 @@ function SongView({ song, filename, files, onReset }: {
   const firstPhraseRef = useRef<HTMLDivElement | null>(null)
   const [warningDismissed, setWarningDismissed] = useState(false)
 
-  // MusicBrainz year lookup — runs once when the song is loaded
+  // MusicBrainz lookup — year + genre, runs once when the song is loaded
   useEffect(() => {
-    lookupReleaseYear(header.artist, header.title).then(year => {
+    lookupReleaseInfo(header.artist, header.title).then(({ year, genre }) => {
       if (year !== null) setSuggestedYear(year)
+      if (genre !== null) setSuggestedGenre(genre)
     })
   }, [header.artist, header.title])
 
@@ -398,6 +400,22 @@ function SongView({ song, filename, files, onReset }: {
               suggestions={GENRE_SUGGESTIONS}
               label="Genre"
             />
+            {suggestedGenre !== null && !editGenres.includes(suggestedGenre) && (
+              <span className="year-suggestion">
+                <button
+                  className="year-suggestion-accept"
+                  onClick={() => { setEditGenres(g => [...g, suggestedGenre!]); setSuggestedGenre(null) }}
+                  title="Genre aus MusicBrainz übernehmen"
+                >
+                  {suggestedGenre} hinzufügen?
+                </button>
+                <button
+                  className="year-suggestion-dismiss"
+                  onClick={() => setSuggestedGenre(null)}
+                  aria-label="Vorschlag verwerfen"
+                >×</button>
+              </span>
+            )}
             <TagEditor
               tags={editEdition}
               onChange={setEditEdition}
