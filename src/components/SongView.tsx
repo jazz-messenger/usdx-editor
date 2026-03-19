@@ -73,6 +73,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
   const [activePos, setActivePos] = useState<ActivePos | null>(null)
   const activePhraseRef = useRef<HTMLDivElement | null>(null)
   const firstPhraseRef = useRef<HTMLDivElement | null>(null)
+  const lyricsColumnRef = useRef<HTMLDivElement | null>(null)
   const skipNextScrollRef = useRef(false)
   const [warningDismissed, setWarningDismissed] = useState(false)
 
@@ -201,7 +202,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
 
       {/* ── Two-column content ── */}
       <div className="song-content">
-        <div className="lyrics-column">
+        <div className="lyrics-column" ref={lyricsColumnRef}>
           {(Object.values(singerMap).some(v => v === 2) || singerNames[0] || singerNames[1]) && (
             <div className="duet-header">
               <input
@@ -296,7 +297,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
             onReset={() => {
               setActivePos(null)
               skipNextScrollRef.current = true
-              firstPhraseRef.current?.scrollIntoView({ behavior: 'instant', block: 'start' })
+              if (lyricsColumnRef.current) lyricsColumnRef.current.scrollTop = 0
             }}
             artist={header.artist}
             title={header.title}
