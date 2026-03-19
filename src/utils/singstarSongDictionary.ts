@@ -1,7 +1,12 @@
 // AUTO-GENERATED FILE
-// Source pages:
-// - https://en.wikipedia.org/wiki/List_of_songs_in_SingStar_games_(PlayStation_2)
-// - https://en.wikipedia.org/wiki/List_of_songs_in_SingStar_games_(PlayStation_3)
+//
+// The song and edition data in this file was compiled from Wikipedia:
+//   https://en.wikipedia.org/wiki/List_of_songs_in_SingStar_games_(PlayStation_2)
+//   https://en.wikipedia.org/wiki/List_of_songs_in_SingStar_games_(PlayStation_3)
+//
+// The data consists of factual information (song titles, artist names, game names)
+// and is based on contributions by Wikipedia editors, licensed under CC BY-SA 4.0:
+//   https://creativecommons.org/licenses/by-sa/4.0/
 
 export type Platform = "PS2" | "PS3";
 
