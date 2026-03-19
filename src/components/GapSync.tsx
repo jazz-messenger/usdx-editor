@@ -445,9 +445,11 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
           >
             {isPlaying ? '⏸' : '▶'}
           </button>
-          <span className="video-clock" title="Aktuelle Videoposition">
-            {videoTime.toFixed(1)}s
-          </span>
+          {videoTime > 0 && (
+            <span className="video-clock" title="Aktuelle Videoposition">
+              {videoTime.toFixed(1)}s
+            </span>
+          )}
           {isPlaying && (
             <span className="yt-hint-live">Lyrics werden live hervorgehoben.</span>
           )}
