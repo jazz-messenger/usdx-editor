@@ -2,8 +2,10 @@ import { useState, useMemo, useEffect } from 'react'
 import type { UsdxHeader } from '../parser/usdxParser'
 import { findCoverFile, fetchRemoteCover } from '../utils/fileLoader'
 import type { SongFileMap } from '../utils/fileLoader'
+import { useLanguage } from '../i18n/LanguageContext'
 
 export function CoverArt({ header, files, onCoverUrl }: { header: UsdxHeader; files: SongFileMap; onCoverUrl?: (url: string) => void }) {
+  const { t } = useLanguage()
   const localFile = useMemo(() => findCoverFile(header, files), [header, files])
   const localUrl = useMemo(
     () => (localFile ? URL.createObjectURL(localFile) : null),
@@ -60,19 +62,19 @@ export function CoverArt({ header, files, onCoverUrl }: { header: UsdxHeader; fi
 
   return (
     <div className="song-cover-wrap">
-      <img className="song-cover" src={displayUrl} alt="Cover" />
+      <img className="song-cover" src={displayUrl} alt={t.coverart.alt} />
       <div className="song-cover-actions">
         {localFile && (
           <button
             className="cover-btn"
             onClick={handleFlip}
-            title={showRemote ? 'Lokales Cover anzeigen' : 'Online-Cover laden'}
+            title={showRemote ? t.coverart.showLocal : t.coverart.loadOnline}
           >
             {loading ? '…' : showRemote ? '⬅' : '↺'}
           </button>
         )}
         {showRemote && remoteUrl && (
-          <button className="cover-btn" onClick={handleDownload} title="Cover herunterladen">
+          <button className="cover-btn" onClick={handleDownload} title={t.coverart.download}>
             ↓
           </button>
         )}

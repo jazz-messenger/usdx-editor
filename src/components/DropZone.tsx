@@ -4,15 +4,17 @@ import { parseUsdx } from '../parser/usdxParser'
 import type { UsdxSong } from '../parser/usdxParser'
 import { readTxtFile, readDroppedEntry } from '../utils/fileLoader'
 import type { SongFileMap } from '../utils/fileLoader'
+import { useLanguage } from '../i18n/LanguageContext'
 
 export function DropZone({ onLoad }: { onLoad: (song: UsdxSong, filename: string, files: SongFileMap) => void }) {
+  const { t } = useLanguage()
   const [dragOver, setDragOver] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [multiTxtNames, setMultiTxtNames] = useState<string[] | null>(null)
 
   const processFileMap = useCallback((files: SongFileMap) => {
     const txtFiles = Array.from(files.values()).filter((f) => f.name.toLowerCase().endsWith('.txt'))
-    if (txtFiles.length === 0) { setError('Keine .txt-Datei im Ordner gefunden.'); return }
+    if (txtFiles.length === 0) { setError(t.dropzone.noTxt); return }
     if (txtFiles.length > 1) {
       setMultiTxtNames(txtFiles.map((f) => f.name))
       return
@@ -20,7 +22,7 @@ export function DropZone({ onLoad }: { onLoad: (song: UsdxSong, filename: string
     setError(null)
     setMultiTxtNames(null)
     readTxtFile(txtFiles[0]).then((text) => onLoad(parseUsdx(text), txtFiles[0].name, files))
-  }, [onLoad])
+  }, [onLoad, t])
 
   const onDrop = async (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault()
@@ -46,12 +48,12 @@ export function DropZone({ onLoad }: { onLoad: (song: UsdxSong, filename: string
     return (
       <div className="drop-zone drop-zone--warning">
         <div className="drop-zone-icon">⚠️</div>
-        <h2>Mehrere .txt-Dateien gefunden</h2>
-        <p>Die Auswahl enthält {multiTxtNames.length} .txt-Dateien. Bitte öffne nur den Ordner eines einzelnen Songs.</p>
+        <h2>{t.dropzone.multiTxtHeading}</h2>
+        <p>{t.dropzone.multiTxtDesc(multiTxtNames.length)}</p>
         <ul className="multi-txt-list">
           {multiTxtNames.map((n) => <li key={n}>{n}</li>)}
         </ul>
-        <button className="btn-primary" onClick={() => setMultiTxtNames(null)}>Verstanden</button>
+        <button className="btn-primary" onClick={() => setMultiTxtNames(null)}>{t.dropzone.understood}</button>
       </div>
     )
   }
@@ -64,11 +66,11 @@ export function DropZone({ onLoad }: { onLoad: (song: UsdxSong, filename: string
       onDrop={onDrop}
     >
       <div className="drop-zone-icon">🎵</div>
-      <h2>Song-Ordner hierher ziehen</h2>
-      <p>…oder Ordner über den Button öffnen und alle Dateien auswählen ({navigator.platform.includes('Mac') ? '⌘' : 'Strg'}+A)</p>
+      <h2>{t.dropzone.heading}</h2>
+      <p>{t.dropzone.instruction(navigator.platform.includes('Mac') ? '⌘' : 'Strg')}</p>
       {error && <p className="drop-zone-error">{error}</p>}
       <label className="btn-primary drop-zone-btn">
-        Ordner öffnen
+        {t.dropzone.button}
         <input type="file" multiple onChange={onFileInput} style={{ display: 'none' }} />
       </label>
     </div>

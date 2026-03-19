@@ -117,6 +117,35 @@
   color: rgb(var(--text-muted));
 }
 
+.lang-toggle {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.lang-btn {
+  padding: 3px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 4px;
+  border: 1px solid rgb(var(--border-subtle));
+  background: transparent;
+  color: rgb(var(--text-muted));
+  cursor: pointer;
+  transition: color .15s, border-color .15s, background .15s;
+}
+
+.lang-btn:hover {
+  color: rgb(var(--text-primary));
+  border-color: rgb(var(--text-muted));
+}
+
+.lang-btn--active {
+  background: rgb(var(--accent-primary) / .15);
+  border-color: rgb(var(--accent-primary) / .5);
+  color: rgb(var(--accent-primary));
+}
+
 .app-main {
   flex: 1;
   min-height: 0;

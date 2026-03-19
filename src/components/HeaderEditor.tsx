@@ -4,6 +4,7 @@ import { KNOWN_SINGSTAR_GAMES } from '../utils/singstarEditions'
 import type { SingStarEditionMatch } from '../utils/singstarEditions'
 import type { UsdxHeader } from '../parser/usdxParser'
 import type { SongFileMap } from '../utils/fileLoader'
+import { useLanguage } from '../i18n/LanguageContext'
 
 export const GENRE_SUGGESTIONS = [
   'Blues', 'Country', 'Darkwave', 'Electronic', 'Folk', 'Funk',
@@ -70,6 +71,7 @@ export function HeaderEditor({
   onAcceptSingstar, onDismissSingstar,
   onCoverUrl, onDownload, onReset,
 }: HeaderEditorProps) {
+  const { t } = useLanguage()
   const { title, artist, year, genres, languages, edition, tags } = values
   const { setTitle, setArtist, setYear, setGenres, setLanguages, setEdition, setTags } = handlers
 
@@ -81,13 +83,13 @@ export function HeaderEditor({
           className="song-title song-title-input"
           value={title}
           onChange={e => setTitle(e.target.value)}
-          aria-label="Titel"
+          aria-label={t.header.titleLabel}
         />
         <input
           className="song-artist song-artist-input"
           value={artist}
           onChange={e => setArtist(e.target.value)}
-          aria-label="Künstler"
+          aria-label={t.header.artistLabel}
         />
         <div className="song-meta-tags">
           <input
@@ -97,43 +99,43 @@ export function HeaderEditor({
             min={1900}
             max={2099}
             onChange={(e) => setYear(e.target.value === '' ? '' : Number(e.target.value))}
-            aria-label="Jahr"
-            placeholder="Jahr"
+            aria-label={t.header.yearLabel}
+            placeholder={t.header.yearPlaceholder}
           />
           {suggestedYear !== null && suggestedYear !== year && (
             <span className="year-suggestion">
               <button
                 className="year-suggestion-accept"
                 onClick={onAcceptYear}
-                title="Jahr aus MusicBrainz übernehmen"
+                title={t.header.yearSuggestionTitle}
               >
-                {suggestedYear} übernehmen?
+                {t.header.acceptYear(suggestedYear)}
               </button>
-              <button className="year-suggestion-dismiss" onClick={onDismissYear} aria-label="Vorschlag verwerfen">×</button>
+              <button className="year-suggestion-dismiss" onClick={onDismissYear} aria-label={t.header.dismissSuggestion}>×</button>
             </span>
           )}
-          <TagEditor tags={languages} onChange={setLanguages} suggestions={LANGUAGE_SUGGESTIONS} label="Sprache" />
-          <TagEditor tags={genres} onChange={setGenres as (v: string[]) => void} suggestions={GENRE_SUGGESTIONS} label="Genre" />
+          <TagEditor tags={languages} onChange={setLanguages} suggestions={LANGUAGE_SUGGESTIONS} label={t.header.languageLabel} />
+          <TagEditor tags={genres} onChange={setGenres as (v: string[]) => void} suggestions={GENRE_SUGGESTIONS} label={t.header.genreLabel} />
           {suggestedGenre !== null && !genres.includes(suggestedGenre) && (
             <span className="year-suggestion">
               <button
                 className="year-suggestion-accept"
                 onClick={onAcceptGenre}
-                title="Genre aus MusicBrainz übernehmen"
+                title={t.header.genreSuggestionTitle}
               >
-                {suggestedGenre} hinzufügen?
+                {t.header.addGenre(suggestedGenre)}
               </button>
-              <button className="year-suggestion-dismiss" onClick={onDismissGenre} aria-label="Vorschlag verwerfen">×</button>
+              <button className="year-suggestion-dismiss" onClick={onDismissGenre} aria-label={t.header.dismissSuggestion}>×</button>
             </span>
           )}
           <TagEditor
             tags={edition}
             onChange={setEdition}
             suggestions={EDITION_SUGGESTIONS}
-            label="Edition"
-            warnTags={edition.filter(t => {
-              if (!t.toLowerCase().includes('singstar')) return false
-              if (KNOWN_SINGSTAR_GAMES.has(t)) return false
+            label={t.header.editionLabel}
+            warnTags={edition.filter(e => {
+              if (!e.toLowerCase().includes('singstar')) return false
+              if (KNOWN_SINGSTAR_GAMES.has(e)) return false
               return true
             })}
           />
@@ -142,11 +144,11 @@ export function HeaderEditor({
               <button
                 className="year-suggestion-accept"
                 onClick={onAcceptSingstar}
-                title={`Gefunden in SingStar (${singstarMatch.platforms.join(', ')})`}
+                title={t.header.singstarSuggestionTitle(singstarMatch.platforms.join(', '))}
               >
-                {singstarMatch.suggestedEdition} übernehmen?
+                {t.header.acceptEdition(singstarMatch.suggestedEdition)}
               </button>
-              <button className="year-suggestion-dismiss" onClick={onDismissSingstar} aria-label="Vorschlag verwerfen">×</button>
+              <button className="year-suggestion-dismiss" onClick={onDismissSingstar} aria-label={t.header.dismissSuggestion}>×</button>
             </span>
           )}
         </div>
@@ -155,12 +157,12 @@ export function HeaderEditor({
           value={tags}
           onChange={(e) => setTags(e.target.value)}
           aria-label="Tags"
-          placeholder="Tags: Party, Charts, Disney, Dancefloor…"
+          placeholder={t.header.tagsPlaceholder}
         />
       </div>
       <div className="meta-actions">
-        <button className="btn-primary" onClick={onDownload}>Speichern</button>
-        <button className="btn-secondary" onClick={onReset} title={filename}>Andere Datei</button>
+        <button className="btn-primary" onClick={onDownload}>{t.header.save}</button>
+        <button className="btn-secondary" onClick={onReset} title={filename}>{t.header.changeFile}</button>
       </div>
     </div>
   )
