@@ -96,8 +96,8 @@ export function useYouTubePlayer(videoId: string | null) {
   const getCurrentTime = (): number => playerRef.current?.getCurrentTime() ?? 0
   const getDuration = (): number => playerRef.current?.getDuration() ?? 0
   const seekTo = (seconds: number) => playerRef.current?.seekTo(seconds, true)
-  const play = () => playerRef.current?.playVideo()
-  const pause = () => playerRef.current?.pauseVideo()
+  const play  = () => { if (typeof playerRef.current?.playVideo  === 'function') playerRef.current.playVideo() }
+  const pause = () => { if (typeof playerRef.current?.pauseVideo === 'function') playerRef.current.pauseVideo() }
 
   return { containerRef, playerState, isPlaying, getCurrentTime, getDuration, seekTo, play, pause }
 }
