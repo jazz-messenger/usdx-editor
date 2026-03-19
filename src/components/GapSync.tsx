@@ -152,6 +152,7 @@ export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdat
 
   // ── Pause inactive player when source is switched ───────────────────────────
   useEffect(() => {
+    if (!isPlayerReady) return
     if (preferYoutube) localPause()
     else ytPause()
   }, [preferYoutube]) // eslint-disable-line react-hooks/exhaustive-deps
