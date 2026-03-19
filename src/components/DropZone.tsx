@@ -22,7 +22,7 @@ export function DropZone({ onLoad }: { onLoad: (song: UsdxSong, filename: string
     readTxtFile(txtFiles[0]).then((text) => onLoad(parseUsdx(text), txtFiles[0].name, files))
   }, [onLoad])
 
-  const onDrop = async (e: DragEvent<HTMLLabelElement>) => {
+  const onDrop = async (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault()
     setDragOver(false)
     const item = e.dataTransfer.items[0]
@@ -57,17 +57,20 @@ export function DropZone({ onLoad }: { onLoad: (song: UsdxSong, filename: string
   }
 
   return (
-    <label
+    <div
       className={`drop-zone${dragOver ? ' drag-over' : ''}`}
       onDragOver={(e) => { e.preventDefault(); setDragOver(true) }}
       onDragLeave={() => setDragOver(false)}
       onDrop={onDrop}
     >
       <div className="drop-zone-icon">🎵</div>
-      <h2>Song-Dateien öffnen</h2>
-      <p>Song-Ordner hierher ziehen — oder klicken, Ordner öffnen und alle Dateien auswählen ({navigator.platform.includes('Mac') ? '⌘' : 'Strg'}+A)</p>
+      <h2>Song-Ordner hierher ziehen</h2>
+      <p>…oder Ordner über den Button öffnen und alle Dateien auswählen ({navigator.platform.includes('Mac') ? '⌘' : 'Strg'}+A)</p>
       {error && <p className="drop-zone-error">{error}</p>}
-      <input type="file" multiple onChange={onFileInput} style={{ display: 'none' }} />
-    </label>
+      <label className="btn-primary drop-zone-btn">
+        Ordner öffnen
+        <input type="file" multiple onChange={onFileInput} style={{ display: 'none' }} />
+      </label>
+    </div>
   )
 }
