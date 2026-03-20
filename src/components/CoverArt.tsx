@@ -4,7 +4,16 @@ import { findCoverFiles, fetchRemoteCovers } from '../utils/fileLoader'
 import type { SongFileMap } from '../utils/fileLoader'
 import { useLanguage } from '../i18n/LanguageContext'
 
-export function CoverArt({ header, files, onCoverUrl }: { header: UsdxHeader; files: SongFileMap; onCoverUrl?: (url: string) => void }) {
+interface CoverArtProps {
+  header: UsdxHeader
+  files: SongFileMap
+  /** Called when a remote cover URL is selected (for #COVERURL). */
+  onCoverUrl?: (url: string) => void
+  /** Called after a remote cover has been saved locally (for #COVER). */
+  onCoverFileSaved?: (filename: string) => void
+}
+
+export function CoverArt({ header, files, onCoverUrl, onCoverFileSaved }: CoverArtProps) {
   const { t } = useLanguage()
 
   // ── Local covers ────────────────────────────────────────────────────────────
@@ -21,6 +30,7 @@ export function CoverArt({ header, files, onCoverUrl }: { header: UsdxHeader; fi
   const [remoteIndex, setRemoteIndex] = useState(0)
   const [showRemote, setShowRemote] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [saving, setSaving] = useState(false)
 
   // ── Lightbox ─────────────────────────────────────────────────────────────────
   const [lightboxOpen, setLightboxOpen] = useState(false)
@@ -59,13 +69,46 @@ export function CoverArt({ header, files, onCoverUrl }: { header: UsdxHeader; fi
     })
   }
 
-  const handleDownload = () => {
+  /** Downloads the current remote cover and updates #COVER in the header. */
+  const handleSetAsCover = async () => {
     if (!remoteUrl) return
-    const a = document.createElement('a')
-    a.href = remoteUrl
-    a.download = header.cover ?? `${header.artist} - ${header.title} [CO].jpg`
-    a.target = '_blank'
-    a.click()
+    const suggestedFilename = `${header.artist} - ${header.title} [CO].jpg`
+    setSaving(true)
+    try {
+      const response = await fetch(remoteUrl)
+      const blob = await response.blob()
+
+      if ('showSaveFilePicker' in window) {
+        try {
+          const handle = await (window as Window & { showSaveFilePicker: (opts: object) => Promise<FileSystemFileHandle> })
+            .showSaveFilePicker({
+              suggestedName: suggestedFilename,
+              types: [{ description: 'Cover Image', accept: { 'image/*': ['.jpg', '.jpeg', '.png', '.webp'] } }],
+            })
+          const writable = await handle.createWritable()
+          await writable.write(blob)
+          await writable.close()
+          onCoverFileSaved?.(handle.name)
+          setSaving(false)
+          return
+        } catch (e) {
+          if (e instanceof DOMException && e.name === 'AbortError') { setSaving(false); return }
+          // Non-abort error: fall through to regular download
+        }
+      }
+
+      // Fallback: regular browser download
+      const objectUrl = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = objectUrl
+      a.download = suggestedFilename
+      a.click()
+      URL.revokeObjectURL(objectUrl)
+      onCoverFileSaved?.(suggestedFilename)
+    } catch {
+      // fetch failed — silently ignore
+    }
+    setSaving(false)
   }
 
   const navigateLocal = (dir: 1 | -1) => {
@@ -128,13 +171,22 @@ export function CoverArt({ header, files, onCoverUrl }: { header: UsdxHeader; fi
             {/* Action row */}
             <div className="cover-lightbox-actions">
               {localFile && (
-                <button className="cover-lightbox-action-btn" onClick={handleFlip} title={showRemote ? t.coverart.showLocal : t.coverart.loadOnline}>
+                <button
+                  className="cover-lightbox-action-btn"
+                  onClick={handleFlip}
+                  title={showRemote ? t.coverart.showLocal : t.coverart.loadOnline}
+                >
                   {loading ? '…' : showRemote ? t.coverart.btnShowLocal : t.coverart.btnLoadOnline}
                 </button>
               )}
-              {!localFile && showRemote && remoteUrl && (
-                <button className="cover-lightbox-action-btn" onClick={handleDownload} title={t.coverart.download}>
-                  {t.coverart.btnDownload}
+              {showRemote && remoteUrl && (
+                <button
+                  className="cover-lightbox-action-btn cover-lightbox-action-btn--primary"
+                  onClick={handleSetAsCover}
+                  disabled={saving}
+                  title={t.coverart.download}
+                >
+                  {saving ? '…' : t.coverart.setAsCover}
                 </button>
               )}
             </div>

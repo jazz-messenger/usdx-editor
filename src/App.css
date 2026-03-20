@@ -482,6 +482,13 @@
 }
 .cover-lightbox-action-btn:hover { background: rgb(255 255 255 / .22); }
 
+.cover-lightbox-action-btn--primary {
+  background: rgb(var(--accent-primary) / .25);
+  border-color: rgb(var(--accent-primary) / .50);
+  color: rgb(var(--accent-primary));
+}
+.cover-lightbox-action-btn--primary:hover { background: rgb(var(--accent-primary) / .38); }
+
 /* Close button */
 .cover-lightbox-close {
   position: absolute;

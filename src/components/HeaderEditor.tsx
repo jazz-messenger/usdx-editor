@@ -58,6 +58,7 @@ interface HeaderEditorProps {
   onAcceptSingstar: () => void
   onDismissSingstar: () => void
   onCoverUrl: (url: string) => void
+  onCoverFileSaved: (filename: string) => void
   onDownload: () => void
   onReset: () => void
 }
@@ -69,7 +70,7 @@ export function HeaderEditor({
   onAcceptYear, onDismissYear,
   onAcceptGenre, onDismissGenre,
   onAcceptSingstar, onDismissSingstar,
-  onCoverUrl, onDownload, onReset,
+  onCoverUrl, onCoverFileSaved, onDownload, onReset,
 }: HeaderEditorProps) {
   const { t } = useLanguage()
   const { title, artist, year, genres, languages, edition, tags } = values
@@ -77,7 +78,7 @@ export function HeaderEditor({
 
   return (
     <div className="song-meta">
-      <CoverArt header={header} files={files} onCoverUrl={onCoverUrl} />
+      <CoverArt header={header} files={files} onCoverUrl={onCoverUrl} onCoverFileSaved={onCoverFileSaved} />
       <div className="song-title-block">
         <input
           className="song-title song-title-input"

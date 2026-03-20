@@ -70,6 +70,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
   const [videoGap, setVideoGap] = useState(header.videoGap ?? 0)
   const [editVideoUrl, setEditVideoUrl] = useState(header.videoUrl ?? '')
   const [editCoverUrl, setEditCoverUrl] = useState(header.coverUrl ?? '')
+  const [editCover, setEditCover] = useState(header.cover ?? '')
 
   // Playback state
   const [activePos, setActivePos] = useState<ActivePos | null>(null)
@@ -126,6 +127,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
       gap,
       videoGap: videoGap || undefined,
       videoUrl: editVideoUrl || undefined,
+      cover: editCover || undefined,
       coverUrl: editCoverUrl || undefined,
       comment: `edited with usdx-editor v${version} on ${today}, http://korczak.at/usdx-editor`,
     }
@@ -187,6 +189,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
         onAcceptSingstar={() => { setEditEdition([singstarMatch!.suggestedEdition]); setSingstarMatch(null) }}
         onDismissSingstar={() => setSingstarMatch(null)}
         onCoverUrl={setEditCoverUrl}
+        onCoverFileSaved={setEditCover}
         onDownload={handleDownload}
         onReset={onReset}
       />
