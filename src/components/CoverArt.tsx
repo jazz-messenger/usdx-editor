@@ -132,7 +132,7 @@ export function CoverArt({ header, files, onCoverUrl }: { header: UsdxHeader; fi
                   {loading ? '…' : showRemote ? t.coverart.btnShowLocal : t.coverart.btnLoadOnline}
                 </button>
               )}
-              {showRemote && remoteUrl && (
+              {!localFile && showRemote && remoteUrl && (
                 <button className="cover-lightbox-action-btn" onClick={handleDownload} title={t.coverart.download}>
                   {t.coverart.btnDownload}
                 </button>
