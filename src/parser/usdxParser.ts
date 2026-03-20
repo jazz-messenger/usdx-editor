@@ -54,6 +54,8 @@ export interface UsdxHeader {
 export interface UsdxSong {
   header: UsdxHeader
   tracks: Track[]
+  /** Deprecated field names found during parsing (e.g. 'MP3', 'AUTHOR'). */
+  deprecatedFields: string[]
 }
 
 const NOTE_TYPES = new Set([':', '*', 'F', 'R', 'G'])
@@ -88,6 +90,7 @@ export function parseUsdx(content: string): UsdxSong {
 
   const header: Partial<UsdxHeader> & Record<string, unknown> = {}
   const tracks: Track[] = []
+  const deprecatedFields: string[] = []
 
   // Current state while parsing notes
   let currentPhrases: Phrase[] = []
@@ -142,7 +145,6 @@ export function parseUsdx(content: string): UsdxSong {
           header.videoGap = parseNumber(value)
           break
         case 'AUDIO':
-        case 'MP3':
           header.audio = value
           break
         case 'VIDEO':
@@ -190,6 +192,43 @@ export function parseUsdx(content: string): UsdxSong {
         case 'P2':
           if (value) header.singerP2 = value
           break
+
+        // ── Deprecated fields: migrate where possible, always track ──────────
+        case 'MP3':
+          if (!header.audio) header.audio = value
+          deprecatedFields.push('MP3')
+          break
+        case 'AUTHOR':
+          if (!header.creator) header.creator = value
+          deprecatedFields.push('AUTHOR')
+          break
+        case 'PREVIEW':
+          if (header.previewStart === undefined) header.previewStart = parseNumber(value)
+          deprecatedFields.push('PREVIEW')
+          break
+        case 'DUETSINGERP1':
+          if (!header.singerP1) header.singerP1 = value
+          deprecatedFields.push('DUETSINGERP1')
+          break
+        case 'DUETSINGERP2':
+          if (!header.singerP2) header.singerP2 = value
+          deprecatedFields.push('DUETSINGERP2')
+          break
+        case 'YOUTUBE':
+          if (!header.videoUrl) header.videoUrl = value
+          deprecatedFields.push('YOUTUBE')
+          break
+        case 'ALBUM':
+        case 'SOURCE':
+        case 'LENGTH':
+        case 'FIXER':
+        case 'RESOLUTION':
+        case 'NOTESGAP':
+        case 'RELATIVE':
+        case 'ENCODING':
+          deprecatedFields.push(tag)
+          break
+
         default:
           header[tag.toLowerCase()] = value
       }
@@ -236,5 +275,6 @@ export function parseUsdx(content: string): UsdxSong {
   return {
     header: header as UsdxHeader,
     tracks,
+    deprecatedFields,
   }
 }

@@ -78,6 +78,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
   const lyricsColumnRef = useRef<HTMLDivElement | null>(null)
   const skipNextScrollRef = useRef(false)
   const [warningDismissed, setWarningDismissed] = useState(false)
+  const [deprecationDismissed, setDeprecationDismissed] = useState(false)
 
   // MusicBrainz lookup — year + genre, runs once when the song is loaded
   useEffect(() => {
@@ -189,6 +190,15 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
         onDownload={handleDownload}
         onReset={onReset}
       />
+
+      {/* ── Deprecated fields notice ── */}
+      {song.deprecatedFields.length > 0 && !deprecationDismissed && (
+        <div className="missing-files-banner missing-files-banner--info">
+          <span className="missing-files-icon">ℹ</span>
+          <span className="missing-files-text">{t.songview.deprecationBanner(song.deprecatedFields)}</span>
+          <button className="missing-files-dismiss" onClick={() => setDeprecationDismissed(true)} title={t.songview.closeMissing}>✕</button>
+        </div>
+      )}
 
       {/* ── Missing files warning ── */}
       {missingFiles.length > 0 && !warningDismissed && (
