@@ -170,24 +170,39 @@ export function CoverArt({ header, files, onCoverUrl, onCoverFileSaved }: CoverA
 
             {/* Action row */}
             <div className="cover-lightbox-actions">
-              {localFile && (
-                <button
-                  className="cover-lightbox-action-btn"
-                  onClick={handleFlip}
-                  title={showRemote ? t.coverart.showLocal : t.coverart.loadOnline}
-                >
-                  {loading ? '…' : showRemote ? t.coverart.btnShowLocal : t.coverart.btnLoadOnline}
-                </button>
-              )}
-              {showRemote && remoteUrl && (
-                <button
-                  className="cover-lightbox-action-btn cover-lightbox-action-btn--primary"
-                  onClick={handleSetAsCover}
-                  disabled={saving}
-                  title={t.coverart.download}
-                >
-                  {saving ? '…' : t.coverart.setAsCover}
-                </button>
+              {!showRemote ? (
+                <>
+                  <span className="cover-lightbox-selected-label">{t.coverart.selectedCover}</span>
+                  <button
+                    className="cover-lightbox-action-btn"
+                    onClick={handleFlip}
+                    title={t.coverart.loadOnline}
+                  >
+                    {loading ? '…' : t.coverart.btnLoadOnline}
+                  </button>
+                </>
+              ) : (
+                <>
+                  {localFile && (
+                    <button
+                      className="cover-lightbox-action-btn"
+                      onClick={handleFlip}
+                      title={t.coverart.showLocal}
+                    >
+                      {t.coverart.btnShowLocal}
+                    </button>
+                  )}
+                  {remoteUrl && (
+                    <button
+                      className="cover-lightbox-action-btn cover-lightbox-action-btn--primary"
+                      onClick={handleSetAsCover}
+                      disabled={saving}
+                      title={t.coverart.download}
+                    >
+                      {saving ? '…' : t.coverart.setAsCover}
+                    </button>
+                  )}
+                </>
               )}
             </div>
 
