@@ -34,19 +34,28 @@ export async function readDroppedEntry(entry: FileSystemEntry): Promise<SongFile
 
 // ── Cover resolution ─────────────────────────────────────────────────────────
 
-export function findCoverFile(header: UsdxHeader, files: SongFileMap): File | null {
+/** Returns all candidate cover files in priority order (deduplicated). */
+export function findCoverFiles(header: UsdxHeader, files: SongFileMap): File[] {
+  const seen = new Set<string>()
+  const result: File[] = []
+  const add = (f: File) => { if (!seen.has(f.name)) { seen.add(f.name); result.push(f) } }
+
   if (header.cover) {
     const f = files.get(header.cover.toLowerCase())
-    if (f) return f
+    if (f) add(f)
   }
   for (const [name, file] of files) {
-    if (name.includes('[co]') && /\.(jpg|jpeg|png|webp)$/.test(name)) return file
+    if (name.includes('[co]') && /\.(jpg|jpeg|png|webp)$/.test(name)) add(file)
   }
   for (const name of ['cover.jpg', 'cover.jpeg', 'cover.png', 'cover.webp']) {
     const f = files.get(name)
-    if (f) return f
+    if (f) add(f)
   }
-  return null
+  return result
+}
+
+export function findCoverFile(header: UsdxHeader, files: SongFileMap): File | null {
+  return findCoverFiles(header, files)[0] ?? null
 }
 
 export function findVideoFile(header: UsdxHeader, files: SongFileMap): File | null {
@@ -72,13 +81,20 @@ export function findBackgroundFile(header: UsdxHeader, files: SongFileMap): File
   return null
 }
 
-export function fetchRemoteCover(artist: string, title: string): Promise<string | null> {
+/** Fetches up to 5 remote cover URLs from iTunes for the given artist + title. */
+export function fetchRemoteCovers(artist: string, title: string): Promise<string[]> {
   const query = encodeURIComponent(`${artist} ${title}`)
-  return fetch(`https://itunes.apple.com/search?term=${query}&entity=song&limit=1`)
+  return fetch(`https://itunes.apple.com/search?term=${query}&entity=song&limit=5`)
     .then((r) => r.json())
-    .then((data) => {
-      const artwork = data.results?.[0]?.artworkUrl100
-      return artwork ? artwork.replace('100x100bb', '600x600bb') : null
-    })
-    .catch(() => null)
+    .then((data) => (data.results ?? [])
+      .map((r: { artworkUrl100?: string }) => r.artworkUrl100)
+      .filter(Boolean)
+      .map((url: string) => url.replace('100x100bb', '600x600bb'))
+    )
+    .catch(() => [])
+}
+
+/** @deprecated Use fetchRemoteCovers instead */
+export function fetchRemoteCover(artist: string, title: string): Promise<string | null> {
+  return fetchRemoteCovers(artist, title).then((urls) => urls[0] ?? null)
 }

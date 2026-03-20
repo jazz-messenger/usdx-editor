@@ -331,6 +331,13 @@
   color: #fbbf24;
 }
 
+.missing-files-banner--info {
+  background: rgb(99 179 237 / .08);
+  border-color: rgb(99 179 237 / .25);
+  color: rgb(99 179 237);
+}
+.missing-files-banner--info .missing-files-text { color: rgb(99 179 237 / .75); }
+
 .missing-files-icon { flex-shrink: 0; }
 
 .missing-files-text { color: #a89060; }
@@ -419,17 +426,97 @@
   border: none;
   border-radius: var(--radius-sm);
   color: #fff;
-  font-size: 13px;
-  width: 22px;
-  height: 22px;
+  font-size: 11px;
+  font-weight: 600;
+  height: 20px;
+  white-space: nowrap;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
+  padding: 0 6px;
 }
 
 .cover-btn:hover { background: rgb(255 255 255 / .30); }
+
+/* Cover navigation (multiple covers) */
+.cover-nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 2px;
+  background: linear-gradient(rgb(0 0 0 / .55), transparent);
+  border-radius: 6px 6px 0 0;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+.song-cover-wrap:hover .cover-nav { opacity: 1; }
+
+.cover-nav-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 3px;
+}
+.cover-nav-index {
+  font-size: 10px;
+  color: rgb(255 255 255 / .85);
+}
+
+/* Clickable cover image */
+.song-cover--clickable { cursor: zoom-in; }
+
+/* Lightbox */
+.cover-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgb(0 0 0 / .82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.cover-lightbox-inner {
+  position: relative;
+  max-width: min(88vw, 540px);
+  max-height: 88vh;
+  cursor: default;
+}
+.cover-lightbox-inner img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  border-radius: 8px;
+  box-shadow: 0 8px 40px rgb(0 0 0 / .6);
+}
+.cover-lightbox-close {
+  position: absolute;
+  top: -11px;
+  right: -11px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: rgb(var(--bg-surface));
+  color: rgb(var(--text-primary));
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cover-lightbox-close:hover { background: rgb(var(--bg-elevated)); }
 
 .song-cover {
   width: 64px;

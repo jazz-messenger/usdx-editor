@@ -1,44 +1,60 @@
 import { useState, useMemo, useEffect } from 'react'
 import type { UsdxHeader } from '../parser/usdxParser'
-import { findCoverFile, fetchRemoteCover } from '../utils/fileLoader'
+import { findCoverFiles, fetchRemoteCovers } from '../utils/fileLoader'
 import type { SongFileMap } from '../utils/fileLoader'
 import { useLanguage } from '../i18n/LanguageContext'
 
 export function CoverArt({ header, files, onCoverUrl }: { header: UsdxHeader; files: SongFileMap; onCoverUrl?: (url: string) => void }) {
   const { t } = useLanguage()
-  const localFile = useMemo(() => findCoverFile(header, files), [header, files])
+
+  // ── Local covers ────────────────────────────────────────────────────────────
+  const localFiles = useMemo(() => findCoverFiles(header, files), [header, files])
+  const [localIndex, setLocalIndex] = useState(0)
+  const localFile = localFiles[localIndex] ?? null
   const localUrl = useMemo(
     () => (localFile ? URL.createObjectURL(localFile) : null),
     [localFile]
   )
 
-  const [remoteUrl, setRemoteUrl] = useState<string | null>(null)
+  // ── Remote covers ────────────────────────────────────────────────────────────
+  const [remoteUrls, setRemoteUrls] = useState<string[]>([])
+  const [remoteIndex, setRemoteIndex] = useState(0)
   const [showRemote, setShowRemote] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  // If no local cover, fetch remote automatically
+  // ── Lightbox ─────────────────────────────────────────────────────────────────
+  const [lightboxOpen, setLightboxOpen] = useState(false)
+
+  // Auto-fetch remote covers when no local file is present
   useEffect(() => {
     if (!localFile) {
       setLoading(true)
-      fetchRemoteCover(header.artist, header.title).then((url) => {
-        setRemoteUrl(url)
-        if (url) { setShowRemote(true); onCoverUrl?.(url) }
+      fetchRemoteCovers(header.artist, header.title).then((urls) => {
+        setRemoteUrls(urls)
+        if (urls.length > 0) { setShowRemote(true); onCoverUrl?.(urls[0]) }
         setLoading(false)
       })
     }
   }, [localFile, header.artist, header.title]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Close lightbox on Escape
+  useEffect(() => {
+    if (!lightboxOpen) return
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setLightboxOpen(false) }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [lightboxOpen])
+
+  const remoteUrl = remoteUrls[remoteIndex] ?? null
+  const displayUrl = showRemote ? remoteUrl : localUrl
+
   const handleFlip = () => {
-    if (remoteUrl) {
-      const next = !showRemote
-      setShowRemote(next)
-      if (next) onCoverUrl?.(remoteUrl)
-      return
-    }
+    if (showRemote) { setShowRemote(false); return }
+    if (remoteUrls.length > 0) { setShowRemote(true); onCoverUrl?.(remoteUrls[remoteIndex]); return }
     setLoading(true)
-    fetchRemoteCover(header.artist, header.title).then((url) => {
-      setRemoteUrl(url)
-      if (url) { setShowRemote(true); onCoverUrl?.(url) }
+    fetchRemoteCovers(header.artist, header.title).then((urls) => {
+      setRemoteUrls(urls)
+      if (urls.length > 0) { setShowRemote(true); onCoverUrl?.(urls[0]) }
       setLoading(false)
     })
   }
@@ -52,7 +68,15 @@ export function CoverArt({ header, files, onCoverUrl }: { header: UsdxHeader; fi
     a.click()
   }
 
-  const displayUrl = showRemote ? remoteUrl : localUrl
+  const navigateLocal = (dir: 1 | -1) => {
+    setLocalIndex((i) => (i + dir + localFiles.length) % localFiles.length)
+  }
+
+  const navigateRemote = (dir: 1 | -1) => {
+    const next = (remoteIndex + dir + remoteUrls.length) % remoteUrls.length
+    setRemoteIndex(next)
+    if (showRemote) onCoverUrl?.(remoteUrls[next])
+  }
 
   if (loading && !displayUrl) {
     return <div className="song-cover song-cover--placeholder">♪</div>
@@ -62,7 +86,30 @@ export function CoverArt({ header, files, onCoverUrl }: { header: UsdxHeader; fi
 
   return (
     <div className="song-cover-wrap">
-      <img className="song-cover" src={displayUrl} alt={t.coverart.alt} />
+      <img
+        className="song-cover song-cover--clickable"
+        src={displayUrl}
+        alt={t.coverart.alt}
+        onClick={() => setLightboxOpen(true)}
+        title={t.coverart.openPreview}
+      />
+
+      {/* Multi-cover navigation */}
+      {!showRemote && localFiles.length > 1 && (
+        <div className="cover-nav">
+          <button className="cover-nav-btn" onClick={() => navigateLocal(-1)} title={t.coverart.prevCover}>‹</button>
+          <span className="cover-nav-index">{t.coverart.coverOf(localIndex + 1, localFiles.length)}</span>
+          <button className="cover-nav-btn" onClick={() => navigateLocal(1)} title={t.coverart.nextCover}>›</button>
+        </div>
+      )}
+      {showRemote && remoteUrls.length > 1 && (
+        <div className="cover-nav">
+          <button className="cover-nav-btn" onClick={() => navigateRemote(-1)} title={t.coverart.prevCover}>‹</button>
+          <span className="cover-nav-index">{t.coverart.coverOf(remoteIndex + 1, remoteUrls.length)}</span>
+          <button className="cover-nav-btn" onClick={() => navigateRemote(1)} title={t.coverart.nextCover}>›</button>
+        </div>
+      )}
+
       <div className="song-cover-actions">
         {localFile && (
           <button
@@ -70,15 +117,29 @@ export function CoverArt({ header, files, onCoverUrl }: { header: UsdxHeader; fi
             onClick={handleFlip}
             title={showRemote ? t.coverart.showLocal : t.coverart.loadOnline}
           >
-            {loading ? '…' : showRemote ? '⬅' : '↺'}
+            {loading ? '…' : showRemote ? t.coverart.btnShowLocal : t.coverart.btnLoadOnline}
           </button>
         )}
         {showRemote && remoteUrl && (
           <button className="cover-btn" onClick={handleDownload} title={t.coverart.download}>
-            ↓
+            {t.coverart.btnDownload}
           </button>
         )}
       </div>
+
+      {/* Lightbox */}
+      {lightboxOpen && (
+        <div className="cover-lightbox" onClick={() => setLightboxOpen(false)}>
+          <div className="cover-lightbox-inner" onClick={(e) => e.stopPropagation()}>
+            <img src={displayUrl} alt={t.coverart.alt} />
+            <button
+              className="cover-lightbox-close"
+              onClick={() => setLightboxOpen(false)}
+              aria-label={t.coverart.closePreview}
+            >×</button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
