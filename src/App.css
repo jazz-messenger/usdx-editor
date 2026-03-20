@@ -489,6 +489,13 @@
 }
 .cover-lightbox-action-btn--primary:hover { background: rgb(var(--accent-primary) / .38); }
 
+.cover-lightbox-selected-label {
+  font-size: 0.8rem;
+  color: rgb(255 255 255 / .5);
+  align-self: center;
+  white-space: nowrap;
+}
+
 /* Close button */
 .cover-lightbox-close {
   position: absolute;
