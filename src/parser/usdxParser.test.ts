@@ -73,6 +73,71 @@ describe('parseUsdx', () => {
     })
   })
 
+  describe('deprecated fields', () => {
+    const NOTES = ': 0 4 60 Hi\nE'
+
+    it('migrates #MP3 to audio and records it in deprecatedFields', () => {
+      const song = parseUsdx(`#ARTIST:A\n#TITLE:T\n#MP3:song.mp3\n#BPM:120\n#GAP:0\n${NOTES}`)
+      expect(song.header.audio).toBe('song.mp3')
+      expect(song.deprecatedFields).toContain('MP3')
+    })
+
+    it('does not overwrite existing #AUDIO when #MP3 is also present', () => {
+      const song = parseUsdx(`#ARTIST:A\n#TITLE:T\n#AUDIO:real.mp3\n#MP3:legacy.mp3\n#BPM:120\n#GAP:0\n${NOTES}`)
+      expect(song.header.audio).toBe('real.mp3')
+      expect(song.deprecatedFields).toContain('MP3')
+    })
+
+    it('migrates #AUTHOR to creator', () => {
+      const song = parseUsdx(`#ARTIST:A\n#TITLE:T\n#MP3:a.mp3\n#BPM:120\n#GAP:0\n#AUTHOR:Max\n${NOTES}`)
+      expect(song.header.creator).toBe('Max')
+      expect(song.deprecatedFields).toContain('AUTHOR')
+    })
+
+    it('does not overwrite existing creator when #AUTHOR is present', () => {
+      const song = parseUsdx(`#ARTIST:A\n#TITLE:T\n#MP3:a.mp3\n#BPM:120\n#GAP:0\n#CREATOR:Real\n#AUTHOR:Legacy\n${NOTES}`)
+      expect(song.header.creator).toBe('Real')
+    })
+
+    it('migrates #PREVIEW to previewStart', () => {
+      const song = parseUsdx(`#ARTIST:A\n#TITLE:T\n#MP3:a.mp3\n#BPM:120\n#GAP:0\n#PREVIEW:42,5\n${NOTES}`)
+      expect(song.header.previewStart).toBe(42.5)
+      expect(song.deprecatedFields).toContain('PREVIEW')
+    })
+
+    it('migrates #DUETSINGERP1 and #DUETSINGERP2 to singerP1/singerP2', () => {
+      const song = parseUsdx(`#ARTIST:A\n#TITLE:T\n#MP3:a.mp3\n#BPM:120\n#GAP:0\n#DUETSINGERP1:Alice\n#DUETSINGERP2:Bob\n${NOTES}`)
+      expect(song.header.singerP1).toBe('Alice')
+      expect(song.header.singerP2).toBe('Bob')
+      expect(song.deprecatedFields).toContain('DUETSINGERP1')
+      expect(song.deprecatedFields).toContain('DUETSINGERP2')
+    })
+
+    it('migrates #YOUTUBE to videoUrl', () => {
+      const song = parseUsdx(`#ARTIST:A\n#TITLE:T\n#MP3:a.mp3\n#BPM:120\n#GAP:0\n#YOUTUBE:abc123\n${NOTES}`)
+      expect(song.header.videoUrl).toBe('abc123')
+      expect(song.deprecatedFields).toContain('YOUTUBE')
+    })
+
+    it('tracks unmigrated deprecated tags without touching the header', () => {
+      const deprecated = ['ALBUM', 'SOURCE', 'LENGTH', 'FIXER', 'RESOLUTION', 'NOTESGAP', 'RELATIVE', 'ENCODING']
+      const input = [
+        '#ARTIST:A', '#TITLE:T', '#MP3:a.mp3', '#BPM:120', '#GAP:0',
+        ...deprecated.map((tag) => `#${tag}:value`),
+        NOTES,
+      ].join('\n')
+      const song = parseUsdx(input)
+      for (const tag of deprecated) {
+        expect(song.deprecatedFields).toContain(tag)
+      }
+    })
+
+    it('returns empty deprecatedFields when no deprecated tags are present', () => {
+      const song = parseUsdx(`#ARTIST:A\n#TITLE:T\n#AUDIO:a.mp3\n#BPM:120\n#GAP:0\n${NOTES}`)
+      expect(song.deprecatedFields).toEqual([])
+    })
+  })
+
   describe('duet', () => {
     const DUET = `#ARTIST:Die Fantastischen Vier
 #TITLE:Die Da
