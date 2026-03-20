@@ -84,8 +84,12 @@ export function CoverArt({ header, files, onCoverUrl }: { header: UsdxHeader; fi
 
   if (!displayUrl) return null
 
+  const hasMultiLocal = !showRemote && localFiles.length > 1
+  const hasMultiRemote = showRemote && remoteUrls.length > 1
+
   return (
     <div className="song-cover-wrap">
+      {/* Thumbnail — click only */}
       <img
         className="song-cover song-cover--clickable"
         src={displayUrl}
@@ -94,44 +98,47 @@ export function CoverArt({ header, files, onCoverUrl }: { header: UsdxHeader; fi
         title={t.coverart.openPreview}
       />
 
-      {/* Multi-cover navigation */}
-      {!showRemote && localFiles.length > 1 && (
-        <div className="cover-nav">
-          <button className="cover-nav-btn" onClick={() => navigateLocal(-1)} title={t.coverart.prevCover}>‹</button>
-          <span className="cover-nav-index">{t.coverart.coverOf(localIndex + 1, localFiles.length)}</span>
-          <button className="cover-nav-btn" onClick={() => navigateLocal(1)} title={t.coverart.nextCover}>›</button>
-        </div>
-      )}
-      {showRemote && remoteUrls.length > 1 && (
-        <div className="cover-nav">
-          <button className="cover-nav-btn" onClick={() => navigateRemote(-1)} title={t.coverart.prevCover}>‹</button>
-          <span className="cover-nav-index">{t.coverart.coverOf(remoteIndex + 1, remoteUrls.length)}</span>
-          <button className="cover-nav-btn" onClick={() => navigateRemote(1)} title={t.coverart.nextCover}>›</button>
-        </div>
-      )}
-
-      <div className="song-cover-actions">
-        {localFile && (
-          <button
-            className="cover-btn"
-            onClick={handleFlip}
-            title={showRemote ? t.coverart.showLocal : t.coverart.loadOnline}
-          >
-            {loading ? '…' : showRemote ? t.coverart.btnShowLocal : t.coverart.btnLoadOnline}
-          </button>
-        )}
-        {showRemote && remoteUrl && (
-          <button className="cover-btn" onClick={handleDownload} title={t.coverart.download}>
-            {t.coverart.btnDownload}
-          </button>
-        )}
-      </div>
-
       {/* Lightbox */}
       {lightboxOpen && (
         <div className="cover-lightbox" onClick={() => setLightboxOpen(false)}>
           <div className="cover-lightbox-inner" onClick={(e) => e.stopPropagation()}>
             <img src={displayUrl} alt={t.coverart.alt} />
+
+            {/* Navigation row */}
+            {(hasMultiLocal || hasMultiRemote) && (
+              <div className="cover-lightbox-nav">
+                <button
+                  className="cover-lightbox-nav-btn"
+                  onClick={() => hasMultiLocal ? navigateLocal(-1) : navigateRemote(-1)}
+                  title={t.coverart.prevCover}
+                >‹</button>
+                <span className="cover-lightbox-nav-index">
+                  {hasMultiLocal
+                    ? t.coverart.coverOf(localIndex + 1, localFiles.length)
+                    : t.coverart.coverOf(remoteIndex + 1, remoteUrls.length)}
+                </span>
+                <button
+                  className="cover-lightbox-nav-btn"
+                  onClick={() => hasMultiLocal ? navigateLocal(1) : navigateRemote(1)}
+                  title={t.coverart.nextCover}
+                >›</button>
+              </div>
+            )}
+
+            {/* Action row */}
+            <div className="cover-lightbox-actions">
+              {localFile && (
+                <button className="cover-lightbox-action-btn" onClick={handleFlip} title={showRemote ? t.coverart.showLocal : t.coverart.loadOnline}>
+                  {loading ? '…' : showRemote ? t.coverart.btnShowLocal : t.coverart.btnLoadOnline}
+                </button>
+              )}
+              {showRemote && remoteUrl && (
+                <button className="cover-lightbox-action-btn" onClick={handleDownload} title={t.coverart.download}>
+                  {t.coverart.btnDownload}
+                </button>
+              )}
+            </div>
+
             <button
               className="cover-lightbox-close"
               onClick={() => setLightboxOpen(false)}
