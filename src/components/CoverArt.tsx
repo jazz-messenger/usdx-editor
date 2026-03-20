@@ -31,6 +31,8 @@ export function CoverArt({ header, files, onCoverUrl, onCoverFileSaved }: CoverA
   const [showRemote, setShowRemote] = useState(false)
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
+  // URL of a remote cover that was saved locally — treated as the effective local cover
+  const [savedAsLocalUrl, setSavedAsLocalUrl] = useState<string | null>(null)
 
   // ── Lightbox ─────────────────────────────────────────────────────────────────
   const [lightboxOpen, setLightboxOpen] = useState(false)
@@ -56,7 +58,8 @@ export function CoverArt({ header, files, onCoverUrl, onCoverFileSaved }: CoverA
   }, [lightboxOpen])
 
   const remoteUrl = remoteUrls[remoteIndex] ?? null
-  const displayUrl = showRemote ? remoteUrl : localUrl
+  const effectiveLocalUrl = savedAsLocalUrl ?? localUrl
+  const displayUrl = showRemote ? remoteUrl : effectiveLocalUrl
 
   const handleFlip = () => {
     if (showRemote) { setShowRemote(false); return }
@@ -89,6 +92,8 @@ export function CoverArt({ header, files, onCoverUrl, onCoverFileSaved }: CoverA
           await writable.write(blob)
           await writable.close()
           onCoverFileSaved?.(handle.name)
+          setSavedAsLocalUrl(remoteUrl)
+          setShowRemote(false)
           setSaving(false)
           return
         } catch (e) {
@@ -105,6 +110,8 @@ export function CoverArt({ header, files, onCoverUrl, onCoverFileSaved }: CoverA
       a.click()
       URL.revokeObjectURL(objectUrl)
       onCoverFileSaved?.(suggestedFilename)
+      setSavedAsLocalUrl(remoteUrl)
+      setShowRemote(false)
     } catch {
       // fetch failed — silently ignore
     }
@@ -127,6 +134,7 @@ export function CoverArt({ header, files, onCoverUrl, onCoverFileSaved }: CoverA
 
   if (!displayUrl) return null
 
+  const hasLocalCover = !!effectiveLocalUrl
   const hasMultiLocal = !showRemote && localFiles.length > 1
   const hasMultiRemote = showRemote && remoteUrls.length > 1
 
@@ -183,7 +191,7 @@ export function CoverArt({ header, files, onCoverUrl, onCoverFileSaved }: CoverA
                 </>
               ) : (
                 <>
-                  {localFile && (
+                  {hasLocalCover && (
                     <button
                       className="cover-lightbox-action-btn"
                       onClick={handleFlip}
