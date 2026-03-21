@@ -37,9 +37,17 @@ export function CoverArt({ header, files, onCoverUrl, onCoverFileSaved }: CoverA
   // ── Lightbox ─────────────────────────────────────────────────────────────────
   const [lightboxOpen, setLightboxOpen] = useState(false)
 
+  // Reset view state when the song changes (header identity changes)
+  useEffect(() => {
+    setShowRemote(false)
+    setSavedAsLocalUrl(null)
+    setRemoteUrls([])
+    setRemoteIndex(0)
+  }, [header.artist, header.title]) // eslint-disable-line react-hooks/exhaustive-deps
+
   // Auto-fetch remote covers when no local file is present
   useEffect(() => {
-    if (!localFile) {
+    if (localFiles.length === 0) {
       setLoading(true)
       fetchRemoteCovers(header.artist, header.title).then((urls) => {
         setRemoteUrls(urls)
@@ -47,7 +55,7 @@ export function CoverArt({ header, files, onCoverUrl, onCoverFileSaved }: CoverA
         setLoading(false)
       })
     }
-  }, [localFile, header.artist, header.title]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [header.artist, header.title, localFiles.length]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Close lightbox on Escape
   useEffect(() => {
