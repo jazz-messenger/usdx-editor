@@ -160,6 +160,11 @@ export function HeaderEditor({
           aria-label="Tags"
           placeholder={t.header.tagsPlaceholder}
         />
+        {header.providedBy && (
+          <p className="provided-by-label">
+            <span className="provided-by-key">{t.header.providedByLabel}:</span> {header.providedBy}
+          </p>
+        )}
       </div>
       <div className="meta-actions">
         <button className="btn-primary" onClick={onDownload}>{t.header.save}</button>

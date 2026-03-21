@@ -817,6 +817,20 @@
   color: rgb(var(--text-muted));
 }
 
+/* ─── Provided-by read-only label ───────────────────────────────────────── */
+.provided-by-label {
+  margin: 4px 0 0;
+  padding: 0 14px;
+  font-size: 11px;
+  color: rgb(var(--text-dim));
+  line-height: 1.4;
+}
+.provided-by-key {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
 /* ─── Year input (below artist in title block) ───────────────────────────── */
 .song-year-input {
   display: block;

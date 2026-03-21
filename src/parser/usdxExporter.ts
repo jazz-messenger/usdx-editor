@@ -48,6 +48,7 @@ export function exportUsdx(
   if (header.edition)       lines.push(`#EDITION:${header.edition}`)
   if (header.tags)          lines.push(`#TAGS:${header.tags}`)
   if (header.creator)       lines.push(`#CREATOR:${header.creator}`)
+  if (header.providedBy)    lines.push(`#PROVIDEDBY:${header.providedBy}`)
   if (header.previewStart !== undefined) lines.push(`#PREVIEWSTART:${header.previewStart}`)
   if (header.comment)       lines.push(`#COMMENT:${header.comment}`)
 

@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useRef, useEffect } from 'react'
+import { useState, useMemo, useCallback, useRef, useEffect, useReducer } from 'react'
 import { GapSync } from './GapSync'
 import { HeaderEditor } from './HeaderEditor'
 import { useLanguage } from '../i18n/LanguageContext'
@@ -14,6 +14,55 @@ import { findVideoFile, findBackgroundFile } from '../utils/fileLoader'
 import type { SongFileMap } from '../utils/fileLoader'
 import type { UsdxSong } from '../parser/usdxParser'
 import { version } from '../../package.json'
+
+// ── Edit state ────────────────────────────────────────────────────────────────
+
+interface EditState {
+  title: string
+  artist: string
+  year: number | ''
+  genres: string[]
+  languages: string[]
+  edition: string[]
+  tags: string
+  gap: number
+  videoGap: number
+  videoUrl: string
+  coverUrl: string
+  cover: string
+}
+
+type EditAction =
+  | { type: 'SET_TITLE'; value: string }
+  | { type: 'SET_ARTIST'; value: string }
+  | { type: 'SET_YEAR'; value: number | '' }
+  | { type: 'SET_GENRES'; value: string[] | ((prev: string[]) => string[]) }
+  | { type: 'SET_LANGUAGES'; value: string[] }
+  | { type: 'SET_EDITION'; value: string[] }
+  | { type: 'SET_TAGS'; value: string }
+  | { type: 'SET_GAP'; value: number }
+  | { type: 'SET_VIDEO_GAP'; value: number }
+  | { type: 'SET_VIDEO_URL'; value: string }
+  | { type: 'SET_COVER_URL'; value: string }
+  | { type: 'SET_COVER'; value: string }
+
+function editReducer(state: EditState, action: EditAction): EditState {
+  switch (action.type) {
+    case 'SET_TITLE':      return { ...state, title: action.value }
+    case 'SET_ARTIST':     return { ...state, artist: action.value }
+    case 'SET_YEAR':       return { ...state, year: action.value }
+    case 'SET_GENRES':     return { ...state, genres: typeof action.value === 'function' ? action.value(state.genres) : action.value }
+    case 'SET_LANGUAGES':  return { ...state, languages: action.value }
+    case 'SET_EDITION':    return { ...state, edition: action.value }
+    case 'SET_TAGS':       return { ...state, tags: action.value }
+    case 'SET_GAP':        return { ...state, gap: action.value }
+    case 'SET_VIDEO_GAP':  return { ...state, videoGap: action.value }
+    case 'SET_VIDEO_URL':  return { ...state, videoUrl: action.value }
+    case 'SET_COVER_URL':  return { ...state, coverUrl: action.value }
+    case 'SET_COVER':      return { ...state, cover: action.value }
+  }
+}
+
 
 interface SongViewProps {
   song: UsdxSong
@@ -50,27 +99,27 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
   ])
 
   // Header edit state
-  const [editTitle, setEditTitle] = useState(header.title)
-  const [editArtist, setEditArtist] = useState(header.artist)
-  const [editYear, setEditYear] = useState<number | ''>(header.year ?? '')
+  const [edit, dispatch] = useReducer(editReducer, {
+    title: header.title,
+    artist: header.artist,
+    year: header.year ?? '',
+    genres: header.genre ? header.genre.split(',').map(g => g.trim()).filter(Boolean) : [],
+    languages: header.language ? header.language.split(',').map(l => l.trim()).filter(Boolean) : [],
+    edition: header.edition ? header.edition.split(',').map(s => s.trim()).filter(Boolean) : [],
+    tags: (header.tags as string | undefined) ?? '',
+    gap: header.gap,
+    videoGap: header.videoGap ?? 0,
+    videoUrl: header.videoUrl ?? '',
+    coverUrl: header.coverUrl ?? '',
+    cover: header.cover ?? '',
+  })
+  const { title: editTitle, artist: editArtist, year: editYear, genres: editGenres,
+          languages: editLanguages, edition: editEdition, tags: editTags,
+          gap, videoGap, videoUrl: editVideoUrl, coverUrl: editCoverUrl, cover: editCover } = edit
+
   const [suggestedYear, setSuggestedYear] = useState<number | null>(null)
   const [suggestedGenre, setSuggestedGenre] = useState<string | null>(null)
   const [singstarMatch, setSingstarMatch] = useState<SingStarEditionMatch | null>(null)
-  const [editGenres, setEditGenres] = useState<string[]>(
-    header.genre ? header.genre.split(',').map(g => g.trim()).filter(Boolean) : []
-  )
-  const [editLanguages, setEditLanguages] = useState<string[]>(
-    header.language ? header.language.split(',').map(l => l.trim()).filter(Boolean) : []
-  )
-  const [editEdition, setEditEdition] = useState<string[]>(
-    header.edition ? header.edition.split(',').map(s => s.trim()).filter(Boolean) : []
-  )
-  const [editTags, setEditTags] = useState<string>((header.tags as string | undefined) ?? '')
-  const [gap, setGap] = useState(header.gap)
-  const [videoGap, setVideoGap] = useState(header.videoGap ?? 0)
-  const [editVideoUrl, setEditVideoUrl] = useState(header.videoUrl ?? '')
-  const [editCoverUrl, setEditCoverUrl] = useState(header.coverUrl ?? '')
-  const [editCover, setEditCover] = useState(header.cover ?? '')
 
   // Playback state
   const [activePos, setActivePos] = useState<ActivePos | null>(null)
@@ -178,18 +227,18 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
         files={files}
         filename={filename}
         values={{ title: editTitle, artist: editArtist, year: editYear, genres: editGenres, languages: editLanguages, edition: editEdition, tags: editTags }}
-        handlers={{ setTitle: setEditTitle, setArtist: setEditArtist, setYear: setEditYear, setGenres: setEditGenres, setLanguages: setEditLanguages, setEdition: setEditEdition, setTags: setEditTags }}
+        handlers={{ setTitle: v => dispatch({ type: 'SET_TITLE', value: v }), setArtist: v => dispatch({ type: 'SET_ARTIST', value: v }), setYear: v => dispatch({ type: 'SET_YEAR', value: v }), setGenres: v => dispatch({ type: 'SET_GENRES', value: v }), setLanguages: v => dispatch({ type: 'SET_LANGUAGES', value: v }), setEdition: v => dispatch({ type: 'SET_EDITION', value: v }), setTags: v => dispatch({ type: 'SET_TAGS', value: v }) }}
         suggestedYear={suggestedYear}
         suggestedGenre={suggestedGenre}
         singstarMatch={singstarMatch}
-        onAcceptYear={() => { setEditYear(suggestedYear!); setSuggestedYear(null) }}
+        onAcceptYear={() => { dispatch({ type: 'SET_YEAR', value: suggestedYear! }); setSuggestedYear(null) }}
         onDismissYear={() => setSuggestedYear(null)}
-        onAcceptGenre={() => { setEditGenres(g => [...g, suggestedGenre!]); setSuggestedGenre(null) }}
+        onAcceptGenre={() => { dispatch({ type: 'SET_GENRES', value: (g: string[]) => [...g, suggestedGenre!] }); setSuggestedGenre(null) }}
         onDismissGenre={() => setSuggestedGenre(null)}
-        onAcceptSingstar={() => { setEditEdition([singstarMatch!.suggestedEdition]); setSingstarMatch(null) }}
+        onAcceptSingstar={() => { dispatch({ type: 'SET_EDITION', value: [singstarMatch!.suggestedEdition] }); setSingstarMatch(null) }}
         onDismissSingstar={() => setSingstarMatch(null)}
-        onCoverUrl={setEditCoverUrl}
-        onCoverFileSaved={setEditCover}
+        onCoverUrl={v => dispatch({ type: 'SET_COVER_URL', value: v })}
+        onCoverFileSaved={v => dispatch({ type: 'SET_COVER', value: v })}
         onDownload={handleDownload}
         onReset={onReset}
       />
@@ -300,22 +349,15 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
 
         <aside className="video-sidebar">
           <GapSync
-            gap={gap}
-            onChange={setGap}
-            videoGap={videoGap}
-            onVideoGapChange={setVideoGap}
+            timing={{ gap, onChange: v => dispatch({ type: 'SET_GAP', value: v }), videoGap, onVideoGapChange: v => dispatch({ type: 'SET_VIDEO_GAP', value: v }) }}
+            media={{ videoUrl: videoUrl ?? undefined, backgroundUrl: backgroundUrl ?? undefined, initialVideoUrl: editVideoUrl || undefined, onVideoUrlChange: v => dispatch({ type: 'SET_VIDEO_URL', value: v }) }}
+            song={{ artist: header.artist, title: header.title }}
             onTimeUpdate={handleTimeUpdate}
-            videoUrl={videoUrl ?? undefined}
-            backgroundUrl={backgroundUrl ?? undefined}
-            initialVideoUrl={editVideoUrl || undefined}
-            onVideoUrlChange={setEditVideoUrl}
             onReset={() => {
               setActivePos(null)
               skipNextScrollRef.current = true
               if (lyricsColumnRef.current) lyricsColumnRef.current.scrollTop = 0
             }}
-            artist={header.artist}
-            title={header.title}
           />
         </aside>
       </div>
