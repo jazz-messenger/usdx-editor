@@ -43,6 +43,8 @@ export interface UsdxHeader {
   year?: number
   edition?: string
   creator?: string
+  /** Who provided the song file — read-only, preserved as-is on save. */
+  providedBy?: string
   previewStart?: number
   comment?: string
   singerP1?: string
@@ -83,6 +85,24 @@ function buildPhraseText(notes: Note[]): string {
     .join('-')
     .replace(/-~/g, '~')
     .replace(/~$/, '')
+}
+
+// ── Declarative header field maps ─────────────────────────────────────────────
+
+const STRING_FIELDS: Record<string, keyof UsdxHeader> = {
+  TITLE: 'title', ARTIST: 'artist', AUDIO: 'audio', VIDEO: 'video',
+  COVER: 'cover', BACKGROUND: 'background', VIDEOURL: 'videoUrl',
+  COVERURL: 'coverUrl', LANGUAGE: 'language', GENRE: 'genre',
+  EDITION: 'edition', TAGS: 'tags', CREATOR: 'creator',
+  COMMENT: 'comment', PROVIDEDBY: 'providedBy',
+}
+
+const FLOAT_FIELDS: Record<string, keyof UsdxHeader> = {
+  BPM: 'bpm', GAP: 'gap', VIDEOGAP: 'videoGap', PREVIEWSTART: 'previewStart',
+}
+
+const INT_FIELDS: Record<string, keyof UsdxHeader> = {
+  YEAR: 'year',
 }
 
 export function parseUsdx(content: string): UsdxSong {
@@ -128,110 +148,62 @@ export function parseUsdx(content: string): UsdxSong {
       const tag = trimmed.slice(1, colonIdx).toUpperCase()
       const value = decodeHtml(trimmed.slice(colonIdx + 1))
 
-      switch (tag) {
-        case 'TITLE':
-          header.title = value
-          break
-        case 'ARTIST':
-          header.artist = value
-          break
-        case 'BPM':
-          header.bpm = parseNumber(value)
-          break
-        case 'GAP':
-          header.gap = parseNumber(value)
-          break
-        case 'VIDEOGAP':
-          header.videoGap = parseNumber(value)
-          break
-        case 'AUDIO':
-          header.audio = value
-          break
-        case 'VIDEO':
-          header.video = value
-          break
-        case 'COVER':
-          header.cover = value
-          break
-        case 'BACKGROUND':
-          header.background = value
-          break
-        case 'VIDEOURL':
-          header.videoUrl = value
-          break
-        case 'COVERURL':
-          header.coverUrl = value
-          break
-        case 'LANGUAGE':
-          header.language = value
-          break
-        case 'GENRE':
-          header.genre = value
-          break
-        case 'YEAR':
-          header.year = parseInt(value, 10)
-          break
-        case 'EDITION':
-          header.edition = value
-          break
-        case 'TAGS':
-          header.tags = value
-          break
-        case 'CREATOR':
-          header.creator = value
-          break
-        case 'PREVIEWSTART':
-          header.previewStart = parseNumber(value)
-          break
-        case 'COMMENT':
-          header.comment = value
-          break
-        case 'P1':
-          if (value) header.singerP1 = value
-          break
-        case 'P2':
-          if (value) header.singerP2 = value
-          break
-
-        // ── Deprecated fields: migrate where possible, always track ──────────
-        case 'MP3':
-          if (!header.audio) header.audio = value
-          deprecatedFields.push('MP3')
-          break
-        case 'AUTHOR':
-          if (!header.creator) header.creator = value
-          deprecatedFields.push('AUTHOR')
-          break
-        case 'PREVIEW':
-          if (header.previewStart === undefined) header.previewStart = parseNumber(value)
-          deprecatedFields.push('PREVIEW')
-          break
-        case 'DUETSINGERP1':
-          if (!header.singerP1) header.singerP1 = value
-          deprecatedFields.push('DUETSINGERP1')
-          break
-        case 'DUETSINGERP2':
-          if (!header.singerP2) header.singerP2 = value
-          deprecatedFields.push('DUETSINGERP2')
-          break
-        case 'YOUTUBE':
-          if (!header.videoUrl) header.videoUrl = value
-          deprecatedFields.push('YOUTUBE')
-          break
-        case 'ALBUM':
-        case 'SOURCE':
-        case 'LENGTH':
-        case 'FIXER':
-        case 'RESOLUTION':
-        case 'NOTESGAP':
-        case 'RELATIVE':
-        case 'ENCODING':
-          deprecatedFields.push(tag)
-          break
-
-        default:
-          header[tag.toLowerCase()] = value
+      // ── Declarative field maps ────────────────────────────────────────────
+      if (tag in STRING_FIELDS) {
+        header[STRING_FIELDS[tag]] = value
+        continue
       }
+      if (tag in FLOAT_FIELDS) {
+        header[FLOAT_FIELDS[tag]] = parseNumber(value)
+        continue
+      }
+      if (tag in INT_FIELDS) {
+        header[INT_FIELDS[tag]] = parseInt(value, 10)
+        continue
+      }
+
+      // ── Special fields ────────────────────────────────────────────────────
+      if (tag === 'P1') { if (value) header.singerP1 = value; continue }
+      if (tag === 'P2') { if (value) header.singerP2 = value; continue }
+
+      // ── Deprecated fields: migrate where possible, always track ──────────
+      if (tag === 'MP3') {
+        if (!header.audio) header.audio = value
+        deprecatedFields.push('MP3')
+        continue
+      }
+      if (tag === 'AUTHOR') {
+        if (!header.creator) header.creator = value
+        deprecatedFields.push('AUTHOR')
+        continue
+      }
+      if (tag === 'PREVIEW') {
+        if (header.previewStart === undefined) header.previewStart = parseNumber(value)
+        deprecatedFields.push('PREVIEW')
+        continue
+      }
+      if (tag === 'DUETSINGERP1') {
+        if (!header.singerP1) header.singerP1 = value
+        deprecatedFields.push('DUETSINGERP1')
+        continue
+      }
+      if (tag === 'DUETSINGERP2') {
+        if (!header.singerP2) header.singerP2 = value
+        deprecatedFields.push('DUETSINGERP2')
+        continue
+      }
+      if (tag === 'YOUTUBE') {
+        if (!header.videoUrl) header.videoUrl = value
+        deprecatedFields.push('YOUTUBE')
+        continue
+      }
+      if (['ALBUM', 'SOURCE', 'LENGTH', 'FIXER', 'RESOLUTION', 'NOTESGAP', 'RELATIVE', 'ENCODING'].includes(tag)) {
+        deprecatedFields.push(tag)
+        continue
+      }
+
+      // ── Unknown fields: store as-is ───────────────────────────────────────
+      header[tag.toLowerCase()] = value
       continue
     }
 

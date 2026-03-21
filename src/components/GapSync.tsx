@@ -75,27 +75,37 @@ function openYouTubeSearch(artist: string | undefined, title: string | undefined
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-interface GapSyncProps {
+export interface GapSyncTiming {
   gap: number
   onChange: (gap: number) => void
   /** Offset in seconds between video start and song start (from #VIDEOGAP). */
   videoGap: number
   onVideoGapChange: (vg: number) => void
-  onTimeUpdate?: (currentMs: number) => void
-  backgroundUrl?: string
+}
+
+export interface GapSyncMedia {
   /** Object URL for a local video file (#VIDEO). Takes priority over YouTube. */
   videoUrl?: string
+  backgroundUrl?: string
   /** Initial YouTube URL loaded from #VIDEOURL in the song file. */
   initialVideoUrl?: string
   /** Called whenever the user selects or clears a YouTube URL. */
   onVideoUrlChange?: (url: string) => void
-  /** Called when the user clicks ↩ Start — App can use this to scroll to phrase 0. */
-  onReset?: () => void
-  artist?: string
-  title?: string
 }
 
-export function GapSync({ gap, onChange, videoGap, onVideoGapChange, onTimeUpdate, backgroundUrl, videoUrl, initialVideoUrl, onVideoUrlChange, onReset, artist, title }: GapSyncProps) {
+interface GapSyncProps {
+  timing: GapSyncTiming
+  media: GapSyncMedia
+  song?: { artist?: string; title?: string }
+  onTimeUpdate?: (currentMs: number) => void
+  /** Called when the user clicks ↩ Start — App can use this to scroll to phrase 0. */
+  onReset?: () => void
+}
+
+export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncProps) {
+  const { gap, onChange, videoGap, onVideoGapChange } = timing
+  const { videoUrl, backgroundUrl, initialVideoUrl, onVideoUrlChange } = media
+  const { artist, title } = song ?? {}
   const { t } = useLanguage()
 
   // ── YouTube player ──────────────────────────────────────────────────────────
