@@ -12,12 +12,14 @@ export default function App() {
   const [song, setSong] = useState<UsdxSong | null>(null)
   const [filename, setFilename] = useState('')
   const [files, setFiles] = useState<SongFileMap>(new Map())
+  const [songKey, setSongKey] = useState(0)
   const { locale, setLocale, t } = useLanguage()
 
   const handleLoad = useCallback((s: UsdxSong, name: string, f: SongFileMap) => {
     setSong(s)
     setFilename(name)
     setFiles(f)
+    setSongKey((k) => k + 1)
   }, [])
 
   return (
@@ -40,7 +42,7 @@ export default function App() {
       </header>
       <main className="app-main">
         {song
-          ? <SongView song={song} filename={filename} files={files} onReset={() => setSong(null)} />
+          ? <SongView key={songKey} song={song} filename={filename} files={files} onReset={() => setSong(null)} />
           : (
             <div className="landing">
               <div className="landing-hero">
