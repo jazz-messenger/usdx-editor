@@ -1333,8 +1333,6 @@
   color: rgb(var(--text-primary) / .75);
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
   padding: 4px 14px;
   width: 100%;
   transition: border-color var(--transition-fast), color var(--transition-fast);
