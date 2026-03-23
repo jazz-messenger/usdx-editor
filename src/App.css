@@ -1000,12 +1000,8 @@
 }
 
 .tooltip-bubble {
-  visibility: hidden;
-  opacity: 0;
-  position: absolute;
-  bottom: calc(100% + 6px);
-  left: 50%;
-  transform: translateX(-50%);
+  position: fixed;
+  transform: translate(-50%, calc(-100% - 6px));
   background: rgb(var(--bg-card));
   border: 1px solid rgb(var(--border-mid));
   color: rgb(var(--text-primary));
@@ -1019,14 +1015,8 @@
   width: 220px;
   white-space: normal;
   box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-  z-index: 100;
+  z-index: 9999;
   pointer-events: none;
-  transition: opacity 0.15s;
-}
-
-.tooltip-wrap:hover .tooltip-bubble {
-  visibility: visible;
-  opacity: 1;
 }
 
 .gap-input-group {
