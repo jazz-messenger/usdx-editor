@@ -79,9 +79,9 @@ npm run build   # Produktions-Build
 
 ## Lizenz
 
-GNU General Public License v3.0 — siehe [LICENSE](./LICENSE).
+GNU Affero General Public License v3.0 — siehe [LICENSE](./LICENSE).
 
-Kurzfassung: Frei nutzbar und veränderbar, auch kommerziell — aber abgeleitete Werke müssen ebenfalls unter GPL v3 veröffentlicht werden.
+Kurzfassung: Frei nutzbar, veränderbar und weiterggebbar — aber abgeleitete Werke und Dienste die auf diesem Code basieren müssen ebenfalls unter AGPL v3 veröffentlicht werden.
 
 Developed with the assistance of Claude (Anthropic).
 
