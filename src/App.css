@@ -988,15 +988,14 @@
   font-weight: 400;
   letter-spacing: 0;
   text-transform: none;
-  color: rgb(var(--text-muted));
-  opacity: 0.6;
+  color: rgb(var(--accent-primary) / 0.65);
   cursor: help;
   line-height: 1;
-  transition: opacity 0.15s;
+  transition: color 0.15s;
 }
 
 .tooltip-wrap:hover .tooltip-icon {
-  opacity: 1;
+  color: rgb(var(--accent-primary));
 }
 
 .tooltip-bubble {
