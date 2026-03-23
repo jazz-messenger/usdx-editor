@@ -45,7 +45,12 @@ export async function lookupReleaseInfo(
     `?query=${encodeURIComponent(query)}&fmt=json&limit=5&inc=tags`
 
   try {
-    const res = await fetch(url, { headers: { Accept: 'application/json' } })
+    const res = await fetch(url, {
+      headers: {
+        Accept: 'application/json',
+        'User-Agent': 'usdx-editor/1.0.1 (https://github.com/jazz-messenger/usdx-editor)',
+      },
+    })
     if (!res.ok) return empty
     const data = await res.json()
 

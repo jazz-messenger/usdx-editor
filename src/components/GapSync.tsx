@@ -438,8 +438,8 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
         </div>
       )}
 
-      {/* Background image preview — when on a local tab but no file is loaded */}
-      {activeTab !== 'youtube' && !localMediaUrl && !videoId && backgroundUrl && (
+      {/* Background image preview — shown when no active media (any tab) */}
+      {!localMediaUrl && !videoId && backgroundUrl && (
         <div className="bg-preview-wrap">
           <img className="bg-preview" src={backgroundUrl} alt="" />
           <span className="bg-preview-label">{t.gapsync.background}</span>

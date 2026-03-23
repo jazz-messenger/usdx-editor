@@ -205,7 +205,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
       video: selectedVideoFile ? selectedVideoFile.name : header.video,
       cover: editCover || undefined,
       coverUrl: editCoverUrl || undefined,
-      comment: `edited with usdx-editor v${version} on ${today}, http://korczak.at/usdx-editor`,
+      comment: `edited with usdx-editor v${version} on ${today}, https://github.com/jazz-messenger/usdx-editor`,
     }
     if (backgroundFile && !exportHeader.background) {
       exportHeader.background = backgroundFile.name

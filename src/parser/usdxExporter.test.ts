@@ -61,9 +61,9 @@ describe('exportUsdx', () => {
 
   it('writes #COMMENT when present in header', () => {
     const song = parseUsdx(SONG)
-    song.header.comment = 'edited with usdx-editor on 2026-03-16, http://korczak.at/usdx-editor'
+    song.header.comment = 'edited with usdx-editor on 2026-03-16, https://github.com/jazz-messenger/usdx-editor'
     const output = exportUsdx(song, {})
-    expect(output).toContain('#COMMENT:edited with usdx-editor on 2026-03-16, http://korczak.at/usdx-editor')
+    expect(output).toContain('#COMMENT:edited with usdx-editor on 2026-03-16, https://github.com/jazz-messenger/usdx-editor')
   })
 
   it('parses #COMMENT from input', () => {
