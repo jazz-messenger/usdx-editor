@@ -169,11 +169,12 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
       if (fn && !resolved && !files.has(fn.toLowerCase())) missing.push({ tag, filename: fn })
     }
     check('AUDIO', header.audio, !!effectiveAudioFile)
-    check('VIDEO', header.video, !!effectiveVideoFile)
+    // Suppress VIDEO warning when mismatch banner is shown — user can act on it there
+    check('VIDEO', header.video, !!effectiveVideoFile || (!!videoMismatch && !videoMismatchDismissed))
     check('COVER', header.cover)
     check('BACKGROUND', header.background)
     return missing
-  }, [header, files, effectiveAudioFile, effectiveVideoFile])
+  }, [header, files, effectiveAudioFile, effectiveVideoFile, videoMismatch, videoMismatchDismissed])
 
   const handleTimeUpdate = useCallback((currentMs: number) => {
     if (!track) return
@@ -284,7 +285,9 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
           <div className="vmb-message">
             <span className="missing-files-icon">🎬</span>
             <span className="missing-files-text">
-              {t.songview.videoMismatch(videoMismatch.name, header.video ?? '')}
+              {t.songview.videoMismatchInfo(videoMismatch.name, header.video ?? '')}
+              <br />
+              {t.songview.videoMismatchQuestion}
             </span>
           </div>
           <div className="vmb-actions">
