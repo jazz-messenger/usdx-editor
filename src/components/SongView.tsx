@@ -280,24 +280,27 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
 
       {/* ── Video mismatch banner ── */}
       {videoMismatch && !videoMismatchDismissed && (
-        <div className="missing-files-banner missing-files-banner--info">
-          <span className="missing-files-icon">🎬</span>
-          <span className="missing-files-text">
-            {t.songview.videoMismatch(videoMismatch.name, header.video ?? '')}
-          </span>
-          <button
-            className="missing-files-action"
-            onClick={() => { setSelectedVideoFile(videoMismatch); setVideoMismatchDismissed(true) }}
-          >
-            {t.songview.videoMismatchAccept}
-          </button>
-          <button
-            className="missing-files-dismiss"
-            onClick={() => setVideoMismatchDismissed(true)}
-            title={t.songview.videoMismatchDecline}
-          >
-            {t.songview.videoMismatchDecline}
-          </button>
+        <div className="missing-files-banner missing-files-banner--info video-mismatch-banner">
+          <div className="vmb-message">
+            <span className="missing-files-icon">🎬</span>
+            <span className="missing-files-text">
+              {t.songview.videoMismatch(videoMismatch.name, header.video ?? '')}
+            </span>
+          </div>
+          <div className="vmb-actions">
+            <button
+              className="missing-files-dismiss"
+              onClick={() => setVideoMismatchDismissed(true)}
+            >
+              {t.songview.videoMismatchDecline}
+            </button>
+            <button
+              className="missing-files-action"
+              onClick={() => { setSelectedVideoFile(videoMismatch); setVideoMismatchDismissed(true) }}
+            >
+              {t.songview.videoMismatchAccept}
+            </button>
+          </div>
         </div>
       )}
 
