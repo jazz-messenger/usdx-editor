@@ -183,7 +183,11 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
     if (backgroundFile && !exportHeader.background) {
       exportHeader.background = backgroundFile.name
     }
-    const content = exportUsdx({ ...song, header: exportHeader }, singerMap, singerNames)
+    // Use the display track (merged for duet, tracks[0] for solo).
+    // song.tracks[0] alone would omit all P2 phrases and mis-map singerMap indices
+    // for songs that were loaded with pre-existing P1/P2 sections.
+    const exportTracks = track ? [track] : []
+    const content = exportUsdx({ ...song, header: exportHeader, tracks: exportTracks }, singerMap, singerNames)
     const blob = new Blob([content], { type: 'text/plain;charset=utf-8' })
 
     if ('showSaveFilePicker' in window) {
