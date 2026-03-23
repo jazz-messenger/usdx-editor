@@ -58,6 +58,27 @@ export function findCoverFile(header: UsdxHeader, files: SongFileMap): File | nu
   return findCoverFiles(header, files)[0] ?? null
 }
 
+const AUDIO_EXTENSIONS = /\.(mp3|ogg|flac|m4a|wav|aac|opus)$/i
+
+/** Returns all candidate audio files: header match first, then any audio file in the folder. */
+export function findAudioFiles(header: UsdxHeader, files: SongFileMap): File[] {
+  const seen = new Set<string>()
+  const result: File[] = []
+  const add = (f: File) => { if (!seen.has(f.name)) { seen.add(f.name); result.push(f) } }
+  if (header.audio) {
+    const f = files.get(header.audio.toLowerCase())
+    if (f) add(f)
+  }
+  for (const [name, file] of files) {
+    if (AUDIO_EXTENSIONS.test(name)) add(file)
+  }
+  return result
+}
+
+export function findAudioFile(header: UsdxHeader, files: SongFileMap): File | null {
+  return findAudioFiles(header, files)[0] ?? null
+}
+
 const VIDEO_EXTENSIONS = /\.(mp4|mkv|avi|webm|mov|m4v|mpeg|mpg|wmv|flv)$/i
 
 /** Returns all candidate video files: header match first, then any video file in the folder. */

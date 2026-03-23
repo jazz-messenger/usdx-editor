@@ -84,8 +84,10 @@ export interface GapSyncTiming {
 }
 
 export interface GapSyncMedia {
-  /** Object URL for a local video file (#VIDEO). Takes priority over YouTube. */
+  /** Object URL for a local video file (#VIDEO). Takes priority over audio and YouTube. */
   videoUrl?: string
+  /** Object URL for a local audio file (#AUDIO). Used when no video is available. */
+  audioUrl?: string
   backgroundUrl?: string
   /** Initial YouTube URL loaded from #VIDEOURL in the song file. */
   initialVideoUrl?: string
@@ -93,6 +95,8 @@ export interface GapSyncMedia {
   onVideoUrlChange?: (url: string) => void
   /** Called when the user picks a local video file via the file chooser. */
   onVideoFileSelect?: (file: File) => void
+  /** Called when the user picks a local audio file via the file chooser. */
+  onAudioFileSelect?: (file: File) => void
 }
 
 interface GapSyncProps {
@@ -106,7 +110,9 @@ interface GapSyncProps {
 
 export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncProps) {
   const { gap, onChange, videoGap, onVideoGapChange } = timing
-  const { videoUrl, backgroundUrl, initialVideoUrl, onVideoUrlChange, onVideoFileSelect } = media
+  const { videoUrl, audioUrl, backgroundUrl, initialVideoUrl, onVideoUrlChange, onVideoFileSelect, onAudioFileSelect } = media
+  // Effective local media URL: video takes priority over audio
+  const localMediaUrl = videoUrl ?? audioUrl
   const { artist, title } = song ?? {}
   const { t } = useLanguage()
 
@@ -143,7 +149,7 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
   useEffect(() => {
     setLocalPlayerState('idle')
     setLocalIsPlaying(false)
-  }, [videoUrl])
+  }, [localMediaUrl])
 
   const localGetCurrentTime = useCallback(() => localVideoRef.current?.currentTime ?? 0, [])
   const localSeekTo = useCallback((s: number) => { if (localVideoRef.current) localVideoRef.current.currentTime = s }, [])
@@ -156,7 +162,7 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
   const [preferYoutube, setPreferYoutube] = useState(false)
 
   // ── Unified player API — local file wins unless the user chose YouTube ──────
-  const useLocal = Boolean(videoUrl) && !preferYoutube
+  const useLocal = Boolean(localMediaUrl) && !preferYoutube
   const playerState    = useLocal ? localPlayerState    : ytPlayerState
   const isPlaying      = useLocal ? localIsPlaying      : ytIsPlaying
   const getCurrentTime = useLocal ? localGetCurrentTime : ytGetCurrentTime
@@ -292,7 +298,7 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
 
       {/* ── Source switcher ── */}
       <div className="video-source-switcher">
-        {videoUrl && (
+        {localMediaUrl && (
           <button
             className={`vsw-btn${!preferYoutube ? ' vsw-btn--active' : ''}`}
             onClick={() => setPreferYoutube(false)}
@@ -301,7 +307,7 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
           </button>
         )}
         <button
-          className={`vsw-btn${(preferYoutube || !videoUrl) ? ' vsw-btn--active' : ''}`}
+          className={`vsw-btn${(preferYoutube || !localMediaUrl) ? ' vsw-btn--active' : ''}`}
           onClick={() => setPreferYoutube(true)}
         >
           {t.gapsync.youtube}
@@ -320,10 +326,24 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
             />
           </label>
         )}
+        {onAudioFileSelect && (
+          <label className="vsw-btn vsw-btn--pick" title={t.gapsync.pickLocalAudio}>
+            {t.gapsync.pickLocalAudio}
+            <input
+              type="file"
+              accept="audio/*"
+              style={{ display: 'none' }}
+              onChange={(e) => {
+                const file = e.target.files?.[0]
+                if (file) { onAudioFileSelect(file); setPreferYoutube(false) }
+              }}
+            />
+          </label>
+        )}
       </div>
 
-      {/* ── YouTube URL row (shown without local video, or when user chose YouTube) ── */}
-      {(!videoUrl || preferYoutube) && (
+      {/* ── YouTube URL row (shown without local media, or when user chose YouTube) ── */}
+      {(!localMediaUrl || preferYoutube) && (
         <div className="gap-sync-row">
           <input
             type="url"
@@ -365,7 +385,7 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
       )}
 
       {/* "Andere Auswahl" — shown when a video is active but cached results exist */}
-      {(!videoUrl || preferYoutube) && videoId && searchResults && !showResults && (
+      {(!localMediaUrl || preferYoutube) && videoId && searchResults && !showResults && (
         <button className="btn-yt-other" onClick={() => setShowResults(true)}>
           {t.gapsync.otherResults}
         </button>
@@ -375,7 +395,7 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
       {searchMsg && <div className="yt-search-msg">{searchMsg}</div>}
 
       {/* Search results — cached, only visible in YouTube mode */}
-      {(!videoUrl || preferYoutube) && showResults && searchResults && searchResults.length > 0 && (
+      {(!localMediaUrl || preferYoutube) && showResults && searchResults && searchResults.length > 0 && (
         <div className="yt-search-results">
           {searchResults.map((r) => (
             <button key={r.videoId} className="yt-search-result" onClick={() => selectVideo(r.videoId)}>
@@ -394,24 +414,24 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
         </div>
       )}
 
-      {/* Background image preview (only when no video source is active) */}
-      {!useLocal && !videoId && backgroundUrl && (
+      {/* Background image preview (when no video source active, or audio-only local source) */}
+      {(!useLocal || !videoUrl) && !videoId && backgroundUrl && (
         <div className="bg-preview-wrap">
           <img className="bg-preview" src={backgroundUrl} alt="" />
           <span className="bg-preview-label">{t.gapsync.background}</span>
         </div>
       )}
 
-      {/* ── Local video player (always mounted when videoUrl exists, hidden when YouTube is active) ── */}
-      {videoUrl && (
-        <div className={`local-video-wrap${!useLocal ? ' local-video-wrap--hidden' : ''}`}>
+      {/* ── Local video/audio player (always mounted when localMediaUrl exists, hidden when YouTube is active) ── */}
+      {localMediaUrl && (
+        <div className={`local-video-wrap${!useLocal ? ' local-video-wrap--hidden' : ''}${!videoUrl && audioUrl ? ' local-video-wrap--audio-only' : ''}`}>
           {localPlayerState === 'error' && (
             <div className="yt-error">{t.gapsync.videoError}</div>
           )}
           <video
             ref={localVideoRef}
             className="local-video"
-            src={videoUrl}
+            src={localMediaUrl}
             onLoadedMetadata={() => setLocalDuration(localVideoRef.current?.duration ?? 0)}
             onCanPlay={() => setLocalPlayerState('ready')}
             onError={() => setLocalPlayerState('error')}

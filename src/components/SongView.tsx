@@ -10,7 +10,7 @@ import type { ActivePos } from '../utils/duetMerge'
 import { lookupReleaseInfo } from '../utils/musicbrainz'
 import { lookupSingStarEdition } from '../utils/singstarEditions'
 import type { SingStarEditionMatch } from '../utils/singstarEditions'
-import { findVideoFile, findBackgroundFile } from '../utils/fileLoader'
+import { findVideoFile, findAudioFile, findBackgroundFile } from '../utils/fileLoader'
 import type { SongFileMap } from '../utils/fileLoader'
 import type { UsdxSong } from '../parser/usdxParser'
 import { version } from '../../package.json'
@@ -89,6 +89,14 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
     () => (effectiveVideoFile ? URL.createObjectURL(effectiveVideoFile) : null),
     [effectiveVideoFile]
   )
+
+  const audioFile = useMemo(() => findAudioFile(header, files), [header, files])
+  const [selectedAudioFile, setSelectedAudioFile] = useState<File | null>(null)
+  const effectiveAudioFile = selectedAudioFile ?? audioFile
+  const audioUrl = useMemo(
+    () => (effectiveAudioFile ? URL.createObjectURL(effectiveAudioFile) : null),
+    [effectiveAudioFile]
+  )
   const backgroundFile = useMemo(() => findBackgroundFile(header, files), [header, files])
   const backgroundUrl = useMemo(
     () => (backgroundFile ? URL.createObjectURL(backgroundFile) : null),
@@ -153,12 +161,12 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
     const check = (tag: string, fn: string | undefined, resolved?: boolean) => {
       if (fn && !resolved && !files.has(fn.toLowerCase())) missing.push({ tag, filename: fn })
     }
-    check('AUDIO', header.audio)
+    check('AUDIO', header.audio, !!effectiveAudioFile)
     check('VIDEO', header.video, !!effectiveVideoFile)
     check('COVER', header.cover)
     check('BACKGROUND', header.background)
     return missing
-  }, [header, files, effectiveVideoFile])
+  }, [header, files, effectiveAudioFile, effectiveVideoFile])
 
   const handleTimeUpdate = useCallback((currentMs: number) => {
     if (!track) return
@@ -181,6 +189,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
       gap,
       videoGap: videoGap || undefined,
       videoUrl: editVideoUrl || undefined,
+      audio: selectedAudioFile ? selectedAudioFile.name : header.audio,
       video: selectedVideoFile ? selectedVideoFile.name : header.video,
       cover: editCover || undefined,
       coverUrl: editCoverUrl || undefined,
@@ -360,7 +369,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
         <aside className="video-sidebar">
           <GapSync
             timing={{ gap, onChange: v => dispatch({ type: 'SET_GAP', value: v }), videoGap, onVideoGapChange: v => dispatch({ type: 'SET_VIDEO_GAP', value: v }) }}
-            media={{ videoUrl: videoUrl ?? undefined, backgroundUrl: backgroundUrl ?? undefined, initialVideoUrl: editVideoUrl || undefined, onVideoUrlChange: v => dispatch({ type: 'SET_VIDEO_URL', value: v }), onVideoFileSelect: setSelectedVideoFile }}
+            media={{ videoUrl: videoUrl ?? undefined, audioUrl: audioUrl ?? undefined, backgroundUrl: backgroundUrl ?? undefined, initialVideoUrl: editVideoUrl || undefined, onVideoUrlChange: v => dispatch({ type: 'SET_VIDEO_URL', value: v }), onVideoFileSelect: setSelectedVideoFile, onAudioFileSelect: setSelectedAudioFile }}
             song={{ artist: header.artist, title: header.title }}
             onTimeUpdate={handleTimeUpdate}
             onReset={() => {
