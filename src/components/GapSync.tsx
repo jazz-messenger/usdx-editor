@@ -314,24 +314,30 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
 
       {/* ── Source switcher — 3 fixed tabs ── */}
       <div className="video-source-switcher">
-        <button
-          className={`vsw-btn${activeTab === 'video' ? ' vsw-btn--active' : ''}`}
-          onClick={() => setActiveTab('video')}
-        >
-          {t.gapsync.videoTab}
-        </button>
-        <button
-          className={`vsw-btn${activeTab === 'audio' ? ' vsw-btn--active' : ''}`}
-          onClick={() => setActiveTab('audio')}
-        >
-          {t.gapsync.audioTab}
-        </button>
-        <button
-          className={`vsw-btn${activeTab === 'youtube' ? ' vsw-btn--active' : ''}`}
-          onClick={() => setActiveTab('youtube')}
-        >
-          {t.gapsync.youtube}
-        </button>
+        <Tooltip text={t.gapsync.videoTabTooltip}>
+          <button
+            className={`vsw-btn${activeTab === 'video' ? ' vsw-btn--active' : ''}`}
+            onClick={() => setActiveTab('video')}
+          >
+            {t.gapsync.videoTab}
+          </button>
+        </Tooltip>
+        <Tooltip text={t.gapsync.audioTabTooltip}>
+          <button
+            className={`vsw-btn${activeTab === 'audio' ? ' vsw-btn--active' : ''}`}
+            onClick={() => setActiveTab('audio')}
+          >
+            {t.gapsync.audioTab}
+          </button>
+        </Tooltip>
+        <Tooltip text={t.gapsync.youtubeTooltip}>
+          <button
+            className={`vsw-btn${activeTab === 'youtube' ? ' vsw-btn--active' : ''}`}
+            onClick={() => setActiveTab('youtube')}
+          >
+            {t.gapsync.youtube}
+          </button>
+        </Tooltip>
       </div>
 
       {/* ── Video empty state (no file selected yet) ── */}
