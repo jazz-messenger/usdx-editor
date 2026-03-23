@@ -109,6 +109,9 @@ const de = {
       coverOf: (i: number, n: number) => `${i} / ${n}`,
     },
     tagEditor: {
+      tooltipLanguage: 'Sprache des Songs. Wird in UltraStar zur Filterung und Sortierung verwendet.',
+      tooltipGenre: 'Musikgenre des Songs. Kann für mehrere Genres verwendet werden.',
+      tooltipEdition: 'SingStar-Edition oder andere Spielesammlung, in der der Song enthalten ist.',
       unknownTag: 'Dieser Wert ist uns nicht bekannt',
       removeTag: (tag: string) => `${tag} entfernen`,
       addTitle: 'Hinzufügen',
@@ -233,6 +236,9 @@ export const translations = {
       coverOf: (i: number, n: number) => `${i} / ${n}`,
     },
     tagEditor: {
+      tooltipLanguage: 'Language of the song. Used in UltraStar for filtering and sorting.',
+      tooltipGenre: 'Music genre of the song. Multiple genres can be assigned.',
+      tooltipEdition: 'SingStar edition or other game collection the song appears in.',
       unknownTag: 'This value is not known to us',
       removeTag: (tag: string) => `Remove ${tag}`,
       addTitle: 'Add',

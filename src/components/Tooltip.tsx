@@ -1,23 +1,27 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, type ReactNode } from 'react'
 
 interface TooltipProps {
   text: string
+  /** When provided, wraps children as the hover trigger instead of showing a ⓘ icon */
+  children?: ReactNode
 }
 
-export function Tooltip({ text }: TooltipProps) {
+export function Tooltip({ text, children }: TooltipProps) {
   const [pos, setPos] = useState<{ top: number; left: number } | null>(null)
-  const iconRef = useRef<HTMLSpanElement>(null)
+  const triggerRef = useRef<HTMLSpanElement>(null)
 
   const show = () => {
-    if (iconRef.current) {
-      const rect = iconRef.current.getBoundingClientRect()
+    if (triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect()
       setPos({ top: rect.top, left: rect.left + rect.width / 2 })
     }
   }
 
+  const hide = () => setPos(null)
+
   return (
-    <span className="tooltip-wrap" onMouseEnter={show} onMouseLeave={() => setPos(null)}>
-      <span ref={iconRef} className="tooltip-icon" aria-hidden="true">ⓘ</span>
+    <span ref={triggerRef} className="tooltip-wrap" onMouseEnter={show} onMouseLeave={hide}>
+      {children ?? <span className="tooltip-icon" aria-hidden="true">ⓘ</span>}
       {pos && (
         <span
           className="tooltip-bubble"
