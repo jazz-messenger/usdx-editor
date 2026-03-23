@@ -1002,7 +1002,7 @@
 .tooltip-bubble {
   position: fixed;
   transform: translate(-50%, calc(-100% - 6px));
-  background: rgb(var(--bg-card));
+  background: rgb(32 32 54);
   border: 1px solid rgb(var(--border-mid));
   color: rgb(var(--text-primary));
   font-size: 12px;
