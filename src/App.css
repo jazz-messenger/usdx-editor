@@ -1633,8 +1633,8 @@
   align-items: center;
 }
 
-.phrase-col--1 { border-right: 1px solid rgb(var(--border-subtle) / .60); }
-.phrase-col--2 { border-left: 1px solid rgb(var(--border-subtle) / .60); }
+.phrase-col--1 { border-right: 1px solid rgb(var(--border-subtle) / .60); padding-right: 24px; }
+.phrase-col--2 { border-left: 1px solid rgb(var(--border-subtle) / .60); padding-right: 24px; }
 
 /* ─── Assign button ──────────────────────────────────────────────────────── */
 .assign-btn {
