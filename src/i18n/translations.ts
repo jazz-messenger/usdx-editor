@@ -130,9 +130,10 @@ const de = {
       loading: 'Analysiere Audiodatei…',
       error: 'Audiodatei konnte nicht dekodiert werden.',
       noFile: 'Keine lokale Audio- oder Videodatei vorhanden.',
-      hint: 'Klicken → GAP-Kandidat · Abspielen und ⏱ Jetzt! für Echtzeit-Sync',
+      hint: 'Scrollen → Zoom · Klicken → GAP-Kandidat · ⏱ Jetzt! für Echtzeit-Sync',
       confirmGap: (s: string) => `GAP auf ${s}s setzen`,
       syncNow: '⏱ Jetzt!',
+      zoomReset: (x: number) => `${x}× · Zurücksetzen`,
     },
 }
 
@@ -270,9 +271,10 @@ export const translations = {
       loading: 'Analysing audio file…',
       error: 'Could not decode audio file.',
       noFile: 'No local audio or video file available.',
-      hint: 'Click → set GAP candidate · Play and ⏱ Now! for real-time sync',
+      hint: 'Scroll → zoom · Click → GAP candidate · ⏱ Now! for real-time sync',
       confirmGap: (s: string) => `Set GAP to ${s}s`,
       syncNow: '⏱ Now!',
+      zoomReset: (x: number) => `${x}× · Reset`,
     },
   },
 }
