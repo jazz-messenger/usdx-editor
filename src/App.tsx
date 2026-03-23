@@ -25,7 +25,7 @@ export default function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <img src={`${import.meta.env.BASE_URL}icon-logo.svg`} alt={t.app.title} className="app-logo" />
+        <img src={`${import.meta.env.BASE_URL}icon-logo.png`} alt={t.app.title} className="app-logo" />
         <h1>{t.app.title}</h1>
         <span className="subtitle">{t.app.subtitle}</span>
         <div className="lang-toggle">
@@ -46,7 +46,7 @@ export default function App() {
           : (
             <div className="landing">
               <div className="landing-hero">
-                <img src={`${import.meta.env.BASE_URL}icon-logo.svg`} className="landing-icon" alt="" />
+                <img src={`${import.meta.env.BASE_URL}icon-logo.png`} className="landing-icon" alt="" />
                 <p className="landing-tagline">{t.app.tagline}</p>
                 <p className="landing-desc">{t.app.description}</p>
                 <div className="landing-badges">
