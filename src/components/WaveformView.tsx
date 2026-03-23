@@ -179,35 +179,15 @@ export function WaveformView({ file, gap, playheadS, onSetGap }: WaveformViewPro
     return () => ro.disconnect()
   }, [draw])
 
-  // ── Scroll-wheel zoom (mouse-centred) ────────────────────────────────────────
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-
-    const onWheel = (e: WheelEvent) => {
-      if (!duration) return
-      e.preventDefault()
-
-      const rect       = canvas.getBoundingClientRect()
-      const mouseRatio = (e.clientX - rect.left) / rect.width
-
-      // Time under the mouse cursor before zooming
-      const timeAtMouse = pan * duration + mouseRatio * (duration / zoom)
-
-      const factor  = e.deltaY < 0 ? ZOOM_STEP : 1 / ZOOM_STEP
-      const newZoom = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, zoom * factor))
-      const newPan  = clampPan(
-        (timeAtMouse - mouseRatio * (duration / newZoom)) / duration,
-        newZoom
-      )
-
-      setZoom(newZoom)
-      setPan(newPan)
-    }
-
-    canvas.addEventListener('wheel', onWheel, { passive: false })
-    return () => canvas.removeEventListener('wheel', onWheel)
-  }, [duration, zoom, pan, clampPan])
+  // ── Button-driven zoom (centred on current view midpoint) ───────────────────
+  const zoomBy = useCallback((factor: number) => {
+    const newZoom = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, zoom * factor))
+    if (newZoom === zoom) return
+    // Keep view centre fixed
+    const centreTime = (pan + 0.5 / zoom) * duration
+    setPan(clampPan(centreTime / duration - 0.5 / newZoom, newZoom))
+    setZoom(newZoom)
+  }, [zoom, pan, duration, clampPan])
 
   // ── Auto-pan to keep playhead visible during playback ───────────────────────
   useEffect(() => {
@@ -235,6 +215,10 @@ export function WaveformView({ file, gap, playheadS, onSetGap }: WaveformViewPro
 
   const setNow    = () => onSetGap(playheadS * 1000)
   const resetZoom = () => { setZoom(1); setPan(0) }
+  const jumpToGap = () => {
+    if (!duration) return
+    setPan(clampPan(gap / 1000 / duration - 0.5 / zoom, zoom))
+  }
 
   // ── Render ───────────────────────────────────────────────────────────────────
   return (
@@ -260,9 +244,33 @@ export function WaveformView({ file, gap, playheadS, onSetGap }: WaveformViewPro
       <div className="waveform-controls">
         <span className="waveform-hint">{t.waveform.hint}</span>
         <div className="waveform-actions">
+          {/* Zoom controls — always visible when waveform is loaded */}
+          {peaks && (
+            <div className="waveform-zoom-group">
+              <button
+                className="btn-sm waveform-zoom-btn"
+                onClick={() => zoomBy(1 / ZOOM_STEP)}
+                disabled={zoom <= ZOOM_MIN}
+                title={t.waveform.zoomOut}
+              >−</button>
+              <button
+                className="btn-sm waveform-zoom-level"
+                onClick={resetZoom}
+                disabled={zoom <= ZOOM_MIN}
+                title={t.waveform.zoomReset}
+              >{zoom > 1 ? `${Math.round(zoom)}×` : '1×'}</button>
+              <button
+                className="btn-sm waveform-zoom-btn"
+                onClick={() => zoomBy(ZOOM_STEP)}
+                disabled={zoom >= ZOOM_MAX}
+                title={t.waveform.zoomIn}
+              >+</button>
+            </div>
+          )}
+          {/* Jump to GAP — only useful when zoomed */}
           {zoom > 1 && (
-            <button className="btn-sm waveform-zoom-reset" onClick={resetZoom}>
-              {t.waveform.zoomReset(Math.round(zoom))}
+            <button className="btn-sm waveform-zoom-reset" onClick={jumpToGap}>
+              {t.waveform.jumpToGap}
             </button>
           )}
           {pendingGapMs !== null && (

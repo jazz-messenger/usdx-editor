@@ -148,9 +148,9 @@ describe('WaveformView rendering', () => {
     expect(onSetGap).toHaveBeenCalledWith(3500)
   })
 
-  it('zoom reset button is not shown at zoom level 1 (no file)', () => {
+  it('zoom group shows 1× at default zoom', () => {
     renderWaveform()
-    // At zoom=1 the reset button should not be in the DOM
-    expect(screen.queryByText(/zurücksetzen/i)).toBeNull()
+    // No file means no peaks → zoom group not rendered yet
+    expect(screen.queryByText('1×')).toBeNull()
   })
 })

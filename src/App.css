@@ -1560,6 +1560,44 @@
   border-color: rgb(var(--accent-primary) / .4);
 }
 
+/* Zoom − / 1× / + group */
+.waveform-zoom-group {
+  display: inline-flex;
+  align-items: center;
+  background: rgb(var(--bg-elevated));
+  border: 1px solid rgb(var(--border-subtle));
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.waveform-zoom-btn,
+.waveform-zoom-level {
+  background: transparent;
+  border: none;
+  color: rgb(var(--text-muted));
+  font-size: 12px;
+  padding: 4px 8px;
+  cursor: pointer;
+  line-height: 1;
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+.waveform-zoom-level {
+  min-width: 28px;
+  text-align: center;
+  border-left: 1px solid rgb(var(--border-subtle));
+  border-right: 1px solid rgb(var(--border-subtle));
+  font-variant-numeric: tabular-nums;
+}
+.waveform-zoom-btn:hover:not(:disabled),
+.waveform-zoom-level:hover:not(:disabled) {
+  color: rgb(var(--accent-primary-2));
+  background: rgb(var(--accent-primary) / .08);
+}
+.waveform-zoom-btn:disabled,
+.waveform-zoom-level:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
 .duet-header {
   position: sticky;
   top: 0;
