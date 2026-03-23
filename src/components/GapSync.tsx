@@ -285,13 +285,11 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
         </div>
         {isPlayerReady
           ? (
-            <button
-              className="btn-sync"
-              onClick={handleSync}
-              title={t.gapsync.syncTitle}
-            >
-              {t.gapsync.syncNow}
-            </button>
+            <Tooltip text={t.gapsync.syncTitle}>
+              <button className="btn-sync" onClick={handleSync}>
+                {t.gapsync.syncNow}
+              </button>
+            </Tooltip>
           )
           : <span />
         }
@@ -318,21 +316,18 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
       <div className="video-source-switcher">
         <button
           className={`vsw-btn${activeTab === 'video' ? ' vsw-btn--active' : ''}`}
-          title={t.gapsync.videoTab}
           onClick={() => setActiveTab('video')}
         >
           {t.gapsync.videoTab}
         </button>
         <button
           className={`vsw-btn${activeTab === 'audio' ? ' vsw-btn--active' : ''}`}
-          title={t.gapsync.audioTab}
           onClick={() => setActiveTab('audio')}
         >
           {t.gapsync.audioTab}
         </button>
         <button
           className={`vsw-btn${activeTab === 'youtube' ? ' vsw-btn--active' : ''}`}
-          title={t.gapsync.youtube}
           onClick={() => setActiveTab('youtube')}
         >
           {t.gapsync.youtube}
@@ -510,25 +505,18 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
       {isPlayerReady && (
         <div className="gap-sync-transport">
           {/* Reset-to-start: always seeks to videoGap position */}
-          <button
-            className="btn-transport"
-            onClick={handleStart}
-            title={videoGap > 0 ? t.gapsync.startWithGap(videoGap) : t.gapsync.startFromBeginning}
-          >
-            {t.gapsync.startLabel(videoGap)}
-          </button>
-          {/* Play/Pause toggle: resumes/pauses at current slider position */}
-          <button
-            className="btn-transport"
-            onClick={isPlaying ? pause : play}
-            title={isPlaying ? t.gapsync.pause : t.gapsync.play}
-          >
-            {isPlaying ? '⏸' : '▶'}
-          </button>
+          <Tooltip text={videoGap > 0 ? t.gapsync.startWithGap(videoGap) : t.gapsync.startFromBeginning}>
+            <button className="btn-transport" onClick={handleStart}>
+              {t.gapsync.startLabel(videoGap)}
+            </button>
+          </Tooltip>
+          <Tooltip text={isPlaying ? t.gapsync.pause : t.gapsync.play}>
+            <button className="btn-transport" onClick={isPlaying ? pause : play}>
+              {isPlaying ? '⏸' : '▶'}
+            </button>
+          </Tooltip>
           {videoTime > 0 && (
-            <span className="video-clock" title={t.gapsync.clockTitle}>
-              {videoTime.toFixed(1)}s
-            </span>
+            <span className="video-clock">{videoTime.toFixed(1)}s</span>
           )}
           {isPlaying && (
             <span className="yt-hint-live">{t.gapsync.liveHint}</span>

@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback, useRef, useEffect, useReducer } from 'react'
 import { GapSync } from './GapSync'
 import { HeaderEditor } from './HeaderEditor'
+import { Tooltip } from './Tooltip'
 import { useLanguage } from '../i18n/LanguageContext'
 import { exportUsdx } from '../parser/usdxExporter'
 import { phraseToSyllables } from '../parser/lyrics'
@@ -420,13 +421,14 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
                 >
                   <span className="phrase-number">{i + 1}</span>
                   <div className="phrase-col phrase-col--1">{(singer === 1 || singer === 3) && phraseEl}</div>
-                  <button
-                    className={`assign-btn assign-btn--${singer === 1 ? 'to2' : singer === 2 ? 'to1' : 'both'}`}
-                    onClick={() => toggleSinger(i)}
-                    title={singer === 1 ? t.songview.assignToSinger2 : singer === 2 ? t.songview.assignToSinger1 : t.songview.assignBoth}
-                  >
-                    {singer === 1 ? '→' : singer === 2 ? '←' : '⇔'}
-                  </button>
+                  <Tooltip text={singer === 1 ? t.songview.assignToSinger2 : singer === 2 ? t.songview.assignToSinger1 : t.songview.assignBoth}>
+                    <button
+                      className={`assign-btn assign-btn--${singer === 1 ? 'to2' : singer === 2 ? 'to1' : 'both'}`}
+                      onClick={() => toggleSinger(i)}
+                    >
+                      {singer === 1 ? '→' : singer === 2 ? '←' : '⇔'}
+                    </button>
+                  </Tooltip>
                   <div className="phrase-col phrase-col--2">{(singer === 2 || singer === 3) && phraseEl}</div>
                 </div>
               )
