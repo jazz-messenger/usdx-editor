@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { parseUsdx } from './usdxParser'
 import { exportUsdx } from './usdxExporter'
+import { mergeDuetTracks } from '../utils/duetMerge'
 
 const SONG = `#ARTIST:Test Artist
 #TITLE:Test Song
@@ -105,5 +106,39 @@ describe('exportUsdx', () => {
     expect(reimported.header.singerP2).toBe('P2-Name')
     expect(reimported.tracks[0].phrases[0].notes[0].syllable).toBe('Hello')
     expect(reimported.tracks[1].phrases[0].notes[0].syllable).toBe('Foo')
+  })
+
+  /**
+   * Regression: when a song already has P1/P2 sections (song.tracks.length === 2),
+   * the exporter must be given the MERGED track (all phrases, correct singerMap indices)
+   * rather than song.tracks[0] alone — otherwise all P2 phrases are silently dropped.
+   * SongView passes `track` (the display/merged track) to the exporter for this reason.
+   */
+  it('preserves all phrases when exporting a pre-existing duet via merged track', () => {
+    const DUET = `#ARTIST:A\n#TITLE:T\n#BPM:120\n#GAP:0\n#P1:Alice\n#P2:Bob\nP1\n: 0 4 60 One\n- 10\n: 20 4 60 Three\n- 30\nP2\n: 10 4 62 Two\n- 20\n: 30 4 62 Four\n- 40\nE`
+    const song = parseUsdx(DUET)
+    // Simulate what SongView does: merge the tracks and build singerMap
+    const merged = mergeDuetTracks(song.tracks)
+    // merged.phrases should be [One, Two, Three, Four] in beat order
+    // merged.singerMap: 0→1, 1→2, 2→1, 3→2
+    const mergedTrack = { player: 1 as const, phrases: merged.phrases }
+
+    // Export with the merged track (as SongView does)
+    const output = exportUsdx({ ...song, tracks: [mergedTrack] }, merged.singerMap, ['Alice', 'Bob'])
+
+    // All four phrases must be present in the output
+    expect(output).toContain('One')
+    expect(output).toContain('Two')
+    expect(output).toContain('Three')
+    expect(output).toContain('Four')
+
+    // Re-parse should produce 2 tracks with 2 phrases each
+    const reimported = parseUsdx(output)
+    expect(reimported.tracks).toHaveLength(2)
+    const allNotes = reimported.tracks.flatMap(t => t.phrases.flatMap(p => p.notes.map(n => n.syllable)))
+    expect(allNotes).toContain('One')
+    expect(allNotes).toContain('Two')
+    expect(allNotes).toContain('Three')
+    expect(allNotes).toContain('Four')
   })
 })
