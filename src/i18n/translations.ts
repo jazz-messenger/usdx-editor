@@ -9,6 +9,7 @@ const de = {
       badges: ['Duett-Support', 'Live-Highlighting', 'SingStar-Editions', 'Jahreserkennung', 'Genre-Vorschläge', 'YouTube-Suche', 'Optimiert für UltraStar Deluxe'],
       impressum: 'Impressum',
       datenschutz: 'Datenschutz',
+      kofiButtonText: 'Unterstütze mich',
     },
     dropzone: {
       heading: 'Song-Ordner hierher ziehen',
@@ -53,6 +54,11 @@ const de = {
       videoMismatchQuestion: 'Soll die vorhandene Datei verwendet und beim Speichern ersetzt werden?',
       videoMismatchAccept: 'Ja, verwenden',
       videoMismatchDecline: 'Nein, YouTube',
+      audioMismatchInfo: (found: string, expected: string) =>
+        `Im Ordner wurde „${found}" gefunden, aber die Datei lautet „${expected}".`,
+      audioMismatchQuestion: 'Soll die vorhandene Datei verwendet und beim Speichern ersetzt werden?',
+      audioMismatchAccept: 'Ja, verwenden',
+      audioMismatchDecline: 'Nein, ignorieren',
     },
     gapsync: {
       gapLabel: 'GAP',
@@ -125,6 +131,7 @@ export const translations = {
       badges: ['Duet Support', 'Live Highlighting', 'SingStar Editions', 'Year Detection', 'Genre Suggestions', 'YouTube Search', 'Optimized for UltraStar Deluxe'],
       impressum: 'Legal Notice',
       datenschutz: 'Privacy Policy',
+      kofiButtonText: 'Support me',
     },
     dropzone: {
       heading: 'Drop song folder here',
@@ -169,6 +176,11 @@ export const translations = {
       videoMismatchQuestion: 'Use the available file and replace the reference on save?',
       videoMismatchAccept: 'Yes, use it',
       videoMismatchDecline: 'No, use YouTube',
+      audioMismatchInfo: (found: string, expected: string) =>
+        `"${found}" was found in the folder, but the file referenced is "${expected}".`,
+      audioMismatchQuestion: 'Use the available file and replace the reference on save?',
+      audioMismatchAccept: 'Yes, use it',
+      audioMismatchDecline: 'No, ignore',
     },
     gapsync: {
       gapLabel: 'GAP',

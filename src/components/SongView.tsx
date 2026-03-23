@@ -10,7 +10,7 @@ import type { ActivePos } from '../utils/duetMerge'
 import { lookupReleaseInfo } from '../utils/musicbrainz'
 import { lookupSingStarEdition } from '../utils/singstarEditions'
 import type { SingStarEditionMatch } from '../utils/singstarEditions'
-import { findVideoFile, findAudioFile, findBackgroundFile, findVideoMismatch } from '../utils/fileLoader'
+import { findVideoFile, findAudioFile, findBackgroundFile, findVideoMismatch, findAudioMismatch } from '../utils/fileLoader'
 import type { SongFileMap } from '../utils/fileLoader'
 import type { UsdxSong } from '../parser/usdxParser'
 import { version } from '../../package.json'
@@ -97,7 +97,12 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
     [effectiveVideoFile]
   )
 
-  const audioFile = useMemo(() => findAudioFile(header, files), [header, files])
+  const audioMismatch = useMemo(() => findAudioMismatch(header, files), [header, files])
+  const [audioMismatchDismissed, setAudioMismatchDismissed] = useState(false)
+  const audioFile = useMemo(
+    () => (audioMismatch ? null : findAudioFile(header, files)),
+    [header, files, audioMismatch]
+  )
   const [selectedAudioFile, setSelectedAudioFile] = useState<File | null>(null)
   const effectiveAudioFile = selectedAudioFile ?? audioFile
   const audioUrl = useMemo(
@@ -168,13 +173,12 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
     const check = (tag: string, fn: string | undefined, resolved?: boolean) => {
       if (fn && !resolved && !files.has(fn.toLowerCase())) missing.push({ tag, filename: fn })
     }
-    check('AUDIO', header.audio, !!effectiveAudioFile)
-    // Suppress VIDEO warning when mismatch banner is shown — user can act on it there
+    check('AUDIO', header.audio, !!effectiveAudioFile || (!!audioMismatch && !audioMismatchDismissed))
     check('VIDEO', header.video, !!effectiveVideoFile || (!!videoMismatch && !videoMismatchDismissed))
     check('COVER', header.cover)
     check('BACKGROUND', header.background)
     return missing
-  }, [header, files, effectiveAudioFile, effectiveVideoFile, videoMismatch, videoMismatchDismissed])
+  }, [header, files, effectiveAudioFile, effectiveVideoFile, videoMismatch, videoMismatchDismissed, audioMismatch, audioMismatchDismissed])
 
   const handleTimeUpdate = useCallback((currentMs: number) => {
     if (!track) return
@@ -302,6 +306,34 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
               onClick={() => { setSelectedVideoFile(videoMismatch); setVideoMismatchDismissed(true) }}
             >
               {t.songview.videoMismatchAccept}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── Audio mismatch banner ── */}
+      {audioMismatch && !audioMismatchDismissed && (
+        <div className="missing-files-banner missing-files-banner--info video-mismatch-banner">
+          <div className="vmb-message">
+            <span className="missing-files-icon">🎵</span>
+            <span className="missing-files-text">
+              {t.songview.audioMismatchInfo(audioMismatch.name, header.audio ?? '')}
+              <br />
+              {t.songview.audioMismatchQuestion}
+            </span>
+          </div>
+          <div className="vmb-actions">
+            <button
+              className="missing-files-dismiss"
+              onClick={() => setAudioMismatchDismissed(true)}
+            >
+              {t.songview.audioMismatchDecline}
+            </button>
+            <button
+              className="missing-files-action"
+              onClick={() => { setSelectedAudioFile(audioMismatch); setAudioMismatchDismissed(true) }}
+            >
+              {t.songview.audioMismatchAccept}
             </button>
           </div>
         </div>

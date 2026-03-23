@@ -64,7 +64,7 @@ export default function App() {
           )
         }
       </main>
-      <KofiWidget />
+      <KofiWidget text={t.app.kofiButtonText} />
     </div>
   )
 }

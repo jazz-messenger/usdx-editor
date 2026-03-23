@@ -79,6 +79,20 @@ export function findAudioFile(header: UsdxHeader, files: SongFileMap): File | nu
   return findAudioFiles(header, files)[0] ?? null
 }
 
+/** Same mismatch logic as findVideoMismatch, but for #AUDIO. */
+export function findAudioMismatch(
+  header: UsdxHeader,
+  files: SongFileMap,
+): File | null {
+  if (!header.audio) return null
+  const exact = files.get(header.audio.toLowerCase())
+  if (exact) return null
+  for (const [name, file] of files) {
+    if (AUDIO_EXTENSIONS.test(name)) return file
+  }
+  return null
+}
+
 const VIDEO_EXTENSIONS = /\.(mp4|mkv|avi|webm|mov|m4v|mpeg|mpg|wmv|flv)$/i
 
 /** Returns all candidate video files: header match first, then any video file in the folder. */
