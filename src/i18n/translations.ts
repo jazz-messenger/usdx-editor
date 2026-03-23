@@ -9,7 +9,7 @@ const de = {
       badges: ['Duett-Support', 'Live-Highlighting', 'SingStar-Editions', 'Jahreserkennung', 'Genre-Vorschläge', 'YouTube-Suche', 'Optimiert für UltraStar Deluxe'],
       impressum: 'Impressum',
       datenschutz: 'Datenschutz',
-      kofiButtonText: 'Unterstütze mich',
+      kofiButtonText: 'Unterstützen',
     },
     dropzone: {
       heading: 'Song-Ordner hierher ziehen',
