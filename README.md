@@ -83,6 +83,8 @@ GNU General Public License v3.0 — siehe [LICENSE](./LICENSE).
 
 Kurzfassung: Frei nutzbar und veränderbar, auch kommerziell — aber abgeleitete Werke müssen ebenfalls unter GPL v3 veröffentlicht werden.
 
+Developed with the assistance of Claude (Anthropic).
+
 ---
 
 ## Support
