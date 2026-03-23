@@ -9,7 +9,7 @@ const de = {
       badges: ['Duett-Support', 'Live-Highlighting', 'SingStar-Editions', 'Jahreserkennung', 'Genre-Vorschläge', 'YouTube-Suche', 'Optimiert für UltraStar Deluxe'],
       impressum: 'Impressum',
       datenschutz: 'Datenschutz',
-      kofiButtonText: 'Unterstützen',
+      kofiButtonText: 'Danke sagen ☕',
     },
     dropzone: {
       heading: 'Song-Ordner hierher ziehen',
@@ -131,7 +131,7 @@ export const translations = {
       badges: ['Duet Support', 'Live Highlighting', 'SingStar Editions', 'Year Detection', 'Genre Suggestions', 'YouTube Search', 'Optimized for UltraStar Deluxe'],
       impressum: 'Legal Notice',
       datenschutz: 'Privacy Policy',
-      kofiButtonText: 'Support me',
+      kofiButtonText: 'Say thanks ☕',
     },
     dropzone: {
       heading: 'Drop song folder here',
