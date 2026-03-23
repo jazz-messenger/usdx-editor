@@ -58,12 +58,25 @@ export function findCoverFile(header: UsdxHeader, files: SongFileMap): File | nu
   return findCoverFiles(header, files)[0] ?? null
 }
 
-export function findVideoFile(header: UsdxHeader, files: SongFileMap): File | null {
+const VIDEO_EXTENSIONS = /\.(mp4|mkv|avi|webm|mov|m4v|mpeg|mpg|wmv|flv)$/i
+
+/** Returns all candidate video files: header match first, then any video file in the folder. */
+export function findVideoFiles(header: UsdxHeader, files: SongFileMap): File[] {
+  const seen = new Set<string>()
+  const result: File[] = []
+  const add = (f: File) => { if (!seen.has(f.name)) { seen.add(f.name); result.push(f) } }
   if (header.video) {
     const f = files.get(header.video.toLowerCase())
-    if (f) return f
+    if (f) add(f)
   }
-  return null
+  for (const [name, file] of files) {
+    if (VIDEO_EXTENSIONS.test(name)) add(file)
+  }
+  return result
+}
+
+export function findVideoFile(header: UsdxHeader, files: SongFileMap): File | null {
+  return findVideoFiles(header, files)[0] ?? null
 }
 
 export function findBackgroundFile(header: UsdxHeader, files: SongFileMap): File | null {

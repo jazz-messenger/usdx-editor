@@ -91,6 +91,8 @@ export interface GapSyncMedia {
   initialVideoUrl?: string
   /** Called whenever the user selects or clears a YouTube URL. */
   onVideoUrlChange?: (url: string) => void
+  /** Called when the user picks a local video file via the file chooser. */
+  onVideoFileSelect?: (file: File) => void
 }
 
 interface GapSyncProps {
@@ -104,7 +106,7 @@ interface GapSyncProps {
 
 export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncProps) {
   const { gap, onChange, videoGap, onVideoGapChange } = timing
-  const { videoUrl, backgroundUrl, initialVideoUrl, onVideoUrlChange } = media
+  const { videoUrl, backgroundUrl, initialVideoUrl, onVideoUrlChange, onVideoFileSelect } = media
   const { artist, title } = song ?? {}
   const { t } = useLanguage()
 
@@ -288,23 +290,37 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
         <span />
       </div>
 
-      {/* ── Source switcher — only shown when a local video file is present ── */}
-      {videoUrl && (
-        <div className="video-source-switcher">
+      {/* ── Source switcher ── */}
+      <div className="video-source-switcher">
+        {videoUrl && (
           <button
             className={`vsw-btn${!preferYoutube ? ' vsw-btn--active' : ''}`}
             onClick={() => setPreferYoutube(false)}
           >
             {t.gapsync.localFile}
           </button>
-          <button
-            className={`vsw-btn${preferYoutube ? ' vsw-btn--active' : ''}`}
-            onClick={() => setPreferYoutube(true)}
-          >
-            {t.gapsync.youtube}
-          </button>
-        </div>
-      )}
+        )}
+        <button
+          className={`vsw-btn${(preferYoutube || !videoUrl) ? ' vsw-btn--active' : ''}`}
+          onClick={() => setPreferYoutube(true)}
+        >
+          {t.gapsync.youtube}
+        </button>
+        {onVideoFileSelect && (
+          <label className="vsw-btn vsw-btn--pick" title={t.gapsync.pickLocalFile}>
+            {t.gapsync.pickLocalFile}
+            <input
+              type="file"
+              accept="video/*"
+              style={{ display: 'none' }}
+              onChange={(e) => {
+                const file = e.target.files?.[0]
+                if (file) { onVideoFileSelect(file); setPreferYoutube(false) }
+              }}
+            />
+          </label>
+        )}
+      </div>
 
       {/* ── YouTube URL row (shown without local video, or when user chose YouTube) ── */}
       {(!videoUrl || preferYoutube) && (

@@ -83,7 +83,12 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
   const phraseCount = track?.phrases.length ?? 0
 
   const videoFile = useMemo(() => findVideoFile(header, files), [header, files])
-  const videoUrl = useMemo(() => (videoFile ? URL.createObjectURL(videoFile) : null), [videoFile])
+  const [selectedVideoFile, setSelectedVideoFile] = useState<File | null>(null)
+  const effectiveVideoFile = selectedVideoFile ?? videoFile
+  const videoUrl = useMemo(
+    () => (effectiveVideoFile ? URL.createObjectURL(effectiveVideoFile) : null),
+    [effectiveVideoFile]
+  )
   const backgroundFile = useMemo(() => findBackgroundFile(header, files), [header, files])
   const backgroundUrl = useMemo(
     () => (backgroundFile ? URL.createObjectURL(backgroundFile) : null),
@@ -145,15 +150,15 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
 
   const missingFiles = useMemo(() => {
     const missing: { tag: string; filename: string }[] = []
-    const check = (tag: string, fn: string | undefined) => {
-      if (fn && !files.has(fn.toLowerCase())) missing.push({ tag, filename: fn })
+    const check = (tag: string, fn: string | undefined, resolved?: boolean) => {
+      if (fn && !resolved && !files.has(fn.toLowerCase())) missing.push({ tag, filename: fn })
     }
     check('AUDIO', header.audio)
-    check('VIDEO', header.video)
+    check('VIDEO', header.video, !!effectiveVideoFile)
     check('COVER', header.cover)
     check('BACKGROUND', header.background)
     return missing
-  }, [header, files])
+  }, [header, files, effectiveVideoFile])
 
   const handleTimeUpdate = useCallback((currentMs: number) => {
     if (!track) return
@@ -176,6 +181,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
       gap,
       videoGap: videoGap || undefined,
       videoUrl: editVideoUrl || undefined,
+      video: selectedVideoFile ? selectedVideoFile.name : header.video,
       cover: editCover || undefined,
       coverUrl: editCoverUrl || undefined,
       comment: `edited with usdx-editor v${version} on ${today}, http://korczak.at/usdx-editor`,
@@ -354,7 +360,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
         <aside className="video-sidebar">
           <GapSync
             timing={{ gap, onChange: v => dispatch({ type: 'SET_GAP', value: v }), videoGap, onVideoGapChange: v => dispatch({ type: 'SET_VIDEO_GAP', value: v }) }}
-            media={{ videoUrl: videoUrl ?? undefined, backgroundUrl: backgroundUrl ?? undefined, initialVideoUrl: editVideoUrl || undefined, onVideoUrlChange: v => dispatch({ type: 'SET_VIDEO_URL', value: v }) }}
+            media={{ videoUrl: videoUrl ?? undefined, backgroundUrl: backgroundUrl ?? undefined, initialVideoUrl: editVideoUrl || undefined, onVideoUrlChange: v => dispatch({ type: 'SET_VIDEO_URL', value: v }), onVideoFileSelect: setSelectedVideoFile }}
             song={{ artist: header.artist, title: header.title }}
             onTimeUpdate={handleTimeUpdate}
             onReset={() => {
