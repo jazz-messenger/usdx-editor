@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useYouTubePlayer } from '../hooks/useYouTubePlayer'
 import { useLanguage } from '../i18n/LanguageContext'
+import { Tooltip } from './Tooltip'
 
 function extractYouTubeId(url: string): string | null {
   const match = url.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/)
@@ -267,7 +268,10 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
 
       {/* ── Timing fields: 3-column grid — label | input+unit | [⏱ Jetzt!] ── */}
       <div className="gap-timing-grid">
-        <label className="gap-sync-label" htmlFor="gap-input">{t.gapsync.gapLabel}</label>
+        <label className="gap-sync-label" htmlFor="gap-input">
+          {t.gapsync.gapLabel}
+          <Tooltip text={t.gapsync.gapTooltip} />
+        </label>
         <div className="gap-input-group">
           <input
             id="gap-input"
@@ -292,7 +296,10 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
           : <span />
         }
 
-        <label className="gap-sync-label" htmlFor="videogap-input">{t.gapsync.videogapLabel}</label>
+        <label className="gap-sync-label" htmlFor="videogap-input">
+          {t.gapsync.videogapLabel}
+          <Tooltip text={t.gapsync.videogapTooltip} />
+        </label>
         <div className="gap-input-group">
           <input
             id="videogap-input"
