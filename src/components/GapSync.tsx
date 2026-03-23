@@ -137,6 +137,22 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
     else setYtDuration(0)
   }, [ytPlayerState, ytGetDuration])
 
+  // ── Tab state: video | audio | youtube ─────────────────────────────────────
+  type MediaTab = 'video' | 'audio' | 'youtube'
+  const [activeTab, setActiveTab] = useState<MediaTab>(() => {
+    if (forceYoutube) return 'youtube'
+    if (videoUrl) return 'video'
+    if (audioUrl) return 'audio'
+    return 'youtube'
+  })
+  // Sync forceYoutube from parent (e.g. user declined mismatch banner)
+  useEffect(() => { if (forceYoutube) setActiveTab('youtube') }, [forceYoutube])
+
+  // Local media source depends on active tab — must be declared before local player hooks
+  const localMediaUrl = activeTab === 'video' ? (videoUrl ?? null)
+                      : activeTab === 'audio' ? (audioUrl ?? null)
+                      : null
+
   // ── Local video player ──────────────────────────────────────────────────────
   const localVideoRef = useRef<HTMLVideoElement>(null)
   const [localPlayerState, setLocalPlayerState] = useState<'idle' | 'ready' | 'error'>('idle')
@@ -155,22 +171,6 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
   const localSeekTo = useCallback((s: number) => { if (localVideoRef.current) localVideoRef.current.currentTime = s }, [])
   const localPlay = useCallback(() => { localVideoRef.current?.play() }, [])
   const localPause = useCallback(() => { localVideoRef.current?.pause() }, [])
-
-  // ── Tab state: video | audio | youtube ─────────────────────────────────────
-  type MediaTab = 'video' | 'audio' | 'youtube'
-  const [activeTab, setActiveTab] = useState<MediaTab>(() => {
-    if (forceYoutube) return 'youtube'
-    if (videoUrl) return 'video'
-    if (audioUrl) return 'audio'
-    return 'youtube'
-  })
-  // Sync forceYoutube from parent (e.g. user declined mismatch banner)
-  useEffect(() => { if (forceYoutube) setActiveTab('youtube') }, [forceYoutube])
-
-  // Local media source depends on active tab
-  const localMediaUrl = activeTab === 'video' ? (videoUrl ?? null)
-                      : activeTab === 'audio' ? (audioUrl ?? null)
-                      : null
 
   // ── Unified player API ───────────────────────────────────────────────────────
   const useLocal = activeTab !== 'youtube' && Boolean(localMediaUrl)
