@@ -1289,6 +1289,16 @@
   width: 100%;
 }
 
+.video-source-switcher .tooltip-wrap {
+  flex: 1;
+  display: flex;
+}
+
+.video-source-switcher .tooltip-wrap .vsw-btn {
+  flex: 1;
+  width: 100%;
+}
+
 .vsw-btn {
   flex: 1;
   background: transparent;
