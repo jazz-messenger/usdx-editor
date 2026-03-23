@@ -357,6 +357,20 @@
   color: #fbbf24;
 }
 
+.missing-files-action {
+  flex-shrink: 0;
+  background: rgb(99 179 237 / .15);
+  border: 1px solid rgb(99 179 237 / .35);
+  border-radius: var(--radius-sm);
+  color: rgb(99 179 237);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  transition: background var(--transition-fast);
+}
+.missing-files-action:hover { background: rgb(99 179 237 / .25); }
+
 .missing-files-dismiss {
   margin-left: auto;
   background: none;
@@ -1214,19 +1228,23 @@
   border: 1px solid rgb(var(--border-mid));
   border-radius: var(--radius-md);
   overflow: hidden;
-  align-self: flex-start;
+  width: 100%;
 }
 
 .vsw-btn {
+  flex: 1;
   background: transparent;
   border: none;
   color: rgb(var(--text-muted));
   font-size: 12px;
   font-weight: 600;
-  padding: 5px 14px;
+  padding: 5px 8px;
   cursor: pointer;
   transition: background var(--transition-fast), color var(--transition-fast);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .vsw-btn + .vsw-btn { border-left: 1px solid rgb(var(--border-mid)); }

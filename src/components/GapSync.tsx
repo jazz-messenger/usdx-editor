@@ -97,6 +97,8 @@ export interface GapSyncMedia {
   onVideoFileSelect?: (file: File) => void
   /** Called when the user picks a local audio file via the file chooser. */
   onAudioFileSelect?: (file: File) => void
+  /** When true, force the YouTube tab to be active (e.g. after user declines a video mismatch). */
+  forceYoutube?: boolean
 }
 
 interface GapSyncProps {
@@ -110,7 +112,7 @@ interface GapSyncProps {
 
 export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncProps) {
   const { gap, onChange, videoGap, onVideoGapChange } = timing
-  const { videoUrl, audioUrl, backgroundUrl, initialVideoUrl, onVideoUrlChange, onVideoFileSelect, onAudioFileSelect } = media
+  const { videoUrl, audioUrl, backgroundUrl, initialVideoUrl, onVideoUrlChange, onVideoFileSelect, onAudioFileSelect, forceYoutube } = media
   // Effective local media URL: video takes priority over audio
   const localMediaUrl = videoUrl ?? audioUrl
   const { artist, title } = song ?? {}
@@ -159,7 +161,9 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
   // ── Video source preference ─────────────────────────────────────────────────
   // When a local file is present it is used by default. The user can toggle to
   // YouTube; preferYoutube=true makes the YouTube player the active source.
-  const [preferYoutube, setPreferYoutube] = useState(false)
+  const [preferYoutube, setPreferYoutube] = useState(forceYoutube ?? false)
+  // Sync forceYoutube changes (e.g. user declined mismatch banner)
+  useEffect(() => { if (forceYoutube) setPreferYoutube(true) }, [forceYoutube])
 
   // ── Unified player API — local file wins unless the user chose YouTube ──────
   const useLocal = Boolean(localMediaUrl) && !preferYoutube

@@ -10,7 +10,7 @@ import type { ActivePos } from '../utils/duetMerge'
 import { lookupReleaseInfo } from '../utils/musicbrainz'
 import { lookupSingStarEdition } from '../utils/singstarEditions'
 import type { SingStarEditionMatch } from '../utils/singstarEditions'
-import { findVideoFile, findAudioFile, findBackgroundFile } from '../utils/fileLoader'
+import { findVideoFile, findAudioFile, findBackgroundFile, findVideoMismatch } from '../utils/fileLoader'
 import type { SongFileMap } from '../utils/fileLoader'
 import type { UsdxSong } from '../parser/usdxParser'
 import { version } from '../../package.json'
@@ -82,7 +82,14 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
   }, [tracks, mergedDuet])
   const phraseCount = track?.phrases.length ?? 0
 
-  const videoFile = useMemo(() => findVideoFile(header, files), [header, files])
+  // Mismatch: header names a video that doesn't exist, but another video file is present
+  const videoMismatch = useMemo(() => findVideoMismatch(header, files), [header, files])
+  const [videoMismatchDismissed, setVideoMismatchDismissed] = useState(false)
+  // Don't auto-select a mismatched file — wait for explicit user decision
+  const videoFile = useMemo(
+    () => (videoMismatch ? null : findVideoFile(header, files)),
+    [header, files, videoMismatch]
+  )
   const [selectedVideoFile, setSelectedVideoFile] = useState<File | null>(null)
   const effectiveVideoFile = selectedVideoFile ?? videoFile
   const videoUrl = useMemo(
@@ -271,6 +278,29 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
         </div>
       )}
 
+      {/* ── Video mismatch banner ── */}
+      {videoMismatch && !videoMismatchDismissed && (
+        <div className="missing-files-banner missing-files-banner--info">
+          <span className="missing-files-icon">🎬</span>
+          <span className="missing-files-text">
+            {t.songview.videoMismatch(videoMismatch.name, header.video ?? '')}
+          </span>
+          <button
+            className="missing-files-action"
+            onClick={() => { setSelectedVideoFile(videoMismatch); setVideoMismatchDismissed(true) }}
+          >
+            {t.songview.videoMismatchAccept}
+          </button>
+          <button
+            className="missing-files-dismiss"
+            onClick={() => setVideoMismatchDismissed(true)}
+            title={t.songview.videoMismatchDecline}
+          >
+            {t.songview.videoMismatchDecline}
+          </button>
+        </div>
+      )}
+
       {/* ── Missing files warning ── */}
       {missingFiles.length > 0 && !warningDismissed && (
         <div className="missing-files-banner">
@@ -369,7 +399,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
         <aside className="video-sidebar">
           <GapSync
             timing={{ gap, onChange: v => dispatch({ type: 'SET_GAP', value: v }), videoGap, onVideoGapChange: v => dispatch({ type: 'SET_VIDEO_GAP', value: v }) }}
-            media={{ videoUrl: videoUrl ?? undefined, audioUrl: audioUrl ?? undefined, backgroundUrl: backgroundUrl ?? undefined, initialVideoUrl: editVideoUrl || undefined, onVideoUrlChange: v => dispatch({ type: 'SET_VIDEO_URL', value: v }), onVideoFileSelect: setSelectedVideoFile, onAudioFileSelect: setSelectedAudioFile }}
+            media={{ videoUrl: videoUrl ?? undefined, audioUrl: audioUrl ?? undefined, backgroundUrl: backgroundUrl ?? undefined, initialVideoUrl: editVideoUrl || undefined, onVideoUrlChange: v => dispatch({ type: 'SET_VIDEO_URL', value: v }), onVideoFileSelect: setSelectedVideoFile, onAudioFileSelect: setSelectedAudioFile, forceYoutube: videoMismatchDismissed && !selectedVideoFile && !!videoMismatch }}
             song={{ artist: header.artist, title: header.title }}
             onTimeUpdate={handleTimeUpdate}
             onReset={() => {

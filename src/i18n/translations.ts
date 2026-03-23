@@ -48,6 +48,10 @@ const de = {
       assignToSinger1: 'Zu Sänger:in 1',
       assignBoth: 'Beide singen',
       deprecationBanner: (fields: string[]) => `Veraltete Felder erkannt: ${fields.map(f => `#${f}`).join(', ')} – werden beim Speichern entfernt bzw. aktualisiert.`,
+      videoMismatch: (found: string, expected: string) =>
+        `Im Ordner wurde „${found}" gefunden, aber die Datei lautet „${expected}". Soll die vorhandene Datei verwendet und beim Speichern ersetzt werden?`,
+      videoMismatchAccept: 'Ja, verwenden',
+      videoMismatchDecline: 'Nein, YouTube',
     },
     gapsync: {
       gapLabel: 'GAP',
@@ -156,6 +160,10 @@ export const translations = {
       assignToSinger1: 'Assign to Singer 1',
       assignBoth: 'Both sing',
       deprecationBanner: (fields: string[]) => `Deprecated fields detected: ${fields.map(f => `#${f}`).join(', ')} – will be removed or updated on save.`,
+      videoMismatch: (found: string, expected: string) =>
+        `"${found}" was found in the folder, but the file referenced is "${expected}". Use the available file and replace the reference on save?`,
+      videoMismatchAccept: 'Yes, use it',
+      videoMismatchDecline: 'No, use YouTube',
     },
     gapsync: {
       gapLabel: 'GAP',

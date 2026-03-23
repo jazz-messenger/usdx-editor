@@ -100,6 +100,26 @@ export function findVideoFile(header: UsdxHeader, files: SongFileMap): File | nu
   return findVideoFiles(header, files)[0] ?? null
 }
 
+/**
+ * Returns the first video file found in the folder when it doesn't match
+ * the filename stored in the header — i.e. a mismatch situation.
+ * Returns null when there is no mismatch (either no header.video, exact match,
+ * or no video file in the folder at all).
+ */
+export function findVideoMismatch(
+  header: UsdxHeader,
+  files: SongFileMap,
+): File | null {
+  if (!header.video) return null
+  const exact = files.get(header.video.toLowerCase())
+  if (exact) return null // exact match — no mismatch
+  // Header names a file that isn't present; look for any video in the folder
+  for (const [name, file] of files) {
+    if (VIDEO_EXTENSIONS.test(name)) return file
+  }
+  return null
+}
+
 export function findBackgroundFile(header: UsdxHeader, files: SongFileMap): File | null {
   if (header.background) {
     const f = files.get(header.background.toLowerCase())
