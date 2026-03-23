@@ -124,6 +124,16 @@ const de = {
       addCustom: (query: string) => `„${query}" hinzufügen`,
       allUsed: 'Alle Vorschläge bereits verwendet',
     },
+    waveform: {
+      viewText: 'Text',
+      viewWave: 'Wellenform',
+      loading: 'Analysiere Audiodatei…',
+      error: 'Audiodatei konnte nicht dekodiert werden.',
+      noFile: 'Keine lokale Audio- oder Videodatei vorhanden.',
+      hint: 'Klicken → GAP-Kandidat · Abspielen und ⏱ Jetzt! für Echtzeit-Sync',
+      confirmGap: (s: string) => `GAP auf ${s}s setzen`,
+      syncNow: '⏱ Jetzt!',
+    },
 }
 
 export type Translations = typeof de
@@ -253,6 +263,16 @@ export const translations = {
       searchPlaceholder: 'Search or type…',
       addCustom: (query: string) => `Add "${query}"`,
       allUsed: 'All suggestions already used',
+    },
+    waveform: {
+      viewText: 'Text',
+      viewWave: 'Waveform',
+      loading: 'Analysing audio file…',
+      error: 'Could not decode audio file.',
+      noFile: 'No local audio or video file available.',
+      hint: 'Click → set GAP candidate · Play and ⏱ Now! for real-time sync',
+      confirmGap: (s: string) => `Set GAP to ${s}s`,
+      syncNow: '⏱ Now!',
     },
   },
 }
