@@ -1556,6 +1556,7 @@
   grid-template-columns: 1fr 32px 1fr;
   gap: 0;
   padding: 0 0 0 36px;
+  border-bottom: 1px solid rgb(var(--border-subtle));
 }
 
 .duet-col-label {
@@ -1569,7 +1570,6 @@
 .singer-name-input {
   background: transparent;
   border: none;
-  border-bottom: 1px solid rgb(var(--border-subtle));
   color: rgb(var(--text-primary) / .75);
   font-size: 13px;
   font-weight: 600;
@@ -1633,8 +1633,21 @@
   align-items: center;
 }
 
-.phrase-col--1 { border-right: 1px solid rgb(var(--border-subtle) / .60); padding-right: 24px; }
-.phrase-col--2 { border-left: 1px solid rgb(var(--border-subtle) / .60); padding-right: 24px; }
+.phrase-col--1 { padding-right: 24px; }
+.phrase-col--2 { padding-right: 24px; }
+
+/* Assign-column as the divider — flanking borders on the tooltip-wrap grid cell */
+.phrase > .tooltip-wrap {
+  border-left:  1px solid rgb(var(--border-subtle) / .60);
+  border-right: 1px solid rgb(var(--border-subtle) / .60);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  /* bleed into the phrase's transparent border zone so lines connect between rows */
+  margin-top: -1px;
+  margin-bottom: -1px;
+}
 
 /* ─── Assign button ──────────────────────────────────────────────────────── */
 .assign-btn {
