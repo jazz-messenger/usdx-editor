@@ -359,21 +359,21 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
         </div>
       )}
 
+      {/* ── View toggle ── */}
+      <div className="lyrics-view-toggle">
+        <button
+          className={`lvt-btn${lyricsView === 'text' ? ' lvt-btn--active' : ''}`}
+          onClick={() => setLyricsView('text')}
+        >{t.waveform.viewText}</button>
+        <button
+          className={`lvt-btn${lyricsView === 'waveform' ? ' lvt-btn--active' : ''}`}
+          onClick={() => setLyricsView('waveform')}
+        >{t.waveform.viewWave}</button>
+      </div>
+
       {/* ── Two-column content ── */}
       <div className="song-content">
         <div className="lyrics-column" ref={lyricsColumnRef}>
-          {/* ── View toggle ── */}
-          <div className="lyrics-view-toggle">
-            <button
-              className={`lvt-btn${lyricsView === 'text' ? ' lvt-btn--active' : ''}`}
-              onClick={() => setLyricsView('text')}
-            >{t.waveform.viewText}</button>
-            <button
-              className={`lvt-btn${lyricsView === 'waveform' ? ' lvt-btn--active' : ''}`}
-              onClick={() => setLyricsView('waveform')}
-            >{t.waveform.viewWave}</button>
-          </div>
-
           {lyricsView === 'waveform' && (
             <WaveformView
               file={effectiveAudioFile ?? effectiveVideoFile ?? null}

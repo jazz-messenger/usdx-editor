@@ -310,8 +310,7 @@
   flex-shrink: 0;
   background: rgb(var(--bg-panel));
   border: 1px solid rgb(var(--border-subtle));
-  border-bottom: none;
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  border-radius: var(--radius-lg);
   position: relative;
   z-index: 1;
   padding: 16px 20px;
@@ -409,7 +408,7 @@
   align-items: start;
   gap: 0;
   border: 1px solid rgb(var(--border-subtle));
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  border-radius: var(--radius-lg);
   overflow: hidden;
 }
 
@@ -1439,33 +1438,53 @@
   flex-direction: column;
 }
 
-/* ── View toggle (Text / Waveform) ── */
+/* ── View toggle (Material style) ── */
 .lyrics-view-toggle {
   display: flex;
-  border-bottom: 1px solid rgb(var(--border-subtle));
+  align-items: stretch;
+  padding: 0 0 0 8px;
   flex-shrink: 0;
+  margin-top: 12px;
+  margin-bottom: 8px;
 }
 
 .lvt-btn {
-  flex: 1;
   background: transparent;
   border: none;
   color: rgb(var(--text-muted));
-  font-size: 12px;
-  font-weight: 600;
-  padding: 7px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 9px 16px;
   cursor: pointer;
-  transition: color var(--transition-fast), background var(--transition-fast);
+  white-space: nowrap;
+  position: relative;
+  transition: color var(--transition-fast);
+}
+
+.lvt-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgb(var(--accent-primary));
+  transform: scaleX(0);
+  transition: transform 200ms ease;
 }
 
 .lvt-btn:hover {
-  background: rgb(var(--accent-primary) / .08);
-  color: rgb(var(--accent-primary-2));
+  color: rgb(var(--text-primary));
 }
 
 .lvt-btn--active {
   color: rgb(var(--accent-primary-2));
-  border-bottom: 2px solid rgb(var(--accent-primary));
+}
+
+.lvt-btn--active::after {
+  transform: scaleX(1);
 }
 
 /* ── Waveform view ── */
@@ -1552,9 +1571,9 @@
   border: none;
   border-bottom: 1px solid rgb(var(--border-subtle));
   color: rgb(var(--text-primary) / .75);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  padding: 4px 14px;
+  padding: 8px 14px;
   width: 100%;
   transition: border-color var(--transition-fast), color var(--transition-fast);
 }
