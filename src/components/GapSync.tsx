@@ -109,9 +109,11 @@ interface GapSyncProps {
   onTimeUpdate?: (currentMs: number) => void
   /** Called when the user clicks ↩ Start — App can use this to scroll to phrase 0. */
   onReset?: () => void
+  /** Increment to trigger seek-to-GAP + play from WaveformView */
+  startSignal?: number
 }
 
-export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncProps) {
+export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSignal }: GapSyncProps) {
   const { gap, onChange, videoGap, onVideoGapChange } = timing
   const { videoUrl, audioUrl, backgroundUrl, initialVideoUrl, onVideoUrlChange, onVideoFileSelect, onAudioFileSelect, forceYoutube } = media
   const { artist, title } = song ?? {}
@@ -218,6 +220,16 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
     play()
   }
 
+  // External jump-to-GAP trigger from WaveformView — seeks to GAP position (not VIDEOGAP)
+  const lastStartSignal = useRef(0)
+  useEffect(() => {
+    if (!startSignal || startSignal === lastStartSignal.current || playerState !== 'ready') return
+    lastStartSignal.current = startSignal
+    onReset?.()
+    seekTo(gap / 1000)
+    play()
+  }, [startSignal, playerState, gap, seekTo, play, onReset])
+
   // Changing VIDEOGAP: update state AND immediately seek so the video frame
   // jumps to the new position for instant visual feedback.
   const handleVideoGapChange = (value: number) => {
@@ -277,9 +289,9 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
             id="gap-input"
             type="number"
             className="gap-input"
-            value={gap}
+            value={Math.round(gap)}
             step={10}
-            onChange={(e) => onChange(Number(e.target.value))}
+            onChange={(e) => onChange(Math.round(Number(e.target.value)))}
           />
           <span className="gap-unit">{t.gapsync.ms}</span>
         </div>
@@ -509,25 +521,32 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
 
       {/* ── Transport controls — shown below the video frame once player is ready ── */}
       {isPlayerReady && (
-        <div className="gap-sync-transport">
-          {/* Reset-to-start: always seeks to videoGap position */}
-          <Tooltip text={videoGap > 0 ? t.gapsync.startWithGap(videoGap) : t.gapsync.startFromBeginning}>
-            <button className="btn-transport" onClick={handleStart}>
-              {t.gapsync.startLabel(videoGap)}
-            </button>
-          </Tooltip>
-          <Tooltip text={isPlaying ? t.gapsync.pause : t.gapsync.play}>
-            <button className="btn-transport" onClick={isPlaying ? pause : play}>
-              {isPlaying ? '⏸' : '▶'}
-            </button>
-          </Tooltip>
-          {videoTime > 0 && (
-            <span className="video-clock">{videoTime.toFixed(1)}s</span>
-          )}
+        <>
+          <div className="gap-sync-transport">
+            {/* Reset-to-start: always seeks to videoGap position */}
+            <Tooltip text={videoGap > 0 ? t.gapsync.startWithGap(videoGap) : t.gapsync.startFromBeginning}>
+              <button className="btn-transport" onClick={handleStart}>
+                {t.gapsync.startLabel(videoGap)}
+              </button>
+            </Tooltip>
+            <Tooltip text={t.gapsync.jumpToGapTooltip}>
+              <button className="btn-transport" onClick={() => { onReset?.(); seekTo(gap / 1000); play() }}>
+                {t.gapsync.jumpToGapLabel}
+              </button>
+            </Tooltip>
+            <Tooltip text={isPlaying ? t.gapsync.pause : t.gapsync.play}>
+              <button className="btn-transport" onClick={isPlaying ? pause : play}>
+                {isPlaying ? '⏸' : '▶'}
+              </button>
+            </Tooltip>
+            {videoTime > 0 && (
+              <span className="video-clock">{Math.round(videoTime)}s</span>
+            )}
+          </div>
           {isPlaying && (
             <span className="yt-hint-live">{t.gapsync.liveHint}</span>
           )}
-        </div>
+        </>
       )}
 
     </div>

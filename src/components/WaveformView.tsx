@@ -6,6 +6,7 @@ interface WaveformViewProps {
   gap: number                          // current GAP in ms
   playheadS: number                    // absolute playback position in seconds
   onSetGap: (ms: number) => void
+  onJumpToGap?: () => void             // seek player to GAP and play
 }
 
 const WAVEFORM_COLOR    = '#f9731680'
@@ -37,7 +38,7 @@ function buildPeaks(channelData: Float32Array, samples: number): Float32Array {
   return peaks
 }
 
-export function WaveformView({ file, gap, playheadS, onSetGap }: WaveformViewProps) {
+export function WaveformView({ file, gap, playheadS, onSetGap, onJumpToGap }: WaveformViewProps) {
   const { t } = useLanguage()
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const wrapRef   = useRef<HTMLDivElement>(null)
@@ -96,15 +97,24 @@ export function WaveformView({ file, gap, playheadS, onSetGap }: WaveformViewPro
     const visDur   = duration / zoom
     const xOf      = (s: number) => ((s - visStart) / visDur) * W
 
-    // ── Waveform bars ──────────────────────────────────────────────────────────
+    // ── Waveform bars — all dark first, quiet bright on top ───────────────────
     const iStart = Math.max(0, Math.floor(pan * peaks.length) - 1)
     const iEnd   = Math.min(peaks.length, Math.ceil((pan + 1 / zoom) * peaks.length) + 1)
     const barW   = Math.max(1, W / (iEnd - iStart))
 
+    // Pass 1: all bars in dark colour → loud stays dark, quiet gets overwritten
+    ctx.fillStyle = WAVEFORM_COLOR
     for (let i = iStart; i < iEnd; i++) {
       const x = xOf((i / peaks.length) * duration)
       const h = peaks[i] * WH * 0.9
-      ctx.fillStyle = peaks[i] > 0.5 ? WAVEFORM_COLOR_HI : WAVEFORM_COLOR
+      ctx.fillRect(x, (WH - h) / 2, barW, h)
+    }
+    // Pass 2: quiet bars redrawn bright on top → clearly in front of dark
+    ctx.fillStyle = WAVEFORM_COLOR_HI
+    for (let i = iStart; i < iEnd; i++) {
+      if (peaks[i] > 0.5) continue
+      const x = xOf((i / peaks.length) * duration)
+      const h = peaks[i] * WH * 0.9
       ctx.fillRect(x, (WH - h) / 2, barW, h)
     }
 
@@ -218,6 +228,7 @@ export function WaveformView({ file, gap, playheadS, onSetGap }: WaveformViewPro
   const jumpToGap = () => {
     if (!duration) return
     setPan(clampPan(gap / 1000 / duration - 0.5 / zoom, zoom))
+    onJumpToGap?.()
   }
 
   // ── Render ───────────────────────────────────────────────────────────────────
@@ -242,7 +253,6 @@ export function WaveformView({ file, gap, playheadS, onSetGap }: WaveformViewPro
       </div>
 
       <div className="waveform-controls">
-        <span className="waveform-hint">{t.waveform.hint}</span>
         <div className="waveform-actions">
           {/* Zoom controls — always visible when waveform is loaded */}
           {peaks && (
@@ -282,6 +292,7 @@ export function WaveformView({ file, gap, playheadS, onSetGap }: WaveformViewPro
             {t.waveform.syncNow}
           </button>
         </div>
+        <span className="waveform-hint">{t.waveform.hint}</span>
       </div>
     </div>
   )

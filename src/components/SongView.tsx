@@ -151,6 +151,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
   // View toggle
   const [lyricsView, setLyricsView] = useState<'text' | 'waveform'>('text')
   const [absolutePlayheadS, setAbsolutePlayheadS] = useState(0)
+  const [startSignal, setStartSignal] = useState(0)
 
   // Playback state
   const [activePos, setActivePos] = useState<ActivePos | null>(null)
@@ -380,6 +381,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
               gap={gap}
               playheadS={absolutePlayheadS}
               onSetGap={v => dispatch({ type: 'SET_GAP', value: v })}
+              onJumpToGap={() => setStartSignal(s => s + 1)}
             />
           )}
 
@@ -469,6 +471,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
             timing={{ gap, onChange: v => dispatch({ type: 'SET_GAP', value: v }), videoGap, onVideoGapChange: v => dispatch({ type: 'SET_VIDEO_GAP', value: v }) }}
             media={{ videoUrl: videoUrl ?? undefined, audioUrl: audioUrl ?? undefined, backgroundUrl: backgroundUrl ?? undefined, initialVideoUrl: editVideoUrl || undefined, onVideoUrlChange: v => dispatch({ type: 'SET_VIDEO_URL', value: v }), onVideoFileSelect: setSelectedVideoFile, onAudioFileSelect: setSelectedAudioFile, forceYoutube: videoMismatchDismissed && !selectedVideoFile && !!videoMismatch }}
             song={{ artist: header.artist, title: header.title }}
+            startSignal={startSignal}
             onTimeUpdate={handleTimeUpdate}
             onReset={() => {
               setActivePos(null)
