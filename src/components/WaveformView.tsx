@@ -275,7 +275,7 @@ export function WaveformView({ file, gap, playheadS, onSetGap }: WaveformViewPro
           )}
           {pendingGapMs !== null && (
             <button className="btn-primary btn-sm" onClick={confirmGap}>
-              {t.waveform.confirmGap((pendingGapMs / 1000).toFixed(2))}
+              {t.waveform.confirmGap((pendingGapMs / 1000).toFixed(0))}
             </button>
           )}
           <button className="btn-sync btn-sm" onClick={setNow} disabled={playheadS <= 0}>
