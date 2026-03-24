@@ -1781,6 +1781,9 @@
 .landing-footer a:hover {
   color: rgb(var(--text-primary) / .65);
 }
+.landing-footer-version {
+  color: rgb(var(--text-primary) / .2);
+}
 
 /* ─── Ko-fi widget position override ─────────────────────────────────────── */
 .floatingchat-container-wrap,

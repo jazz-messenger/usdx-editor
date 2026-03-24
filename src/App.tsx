@@ -59,6 +59,7 @@ export default function App() {
               <footer className="landing-footer">
                 <a href="/impressum.html">{t.app.impressum}</a>
                 <a href="/datenschutz.html">{t.app.datenschutz}</a>
+                <span className="landing-footer-version">v1.1.0</span>
               </footer>
             </div>
           )
