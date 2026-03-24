@@ -126,7 +126,7 @@ const de = {
     },
     waveform: {
       viewText: 'Text',
-      viewWave: 'Wellenform',
+      viewWave: 'Audio',
       loading: 'Analysiere Audiodatei…',
       error: 'Audiodatei konnte nicht dekodiert werden.',
       noFile: 'Keine lokale Audio- oder Videodatei vorhanden.',
@@ -270,7 +270,7 @@ export const translations = {
     },
     waveform: {
       viewText: 'Text',
-      viewWave: 'Waveform',
+      viewWave: 'Audio',
       loading: 'Analysing audio file…',
       error: 'Could not decode audio file.',
       noFile: 'No local audio or video file available.',
