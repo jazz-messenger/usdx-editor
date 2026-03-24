@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useYouTubePlayer } from '../hooks/useYouTubePlayer'
 import { useLanguage } from '../i18n/LanguageContext'
+import { Tooltip } from './Tooltip'
 
 function extractYouTubeId(url: string): string | null {
   const match = url.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/)
@@ -267,7 +268,10 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
 
       {/* ── Timing fields: 3-column grid — label | input+unit | [⏱ Jetzt!] ── */}
       <div className="gap-timing-grid">
-        <label className="gap-sync-label" htmlFor="gap-input">{t.gapsync.gapLabel}</label>
+        <label className="gap-sync-label" htmlFor="gap-input">
+          {t.gapsync.gapLabel}
+          <Tooltip text={t.gapsync.gapTooltip} />
+        </label>
         <div className="gap-input-group">
           <input
             id="gap-input"
@@ -281,18 +285,19 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
         </div>
         {isPlayerReady
           ? (
-            <button
-              className="btn-sync"
-              onClick={handleSync}
-              title={t.gapsync.syncTitle}
-            >
-              {t.gapsync.syncNow}
-            </button>
+            <Tooltip text={t.gapsync.syncTitle}>
+              <button className="btn-sync" onClick={handleSync}>
+                {t.gapsync.syncNow}
+              </button>
+            </Tooltip>
           )
           : <span />
         }
 
-        <label className="gap-sync-label" htmlFor="videogap-input">{t.gapsync.videogapLabel}</label>
+        <label className="gap-sync-label" htmlFor="videogap-input">
+          {t.gapsync.videogapLabel}
+          <Tooltip text={t.gapsync.videogapTooltip} />
+        </label>
         <div className="gap-input-group">
           <input
             id="videogap-input"
@@ -309,27 +314,30 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
 
       {/* ── Source switcher — 3 fixed tabs ── */}
       <div className="video-source-switcher">
-        <button
-          className={`vsw-btn${activeTab === 'video' ? ' vsw-btn--active' : ''}`}
-          title={t.gapsync.videoTab}
-          onClick={() => setActiveTab('video')}
-        >
-          {t.gapsync.videoTab}
-        </button>
-        <button
-          className={`vsw-btn${activeTab === 'audio' ? ' vsw-btn--active' : ''}`}
-          title={t.gapsync.audioTab}
-          onClick={() => setActiveTab('audio')}
-        >
-          {t.gapsync.audioTab}
-        </button>
-        <button
-          className={`vsw-btn${activeTab === 'youtube' ? ' vsw-btn--active' : ''}`}
-          title={t.gapsync.youtube}
-          onClick={() => setActiveTab('youtube')}
-        >
-          {t.gapsync.youtube}
-        </button>
+        <Tooltip text={t.gapsync.videoTabTooltip}>
+          <button
+            className={`vsw-btn${activeTab === 'video' ? ' vsw-btn--active' : ''}`}
+            onClick={() => setActiveTab('video')}
+          >
+            {t.gapsync.videoTab}
+          </button>
+        </Tooltip>
+        <Tooltip text={t.gapsync.audioTabTooltip}>
+          <button
+            className={`vsw-btn${activeTab === 'audio' ? ' vsw-btn--active' : ''}`}
+            onClick={() => setActiveTab('audio')}
+          >
+            {t.gapsync.audioTab}
+          </button>
+        </Tooltip>
+        <Tooltip text={t.gapsync.youtubeTooltip}>
+          <button
+            className={`vsw-btn${activeTab === 'youtube' ? ' vsw-btn--active' : ''}`}
+            onClick={() => setActiveTab('youtube')}
+          >
+            {t.gapsync.youtube}
+          </button>
+        </Tooltip>
       </div>
 
       {/* ── Video empty state (no file selected yet) ── */}
@@ -503,25 +511,18 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset }: GapSyncP
       {isPlayerReady && (
         <div className="gap-sync-transport">
           {/* Reset-to-start: always seeks to videoGap position */}
-          <button
-            className="btn-transport"
-            onClick={handleStart}
-            title={videoGap > 0 ? t.gapsync.startWithGap(videoGap) : t.gapsync.startFromBeginning}
-          >
-            {t.gapsync.startLabel(videoGap)}
-          </button>
-          {/* Play/Pause toggle: resumes/pauses at current slider position */}
-          <button
-            className="btn-transport"
-            onClick={isPlaying ? pause : play}
-            title={isPlaying ? t.gapsync.pause : t.gapsync.play}
-          >
-            {isPlaying ? '⏸' : '▶'}
-          </button>
+          <Tooltip text={videoGap > 0 ? t.gapsync.startWithGap(videoGap) : t.gapsync.startFromBeginning}>
+            <button className="btn-transport" onClick={handleStart}>
+              {t.gapsync.startLabel(videoGap)}
+            </button>
+          </Tooltip>
+          <Tooltip text={isPlaying ? t.gapsync.pause : t.gapsync.play}>
+            <button className="btn-transport" onClick={isPlaying ? pause : play}>
+              {isPlaying ? '⏸' : '▶'}
+            </button>
+          </Tooltip>
           {videoTime > 0 && (
-            <span className="video-clock" title={t.gapsync.clockTitle}>
-              {videoTime.toFixed(1)}s
-            </span>
+            <span className="video-clock">{videoTime.toFixed(1)}s</span>
           )}
           {isPlaying && (
             <span className="yt-hint-live">{t.gapsync.liveHint}</span>

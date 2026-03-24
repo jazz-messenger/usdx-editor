@@ -115,8 +115,8 @@ export function HeaderEditor({
               <button className="year-suggestion-dismiss" onClick={onDismissYear} aria-label={t.header.dismissSuggestion}>×</button>
             </span>
           )}
-          <TagEditor tags={languages} onChange={setLanguages} suggestions={LANGUAGE_SUGGESTIONS} label={t.header.languageLabel} />
-          <TagEditor tags={genres} onChange={setGenres as (v: string[]) => void} suggestions={GENRE_SUGGESTIONS} label={t.header.genreLabel} />
+          <TagEditor tags={languages} onChange={setLanguages} suggestions={LANGUAGE_SUGGESTIONS} label={t.header.languageLabel} tooltip={t.tagEditor.tooltipLanguage} />
+          <TagEditor tags={genres} onChange={setGenres as (v: string[]) => void} suggestions={GENRE_SUGGESTIONS} label={t.header.genreLabel} tooltip={t.tagEditor.tooltipGenre} />
           {suggestedGenre !== null && !genres.includes(suggestedGenre) && (
             <span className="year-suggestion">
               <button
@@ -134,6 +134,7 @@ export function HeaderEditor({
             onChange={setEdition}
             suggestions={EDITION_SUGGESTIONS}
             label={t.header.editionLabel}
+            tooltip={t.tagEditor.tooltipEdition}
             warnTags={edition.filter(e => {
               if (!e.toLowerCase().includes('singstar')) return false
               if (KNOWN_SINGSTAR_GAMES.has(e)) return false

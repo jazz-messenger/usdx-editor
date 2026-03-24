@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useLanguage } from '../i18n/LanguageContext'
+import { Tooltip } from './Tooltip'
 
 export type SuggestionGroup = { group: string; items: string[] }
 
@@ -11,6 +12,8 @@ export interface TagEditorProps {
   warnTags?: string[]
   /** When set, limits the number of tags; selecting a new one replaces the existing one */
   maxTags?: number
+  /** Optional tooltip shown on hover over the add button / label */
+  tooltip?: string
 }
 
 export function flatItems(suggestions: string[] | SuggestionGroup[]): string[] {
@@ -20,7 +23,7 @@ export function flatItems(suggestions: string[] | SuggestionGroup[]): string[] {
     : (suggestions as SuggestionGroup[]).flatMap((g) => g.items)
 }
 
-export function TagEditor({ tags, onChange, suggestions, label, maxTags, warnTags = [] }: TagEditorProps) {
+export function TagEditor({ tags, onChange, suggestions, label, maxTags, warnTags = [], tooltip }: TagEditorProps) {
   const { t } = useLanguage()
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
@@ -95,13 +98,25 @@ export function TagEditor({ tags, onChange, suggestions, label, maxTags, warnTag
         </span>
       ))}
       <div className="tag-add-wrap">
-        <button
-          className={tags.length === 0 ? 'tag-add-btn tag-add-btn--labeled' : 'tag-add-btn'}
-          onClick={() => setOpen((v) => !v)}
-          title={t.tagEditor.addTitle}
-        >
-          {tags.length === 0 ? t.tagEditor.addLabelEmpty(label) : t.tagEditor.addLabelHasTags}
-        </button>
+        {tooltip ? (
+          <Tooltip text={tooltip}>
+            <button
+              className={tags.length === 0 ? 'tag-add-btn tag-add-btn--labeled' : 'tag-add-btn'}
+              onClick={() => setOpen((v) => !v)}
+              title={t.tagEditor.addTitle}
+            >
+              {tags.length === 0 ? t.tagEditor.addLabelEmpty(label) : t.tagEditor.addLabelHasTags}
+            </button>
+          </Tooltip>
+        ) : (
+          <button
+            className={tags.length === 0 ? 'tag-add-btn tag-add-btn--labeled' : 'tag-add-btn'}
+            onClick={() => setOpen((v) => !v)}
+            title={t.tagEditor.addTitle}
+          >
+            {tags.length === 0 ? t.tagEditor.addLabelEmpty(label) : t.tagEditor.addLabelHasTags}
+          </button>
+        )}
         {open && (
           <div className="tag-dropdown">
             <input

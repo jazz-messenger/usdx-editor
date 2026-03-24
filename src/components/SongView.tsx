@@ -1,6 +1,8 @@
 import { useState, useMemo, useCallback, useRef, useEffect, useReducer } from 'react'
 import { GapSync } from './GapSync'
 import { HeaderEditor } from './HeaderEditor'
+import { Tooltip } from './Tooltip'
+import { WaveformView } from './WaveformView'
 import { useLanguage } from '../i18n/LanguageContext'
 import { exportUsdx } from '../parser/usdxExporter'
 import { phraseToSyllables } from '../parser/lyrics'
@@ -146,6 +148,10 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
   const [suggestedGenre, setSuggestedGenre] = useState<string | null>(null)
   const [singstarMatch, setSingstarMatch] = useState<SingStarEditionMatch | null>(null)
 
+  // View toggle
+  const [lyricsView, setLyricsView] = useState<'text' | 'waveform'>('text')
+  const [absolutePlayheadS, setAbsolutePlayheadS] = useState(0)
+
   // Playback state
   const [activePos, setActivePos] = useState<ActivePos | null>(null)
   const activePhraseRef = useRef<HTMLDivElement | null>(null)
@@ -181,11 +187,13 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
   }, [header, files, effectiveAudioFile, effectiveVideoFile, videoMismatch, videoMismatchDismissed, audioMismatch, audioMismatchDismissed])
 
   const handleTimeUpdate = useCallback((currentMs: number) => {
+    // currentMs = (videoTime - videoGap) * 1000  →  absoluteS = currentMs/1000 + videoGap
+    setAbsolutePlayheadS(currentMs / 1000 + videoGap)
     if (!track) return
     const beat = msToBeat(currentMs, header.bpm, gap)
     const pos = beat >= 0 ? findActivePos(track, beat) : null
     setActivePos(pos)
-  }, [track, header.bpm, gap])
+  }, [track, header.bpm, gap, videoGap])
 
   const handleDownload = async () => {
     const today = new Date().toISOString().slice(0, 10)
@@ -351,10 +359,31 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
         </div>
       )}
 
+      {/* ── View toggle ── */}
+      <div className="lyrics-view-toggle">
+        <button
+          className={`lvt-btn${lyricsView === 'text' ? ' lvt-btn--active' : ''}`}
+          onClick={() => setLyricsView('text')}
+        >{t.waveform.viewText}</button>
+        <button
+          className={`lvt-btn${lyricsView === 'waveform' ? ' lvt-btn--active' : ''}`}
+          onClick={() => setLyricsView('waveform')}
+        >{t.waveform.viewWave}</button>
+      </div>
+
       {/* ── Two-column content ── */}
       <div className="song-content">
         <div className="lyrics-column" ref={lyricsColumnRef}>
-          {(Object.values(singerMap).some(v => v === 2) || singerNames[0] || singerNames[1]) && (
+          {lyricsView === 'waveform' && (
+            <WaveformView
+              file={effectiveAudioFile ?? effectiveVideoFile ?? null}
+              gap={gap}
+              playheadS={absolutePlayheadS}
+              onSetGap={v => dispatch({ type: 'SET_GAP', value: v })}
+            />
+          )}
+
+          {lyricsView === 'text' && (Object.values(singerMap).some(v => v === 2) || singerNames[0] || singerNames[1]) && (
             <div className="duet-header">
               <input
                 className="singer-name-input singer-name-input--1"
@@ -371,7 +400,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
               />
             </div>
           )}
-          <div className="phrases">
+          {lyricsView === 'text' && <div className="phrases">
             {Array.from({ length: phraseCount }, (_, i) => {
               const phrase = track.phrases[i]
               const singer = singerOf(i)
@@ -420,18 +449,19 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
                 >
                   <span className="phrase-number">{i + 1}</span>
                   <div className="phrase-col phrase-col--1">{(singer === 1 || singer === 3) && phraseEl}</div>
-                  <button
-                    className={`assign-btn assign-btn--${singer === 1 ? 'to2' : singer === 2 ? 'to1' : 'both'}`}
-                    onClick={() => toggleSinger(i)}
-                    title={singer === 1 ? t.songview.assignToSinger2 : singer === 2 ? t.songview.assignToSinger1 : t.songview.assignBoth}
-                  >
-                    {singer === 1 ? '→' : singer === 2 ? '←' : '⇔'}
-                  </button>
+                  <Tooltip text={singer === 1 ? t.songview.assignToSinger2 : singer === 2 ? t.songview.assignToSinger1 : t.songview.assignBoth}>
+                    <button
+                      className={`assign-btn assign-btn--${singer === 1 ? 'to2' : singer === 2 ? 'to1' : 'both'}`}
+                      onClick={() => toggleSinger(i)}
+                    >
+                      {singer === 1 ? '→' : singer === 2 ? '←' : '⇔'}
+                    </button>
+                  </Tooltip>
                   <div className="phrase-col phrase-col--2">{(singer === 2 || singer === 3) && phraseEl}</div>
                 </div>
               )
             })}
-          </div>
+          </div>}
         </div>
 
         <aside className="video-sidebar">

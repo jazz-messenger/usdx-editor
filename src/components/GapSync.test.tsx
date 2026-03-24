@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { GapSync } from './GapSync'
 import { LanguageProvider } from '../i18n/LanguageContext'
@@ -74,5 +74,36 @@ describe('GapSync', () => {
     renderGapSync()
     expect(screen.getByText('GAP')).toBeInTheDocument()
     expect(screen.getByText('VIDEOGAP')).toBeInTheDocument()
+  })
+
+  describe('tooltips (#10)', () => {
+    it('renders ⓘ icon next to GAP label', () => {
+      renderGapSync()
+      const icons = screen.getAllByText('ⓘ')
+      expect(icons.length).toBeGreaterThanOrEqual(2)
+    })
+
+    it('shows GAP tooltip text on hover', () => {
+      renderGapSync()
+      const icons = screen.getAllByText('ⓘ')
+      fireEvent.mouseEnter(icons[0].closest('.tooltip-wrap')!)
+      expect(screen.getByRole('tooltip')).toBeInTheDocument()
+    })
+
+    it('shows VIDEOGAP tooltip text on hover', () => {
+      renderGapSync()
+      const icons = screen.getAllByText('ⓘ')
+      fireEvent.mouseEnter(icons[1].closest('.tooltip-wrap')!)
+      expect(screen.getByRole('tooltip')).toBeInTheDocument()
+    })
+
+    it('hides tooltip after mouse leaves', () => {
+      renderGapSync()
+      const wrap = screen.getAllByText('ⓘ')[0].closest('.tooltip-wrap')!
+      fireEvent.mouseEnter(wrap)
+      expect(screen.getByRole('tooltip')).toBeInTheDocument()
+      fireEvent.mouseLeave(wrap)
+      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
+    })
   })
 })
