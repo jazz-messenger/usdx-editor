@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { HeaderEditor } from './HeaderEditor'
 import { LanguageProvider } from '../i18n/LanguageContext'
@@ -83,6 +83,38 @@ describe('HeaderEditor', () => {
   it('does not render PROVIDEDBY section when absent', () => {
     renderEditor()
     expect(screen.queryByText(/bereitgestellt von/i)).not.toBeInTheDocument()
+  })
+
+  describe('tooltips on tag editors (#10)', () => {
+    it('shows Language tooltip on hover over add button', () => {
+      renderEditor()
+      const btn = screen.getByRole('button', { name: '+ Sprache' })
+      fireEvent.mouseEnter(btn.closest('.tooltip-wrap')!)
+      expect(screen.getByRole('tooltip')).toBeInTheDocument()
+    })
+
+    it('shows Genre tooltip on hover over add button', () => {
+      renderEditor()
+      const btn = screen.getByRole('button', { name: '+ Genre' })
+      fireEvent.mouseEnter(btn.closest('.tooltip-wrap')!)
+      expect(screen.getByRole('tooltip')).toBeInTheDocument()
+    })
+
+    it('shows Edition tooltip on hover over add button', () => {
+      renderEditor()
+      const btn = screen.getByRole('button', { name: '+ Edition' })
+      fireEvent.mouseEnter(btn.closest('.tooltip-wrap')!)
+      expect(screen.getByRole('tooltip')).toBeInTheDocument()
+    })
+
+    it('hides tooltip after mouse leaves', () => {
+      renderEditor()
+      const wrap = screen.getByRole('button', { name: '+ Sprache' }).closest('.tooltip-wrap')!
+      fireEvent.mouseEnter(wrap)
+      expect(screen.getByRole('tooltip')).toBeInTheDocument()
+      fireEvent.mouseLeave(wrap)
+      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
+    })
   })
 
   it('shows suggested year button when suggestedYear differs from current', () => {
