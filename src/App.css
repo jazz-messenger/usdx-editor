@@ -104,6 +104,17 @@
   box-shadow: 0 2px 8px rgb(0 0 0 / .40);
 }
 
+.app-logo-btn {
+  all: unset;
+  cursor: pointer;
+  border-radius: 9px;
+  display: flex;
+}
+.app-logo-btn:hover .app-logo {
+  box-shadow: 0 2px 12px rgb(var(--accent-primary) / .45);
+  transition: box-shadow 150ms ease;
+}
+
 .app-header h1 {
   font-size: 18px;
   font-weight: 600;

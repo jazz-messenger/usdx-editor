@@ -10,6 +10,7 @@ const de = {
       impressum: 'Impressum',
       datenschutz: 'Datenschutz',
       kofiButtonText: 'Danke sagen',
+      backToHome: 'Zurück zur Startseite',
     },
     dropzone: {
       heading: 'Song-Ordner hierher ziehen',
@@ -156,6 +157,7 @@ export const translations = {
       impressum: 'Legal Notice',
       datenschutz: 'Privacy Policy',
       kofiButtonText: 'Say thanks',
+      backToHome: 'Back to home',
     },
     dropzone: {
       heading: 'Drop song folder here',

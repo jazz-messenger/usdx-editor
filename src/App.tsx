@@ -25,7 +25,13 @@ export default function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <img src={`${import.meta.env.BASE_URL}icon-logo.png`} alt={t.app.title} className="app-logo" />
+        {song ? (
+          <button className="app-logo-btn" onClick={() => setSong(null)} title={t.app.backToHome}>
+            <img src={`${import.meta.env.BASE_URL}icon-logo.png`} alt={t.app.title} className="app-logo" />
+          </button>
+        ) : (
+          <img src={`${import.meta.env.BASE_URL}icon-logo.png`} alt={t.app.title} className="app-logo" />
+        )}
         <h1>{t.app.title}</h1>
         <span className="subtitle">{t.app.subtitle}</span>
         <div className="lang-toggle">
