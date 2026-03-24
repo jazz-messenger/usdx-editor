@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { GapSync } from './GapSync'
+import { GapSync, shouldHandover } from './GapSync'
 import { LanguageProvider } from '../i18n/LanguageContext'
 import type { GapSyncTiming, GapSyncMedia } from './GapSync'
 
@@ -74,6 +74,21 @@ describe('GapSync', () => {
     renderGapSync()
     expect(screen.getByText('GAP')).toBeInTheDocument()
     expect(screen.getByText('VIDEOGAP')).toBeInTheDocument()
+  })
+
+  describe('tab switching — seamless playback handover', () => {
+    it('triggers handover when player becomes ready with a pending time', () => {
+      expect(shouldHandover(42.5, 'ready')).toBe(true)
+    })
+    it('does not trigger handover when no time is pending', () => {
+      expect(shouldHandover(null, 'ready')).toBe(false)
+    })
+    it('does not trigger handover when player is not yet ready', () => {
+      expect(shouldHandover(42.5, 'idle')).toBe(false)
+    })
+    it('does not trigger handover while player is loading', () => {
+      expect(shouldHandover(42.5, 'error')).toBe(false)
+    })
   })
 
   describe('tooltips (#10)', () => {

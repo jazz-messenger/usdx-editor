@@ -113,6 +113,11 @@ interface GapSyncProps {
   startSignal?: number
 }
 
+/** Pure helper — determines whether a seek+play handover should fire. */
+export function shouldHandover(pendingTime: number | null, playerState: string): boolean {
+  return pendingTime !== null && playerState === 'ready'
+}
+
 export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSignal }: GapSyncProps) {
   const { gap, onChange, videoGap, onVideoGapChange } = timing
   const { videoUrl, audioUrl, backgroundUrl, initialVideoUrl, onVideoUrlChange, onVideoFileSelect, onAudioFileSelect, forceYoutube } = media
@@ -184,12 +189,30 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
   const play           = useLocal ? localPlay           : ytPlay
   const pause          = useLocal ? localPause          : ytPause
 
-  // ── Pause inactive player when tab changes ───────────────────────────────────
+  // ── Seamless handover when tab changes ───────────────────────────────────────
+  const handoverTimeRef = useRef<number | null>(null)
+
+  const switchTab = useCallback((tab: typeof activeTab) => {
+    if (tab === activeTab) return
+    handoverTimeRef.current = isPlaying ? getCurrentTime() : null
+    setActiveTab(tab)
+  }, [activeTab, isPlaying, getCurrentTime])
+
+  // Pause the player that just became inactive
   useEffect(() => {
     if (!isPlayerReady) return
     if (activeTab === 'youtube') localPause()
     else ytPause()
   }, [activeTab]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Once the new player is ready, seek to the captured time and resume
+  useEffect(() => {
+    if (!shouldHandover(handoverTimeRef.current, playerState)) return
+    const t = handoverTimeRef.current!
+    handoverTimeRef.current = null
+    seekTo(t)
+    play()
+  }, [playerState]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Search state ────────────────────────────────────────────────────────────
   const [searchResults, setSearchResults] = useState<YtResult[] | null>(null)
@@ -329,7 +352,7 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
         <Tooltip text={t.gapsync.videoTabTooltip}>
           <button
             className={`vsw-btn${activeTab === 'video' ? ' vsw-btn--active' : ''}`}
-            onClick={() => setActiveTab('video')}
+            onClick={() => switchTab('video')}
           >
             {t.gapsync.videoTab}
           </button>
@@ -337,7 +360,7 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
         <Tooltip text={t.gapsync.audioTabTooltip}>
           <button
             className={`vsw-btn${activeTab === 'audio' ? ' vsw-btn--active' : ''}`}
-            onClick={() => setActiveTab('audio')}
+            onClick={() => switchTab('audio')}
           >
             {t.gapsync.audioTab}
           </button>
@@ -345,7 +368,7 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
         <Tooltip text={t.gapsync.youtubeTooltip}>
           <button
             className={`vsw-btn${activeTab === 'youtube' ? ' vsw-btn--active' : ''}`}
-            onClick={() => setActiveTab('youtube')}
+            onClick={() => switchTab('youtube')}
           >
             {t.gapsync.youtube}
           </button>
