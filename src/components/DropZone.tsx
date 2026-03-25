@@ -10,7 +10,6 @@ export function DropZone({ onLoad }: { onLoad: (song: UsdxSong, filename: string
   const { t } = useLanguage()
   const [dragOver, setDragOver] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [multiTxtFiles, setMultiTxtFiles] = useState<{ file: File; allFiles: SongFileMap } | null>(null)
   const [pendingFiles, setPendingFiles] = useState<{ txtFiles: File[]; allFiles: SongFileMap } | null>(null)
 
   const processFileMap = useCallback((allFiles: SongFileMap) => {
