@@ -4,6 +4,7 @@ import type { UsdxSong } from './parser/usdxParser'
 import { SongView } from './components/SongView'
 import { DropZone } from './components/DropZone'
 import { KofiWidget } from './components/KofiWidget'
+import { HelpModal } from './components/HelpModal'
 import type { SongFileMap } from './utils/fileLoader'
 import { useLanguage } from './i18n/LanguageContext'
 import type { Locale } from './i18n/translations'
@@ -13,6 +14,7 @@ export default function App() {
   const [filename, setFilename] = useState('')
   const [files, setFiles] = useState<SongFileMap>(new Map())
   const [songKey, setSongKey] = useState(0)
+  const [showHelp, setShowHelp] = useState(false)
   const { locale, setLocale, t } = useLanguage()
 
   const handleLoad = useCallback((s: UsdxSong, name: string, f: SongFileMap) => {
@@ -34,18 +36,28 @@ export default function App() {
         )}
         <h1>{t.app.title}</h1>
         <span className="subtitle">{t.app.subtitle}</span>
-        <div className="lang-toggle">
-          {(['de', 'en'] as Locale[]).map(l => (
-            <button
-              key={l}
-              className={`lang-btn${locale === l ? ' lang-btn--active' : ''}`}
-              onClick={() => setLocale(l)}
-            >
-              {l.toUpperCase()}
-            </button>
-          ))}
+        <div className="header-controls">
+          <button
+            className="help-btn"
+            onClick={() => setShowHelp(true)}
+            aria-label={t.help.title}
+          >
+            {t.help.buttonLabel}
+          </button>
+          <div className="lang-toggle">
+            {(['de', 'en'] as Locale[]).map(l => (
+              <button
+                key={l}
+                className={`lang-btn${locale === l ? ' lang-btn--active' : ''}`}
+                onClick={() => setLocale(l)}
+              >
+                {l.toUpperCase()}
+              </button>
+            ))}
+          </div>
         </div>
       </header>
+      {showHelp && <HelpModal onClose={() => setShowHelp(false)} />}
       <main className="app-main">
         {song
           ? <SongView key={songKey} song={song} filename={filename} files={files} onReset={() => setSong(null)} />

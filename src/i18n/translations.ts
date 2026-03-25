@@ -141,6 +141,52 @@ const de = {
       zoomReset: 'Zoom zurücksetzen',
       jumpToGap: '⊙ GAP',
     },
+    help: {
+      buttonLabel: '?',
+      title: 'Kurzanleitung',
+      close: 'Schließen',
+      sections: [
+        {
+          heading: 'Datei öffnen',
+          body: 'Ziehe einen Song-Ordner in den markierten Bereich – oder klicke auf „Ordner öffnen" und wähle alle Dateien aus (⌘+A bzw. Strg+A). Enthält der Ordner mehrere .txt-Dateien, erscheint eine Auswahlliste.',
+          items: [] as string[],
+        },
+        {
+          heading: 'Metadaten bearbeiten',
+          body: 'Titel, Künstler, Jahr, Sprache, Genre und Edition lassen sich direkt bearbeiten. Für Titel und Künstler schlägt MusicBrainz automatisch Jahr und Genre vor – mit einem Klick übernehmen oder verwerfen.',
+          items: [] as string[],
+        },
+        {
+          heading: 'Text-Tab',
+          body: 'Zeigt alle Phrasen des Songs in der Reihenfolge des Originals. Zeilen lassen sich per → Sänger:in 2 zuweisen oder mit ← zurück zu Sänger:in 1 verschieben; „Beide" lässt beide gleichzeitig singen. Die Sängernamen sind oben im Tab editierbar.',
+          items: [] as string[],
+        },
+        {
+          heading: 'Video-Sektion',
+          body: 'Drei Tabs für die Medienwiedergabe:',
+          items: [
+            'Video – lokal gespeicherte Videodatei aus dem Song-Ordner',
+            'Audio – lokal gespeicherte Audiodatei',
+            'YouTube – verknüpftes YouTube-Video (URL einfügen oder automatisch suchen)',
+          ],
+        },
+        {
+          heading: 'GAP und VIDEOGAP',
+          body: 'GAP gibt an, nach wie vielen Millisekunden ab Songstart die erste Note beginnt. VIDEOGAP ist der Zeitversatz in Sekunden zwischen Videostart und Musikstart. Beide Werte lassen sich direkt im Eingabefeld ändern. Im Audio-Tab kann der GAP auch per Klick in die Wellenform gesetzt werden.',
+          items: [] as string[],
+        },
+        {
+          heading: 'Audio-Tab',
+          body: 'Zeigt die Wellenform der Audio- oder Videodatei. Ein Klick setzt einen GAP-Kandidaten; „⏱ Jetzt!" übernimmt die aktuelle Abspielposition als GAP in Echtzeit. Die Zoom-Buttons helfen beim genauen Ausrichten.',
+          items: [] as string[],
+        },
+        {
+          heading: 'Speichern',
+          body: '„Speichern" öffnet den nativen Speicherdialog mit dem Originaldateinamen vorausgefüllt – einfach bestätigen, um die Datei an gleicher Stelle zu überschreiben. In Firefox und Safari landet die Datei automatisch im Download-Ordner; von dort zurück in den Song-Ordner verschieben.',
+          items: [] as string[],
+        },
+      ],
+    },
 }
 
 export type Translations = typeof de
@@ -287,6 +333,52 @@ export const translations = {
       zoomOut: 'Zoom out',
       zoomReset: 'Reset zoom',
       jumpToGap: '⊙ GAP',
+    },
+    help: {
+      buttonLabel: '?',
+      title: 'Quick Guide',
+      close: 'Close',
+      sections: [
+        {
+          heading: 'Opening a file',
+          body: 'Drag a song folder into the drop area – or click "Open Folder" and select all files (⌘+A or Ctrl+A). If the folder contains multiple .txt files, a selection list appears.',
+          items: [] as string[],
+        },
+        {
+          heading: 'Editing metadata',
+          body: 'Title, artist, year, language, genre and edition can all be edited directly. For title and artist, MusicBrainz automatically suggests year and genre – accept or dismiss with one click.',
+          items: [] as string[],
+        },
+        {
+          heading: 'Text tab',
+          body: 'Shows all phrases of the song in their original order. Lines can be assigned to Singer 2 with → or moved back to Singer 1 with ←; "Both" lets both singers sing at the same time. Singer names are editable at the top of the tab.',
+          items: [] as string[],
+        },
+        {
+          heading: 'Video section',
+          body: 'Three tabs for media playback:',
+          items: [
+            'Video – locally stored video file from the song folder',
+            'Audio – locally stored audio file',
+            'YouTube – linked YouTube video (paste URL or search automatically)',
+          ],
+        },
+        {
+          heading: 'GAP and VIDEOGAP',
+          body: 'GAP defines how many milliseconds after the song start the first note begins. VIDEOGAP is the time offset in seconds between video start and music start. Both values can be changed directly in the input field. In the Audio tab, GAP can also be set by clicking in the waveform.',
+          items: [] as string[],
+        },
+        {
+          heading: 'Audio tab',
+          body: 'Shows the waveform of the audio or video file. A click sets a GAP candidate; "⏱ Now!" uses the current playback position as the GAP in real time. Zoom buttons help with precise alignment.',
+          items: [] as string[],
+        },
+        {
+          heading: 'Saving',
+          body: '"Save" opens the native save dialog with the original filename pre-filled – just confirm to overwrite the file in place. In Firefox and Safari the file goes to the Downloads folder; move it back to the song folder from there.',
+          items: [] as string[],
+        },
+      ],
     },
   },
 }
