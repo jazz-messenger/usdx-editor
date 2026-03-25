@@ -255,6 +255,14 @@
   gap: 12px;
 }
 
+.drop-zone--pick {
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
 .multi-txt-list {
   list-style: none;
   padding: 0;
@@ -262,16 +270,43 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  width: 100%;
+  max-width: 480px;
 }
 
-.multi-txt-list li {
+.multi-txt-item {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
   font-family: monospace;
   font-size: 13px;
   color: rgb(var(--text-muted));
   background: rgb(var(--bg-elevated));
-  border: 1px solid rgb(var(--border-mid));
+  border: 1px solid rgb(var(--border-subtle));
   border-radius: var(--radius-sm);
-  padding: 3px 10px;
+  padding: 7px 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.multi-txt-item:hover {
+  background: rgb(var(--accent-primary) / .08);
+  border-color: rgb(var(--accent-primary) / .40);
+  color: rgb(var(--text-primary));
+}
+
+.multi-txt-name {
+  font-weight: 600;
+}
+
+.multi-txt-date {
+  font-size: 11px;
+  color: rgb(var(--text-dim));
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .drop-zone.drag-over {

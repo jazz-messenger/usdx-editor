@@ -10,19 +10,28 @@ export function DropZone({ onLoad }: { onLoad: (song: UsdxSong, filename: string
   const { t } = useLanguage()
   const [dragOver, setDragOver] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [multiTxtNames, setMultiTxtNames] = useState<string[] | null>(null)
+  const [multiTxtFiles, setMultiTxtFiles] = useState<{ file: File; allFiles: SongFileMap } | null>(null)
+  const [pendingFiles, setPendingFiles] = useState<{ txtFiles: File[]; allFiles: SongFileMap } | null>(null)
 
-  const processFileMap = useCallback((files: SongFileMap) => {
-    const txtFiles = Array.from(files.values()).filter((f) => f.name.toLowerCase().endsWith('.txt'))
+  const processFileMap = useCallback((allFiles: SongFileMap) => {
+    const txtFiles = Array.from(allFiles.values())
+      .filter((f) => f.name.toLowerCase().endsWith('.txt'))
+      .sort((a, b) => b.lastModified - a.lastModified)   // newest first
     if (txtFiles.length === 0) { setError(t.dropzone.noTxt); return }
     if (txtFiles.length > 1) {
-      setMultiTxtNames(txtFiles.map((f) => f.name))
+      setPendingFiles({ txtFiles, allFiles })
       return
     }
     setError(null)
-    setMultiTxtNames(null)
-    readTxtFile(txtFiles[0]).then((text) => onLoad(parseUsdx(text), txtFiles[0].name, files))
+    setPendingFiles(null)
+    readTxtFile(txtFiles[0]).then((text) => onLoad(parseUsdx(text), txtFiles[0].name, allFiles))
   }, [onLoad, t])
+
+  const pickTxtFile = useCallback((file: File, allFiles: SongFileMap) => {
+    setPendingFiles(null)
+    setError(null)
+    readTxtFile(file).then((text) => onLoad(parseUsdx(text), file.name, allFiles))
+  }, [onLoad])
 
   const onDrop = async (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault()
@@ -44,16 +53,28 @@ export function DropZone({ onLoad }: { onLoad: (song: UsdxSong, filename: string
     processFileMap(files)
   }
 
-  if (multiTxtNames) {
+  if (pendingFiles) {
+    const { txtFiles, allFiles } = pendingFiles
     return (
-      <div className="drop-zone drop-zone--warning">
-        <div className="drop-zone-icon">⚠️</div>
+      <div className="drop-zone drop-zone--pick">
         <h2>{t.dropzone.multiTxtHeading}</h2>
-        <p>{t.dropzone.multiTxtDesc(multiTxtNames.length)}</p>
+        <p>{t.dropzone.multiTxtDesc}</p>
         <ul className="multi-txt-list">
-          {multiTxtNames.map((n) => <li key={n}>{n}</li>)}
+          {txtFiles.map((f) => (
+            <li key={f.name}>
+              <button className="multi-txt-item" onClick={() => pickTxtFile(f, allFiles)}>
+                <span className="multi-txt-name">{f.name}</span>
+                <span className="multi-txt-date">
+                  {new Date(f.lastModified).toLocaleDateString(undefined, {
+                    year: 'numeric', month: 'short', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit',
+                  })}
+                </span>
+              </button>
+            </li>
+          ))}
         </ul>
-        <button className="btn-primary" onClick={() => setMultiTxtNames(null)}>{t.dropzone.understood}</button>
+        <button className="btn-secondary" onClick={() => setPendingFiles(null)}>{t.dropzone.cancel}</button>
       </div>
     )
   }
