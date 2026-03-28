@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://korczak.at/usdx-editor/sitemap.xml
