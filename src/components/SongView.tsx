@@ -379,7 +379,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
             <WaveformView
               file={effectiveAudioFile ?? effectiveVideoFile ?? null}
               gap={gap}
-              playheadS={absolutePlayheadS}
+              playheadS={absolutePlayheadS - videoGap}
               onSetGap={v => dispatch({ type: 'SET_GAP', value: v })}
               onJumpToGap={() => setStartSignal(s => s + 1)}
             />
