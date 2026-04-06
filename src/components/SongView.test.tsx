@@ -24,6 +24,7 @@ function renderSongView(songOverrides: Partial<UsdxSong> = {}) {
         song={makeSong(songOverrides)}
         filename="song.txt"
         files={new Map()}
+        dirHandle={null}
         onReset={vi.fn()}
       />
     </LanguageProvider>
@@ -66,7 +67,7 @@ describe('SongView', () => {
     const files = new Map([['song.mp3', new File([], 'song.mp3')]])
     render(
       <LanguageProvider>
-        <SongView song={makeSong()} filename="song.txt" files={files} onReset={vi.fn()} />
+        <SongView song={makeSong()} filename="song.txt" files={files} dirHandle={null} onReset={vi.fn()} />
       </LanguageProvider>
     )
     expect(screen.queryByText(/im ordner nicht gefunden/i)).not.toBeInTheDocument()

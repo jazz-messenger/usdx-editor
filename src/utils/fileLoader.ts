@@ -12,6 +12,18 @@ export async function readTxtFile(file: File): Promise<string> {
   return new TextDecoder(detectEncoding(bytes)).decode(buf)
 }
 
+export async function readDirectoryHandle(dirHandle: FileSystemDirectoryHandle): Promise<SongFileMap> {
+  const files: SongFileMap = new Map()
+  const iter = dirHandle as unknown as AsyncIterable<FileSystemHandle>
+  for await (const entry of iter) {
+    if (entry.kind === 'file') {
+      const file = await (entry as FileSystemFileHandle).getFile()
+      files.set(file.name.toLowerCase(), file)
+    }
+  }
+  return files
+}
+
 export async function readDroppedEntry(entry: FileSystemEntry): Promise<SongFileMap> {
   const files: SongFileMap = new Map()
   if (!entry.isDirectory) return files

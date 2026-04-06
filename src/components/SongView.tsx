@@ -70,10 +70,11 @@ interface SongViewProps {
   song: UsdxSong
   filename: string
   files: SongFileMap
+  dirHandle: FileSystemDirectoryHandle | null
   onReset: () => void
 }
 
-export function SongView({ song, filename, files, onReset }: SongViewProps) {
+export function SongView({ song, filename, files, dirHandle, onReset }: SongViewProps) {
   const { t } = useLanguage()
   const { header, tracks } = song
 
@@ -232,6 +233,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
           .showSaveFilePicker({
             suggestedName: filename,
             types: [{ description: 'UltraStar Text File', accept: { 'text/plain': ['.txt'] } }],
+            ...(dirHandle ? { startIn: dirHandle } : {}),
           })
         const writable = await handle.createWritable()
         await writable.write(blob)
