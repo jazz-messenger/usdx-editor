@@ -4,10 +4,13 @@ function noteToLine(note: Note): string {
   return `${note.type} ${note.beat} ${note.length} ${note.pitch} ${note.syllable}`
 }
 
-function phraseToLines(phrase: Phrase): string[] {
+function phraseToLines(phrase: Phrase, isLast = false): string[] {
   const lines = phrase.notes.map(noteToLine)
-  const breakLine = phrase.lineBreakBeat !== undefined ? `- ${phrase.lineBreakBeat}` : '-'
-  lines.push(breakLine)
+  if (phrase.lineBreakBeat !== undefined) {
+    lines.push(`- ${phrase.lineBreakBeat}`)
+  } else if (!isLast) {
+    lines.push('-')
+  }
   return lines
 }
 
@@ -62,9 +65,9 @@ export function exportUsdx(
 
   if (!isDuet) {
     // Solo export – no P markers
-    for (const phrase of track.phrases) {
-      lines.push(...phraseToLines(phrase))
-    }
+    track.phrases.forEach((phrase, i) => {
+      lines.push(...phraseToLines(phrase, i === track.phrases.length - 1))
+    })
   } else {
     // Duet export: singer names go in header, bare P1/P2 mark sections in note area.
     // Singer 3 = both: phrase appears in both the P1 and P2 blocks.
@@ -75,14 +78,14 @@ export function exportUsdx(
     const p2Phrases = track.phrases.filter((_, i) => { const s = singerMap[i] ?? 1; return s === 2 || s === 3 })
 
     lines.push('P1')
-    for (const phrase of p1Phrases) {
-      lines.push(...phraseToLines(phrase))
-    }
+    p1Phrases.forEach((phrase, i) => {
+      lines.push(...phraseToLines(phrase, i === p1Phrases.length - 1))
+    })
 
     lines.push('P2')
-    for (const phrase of p2Phrases) {
-      lines.push(...phraseToLines(phrase))
-    }
+    p2Phrases.forEach((phrase, i) => {
+      lines.push(...phraseToLines(phrase, i === p2Phrases.length - 1))
+    })
   }
 
   lines.push('E')

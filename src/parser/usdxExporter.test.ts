@@ -60,6 +60,13 @@ describe('exportUsdx', () => {
     expect(output).not.toContain('#MP3')
   })
 
+  it('does not write a trailing bare dash before E', () => {
+    // A bare "-" as the last line before "E" causes USDX to skip the song
+    const song = parseUsdx(SONG)
+    const output = exportUsdx(song, {})
+    expect(output).not.toMatch(/-\nE$/)
+  })
+
   it('does not include #VERSION (not supported by USDX yet)', () => {
     const song = parseUsdx(SONG)
     const output = exportUsdx(song, {})
