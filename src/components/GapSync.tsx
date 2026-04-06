@@ -243,15 +243,15 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
     play()
   }
 
-  // External jump-to-GAP trigger from WaveformView — seeks to GAP position (not VIDEOGAP)
+  // External jump-to-GAP trigger from WaveformView — seeks to GAP position offset by VIDEOGAP
   const lastStartSignal = useRef(0)
   useEffect(() => {
     if (!startSignal || startSignal === lastStartSignal.current || playerState !== 'ready') return
     lastStartSignal.current = startSignal
     onReset?.()
-    seekTo(gap / 1000)
+    seekTo(videoGap + gap / 1000)
     play()
-  }, [startSignal, playerState, gap, seekTo, play, onReset])
+  }, [startSignal, playerState, gap, videoGap, seekTo, play, onReset])
 
   // Changing VIDEOGAP: update state AND immediately seek so the video frame
   // jumps to the new position for instant visual feedback.
@@ -553,7 +553,7 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
               </button>
             </Tooltip>
             <Tooltip text={t.gapsync.jumpToGapTooltip}>
-              <button className="btn-transport" onClick={() => { onReset?.(); seekTo(gap / 1000); play() }}>
+              <button className="btn-transport" onClick={() => { onReset?.(); seekTo(videoGap + gap / 1000); play() }}>
                 {t.gapsync.jumpToGapLabel}
               </button>
             </Tooltip>
