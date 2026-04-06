@@ -60,10 +60,10 @@ describe('exportUsdx', () => {
     expect(output).not.toContain('#MP3')
   })
 
-  it('includes VERSION header', () => {
+  it('does not include #VERSION (not supported by USDX yet)', () => {
     const song = parseUsdx(SONG)
     const output = exportUsdx(song, {})
-    expect(output).toContain('#VERSION:1.1.0')
+    expect(output).not.toContain('#VERSION')
   })
 
   it('writes #COMMENT when present in header', () => {

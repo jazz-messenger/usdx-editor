@@ -30,7 +30,7 @@ export function exportUsdx(
   const { header } = song
 
   // Header – mandatory fields first, then optional
-  lines.push(`#VERSION:1.1.0`)
+  // #VERSION omitted until USDX officially supports it (currently causes song to be skipped)
   lines.push(`#TITLE:${header.title}`)
   lines.push(`#ARTIST:${header.artist}`)
   if (header.audio) lines.push(`${song.deprecatedFields.includes('MP3') ? '#MP3' : '#AUDIO'}:${header.audio}`)
