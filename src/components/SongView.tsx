@@ -225,12 +225,15 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
     const exportTracks = track ? [track] : []
     const content = exportUsdx({ ...song, header: exportHeader, tracks: exportTracks }, singerMap, singerNames)
     const blob = new Blob([content], { type: 'text/plain;charset=utf-8' })
+    const suggestedName = editArtist && editTitle
+      ? `${editArtist} - ${editTitle}.txt`
+      : filename
 
     if ('showSaveFilePicker' in window) {
       try {
         const handle = await (window as Window & { showSaveFilePicker: (opts: object) => Promise<FileSystemFileHandle> })
           .showSaveFilePicker({
-            suggestedName: filename,
+            suggestedName,
             types: [{ description: 'UltraStar Text File', accept: { 'text/plain': ['.txt'] } }],
           })
         const writable = await handle.createWritable()
@@ -245,7 +248,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = filename
+    a.download = suggestedName
     a.click()
     URL.revokeObjectURL(url)
   }
