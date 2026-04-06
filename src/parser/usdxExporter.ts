@@ -33,7 +33,7 @@ export function exportUsdx(
   lines.push(`#VERSION:1.1.0`)
   lines.push(`#TITLE:${header.title}`)
   lines.push(`#ARTIST:${header.artist}`)
-  if (header.audio) lines.push(`#AUDIO:${header.audio}`)
+  if (header.audio) lines.push(`${song.deprecatedFields.includes('MP3') ? '#MP3' : '#AUDIO'}:${header.audio}`)
   lines.push(`#BPM:${header.bpm}`)
   lines.push(`#GAP:${header.gap}`)
   if (header.videoGap)      lines.push(`#VIDEOGAP:${header.videoGap}`)

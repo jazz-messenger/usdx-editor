@@ -46,8 +46,15 @@ describe('exportUsdx', () => {
     expect(output.indexOf('Foo')).toBeGreaterThan(p2Start)
   })
 
-  it('upgrades #MP3 to #AUDIO in output', () => {
+  it('preserves #MP3 tag for USDX compatibility (no upgrade to #AUDIO)', () => {
     const song = parseUsdx(SONG)
+    const output = exportUsdx(song, {})
+    expect(output).toContain('#MP3:test.mp3')
+    expect(output).not.toContain('#AUDIO')
+  })
+
+  it('keeps #AUDIO when original file used #AUDIO', () => {
+    const song = parseUsdx(SONG.replace('#MP3:test.mp3', '#AUDIO:test.mp3'))
     const output = exportUsdx(song, {})
     expect(output).toContain('#AUDIO:test.mp3')
     expect(output).not.toContain('#MP3')
