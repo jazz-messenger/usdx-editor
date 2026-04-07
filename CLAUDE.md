@@ -36,6 +36,15 @@ public/
 - **Dezimalstellen:** GAP, VIDEOGAP, Zeitanzeigen immer ganzzahlig (`Math.round`)
 - **Beide Sprachen:** Jede Änderung in `translations.ts` betrifft immer `de` UND `en`
 
+## SingStar-Dictionary (`singstarSongDictionary.ts`)
+
+Beim Hinzufügen neuer Songs **immer** dieses Protokoll einhalten — Abweichungen haben mehrfach den Build gebrochen:
+
+1. **Vor dem Einfügen auf Duplikate prüfen** — Key `"Artist - Title"` darf nur einmal vorkommen. Existiert er bereits, Editions **mergen**, nicht doppelt eintragen.
+2. **Neue CountryCodes in den Typ aufnehmen** — `CountryCode` in Zeile 13 muss alle verwendeten Ländercodes kennen. Nach dem Einfügen prüfen: alle Codes im Dictionary ∈ `CountryCode`.
+3. **Strukturvalidierung vor dem Commit** — `tsc --noEmit` muss fehlerfrei durchlaufen. Zusätzlich sicherstellen, dass kein Editions-Objekt versehentlich in einem `countries`-Array landet (Patch-Skripte haben das mehrfach produziert).
+4. **Patch-Skripte ankern an `} as const;`** — nicht an `};` (das schließt die Typ-Definition, nicht das Dictionary).
+
 ## Bekannte Stolpersteine
 
 - **Tooltip-Clipping:** `position: fixed` + `getBoundingClientRect()` verwenden — `position: absolute` wird von `overflow: hidden`-Eltern abgeschnitten
