@@ -104,10 +104,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "game": "SingStar Pop",
         "platform": "PS2",
         "countries": [
-          "NA",
-      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] }
+          "NA"
         ]
-      }
+      },
+      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] }
     ]
   },
   "3 Doors Down - When I'm Gone": {
@@ -3125,10 +3125,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
           "DE",
           "IT",
           "NL",
-          "UK",
-      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
+          "UK"
         ]
-      }
+      },
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
     ]
   },
   "Black Kids - I'm Not Gonna Teach Your Boyfriend How To Dance With You": {
@@ -3336,10 +3336,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "countries": [
           "FR",
           "IT",
-          "UK",
-      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
+          "UK"
         ]
       },
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] },
       {
         "game": "SingStar '80s",
         "platform": "PS2",
@@ -3498,10 +3498,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
           "HR",
           "NA",
           "NL",
-          "UK",
-      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] }
+          "UK"
         ]
-      }
+      },
+      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] }
     ]
   },
   "Bluvertigo - Altre Forme Di Vita": {
@@ -4613,10 +4613,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "platform": "PS3",
         "countries": [
           "DE",
-          "UK",
-      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
+          "UK"
         ]
-      }
+      },
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
     ]
   },
   "Chris Brown - Yo (Excuse Me Miss)": {
@@ -4874,10 +4874,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "countries": [
           "AU",
           "DE",
-          "PT",
-      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] }
+          "PT"
         ]
       },
+      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] },
       {
         "game": "SingStar Pop Vol 2",
         "platform": "PS2",
@@ -6419,10 +6419,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "game": "SingStar Legends",
         "platform": "PS2",
         "countries": [
-          "DE",
-      { "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": [] }
+          "DE"
         ]
-      }
+      },
+      { "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": [] }
     ]
   },
   "Die Toten Hosen - Alles Was War": {
@@ -9101,10 +9101,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "game": "SingStar Anthems",
         "platform": "PS2",
         "countries": [
-          "UK",
-      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
+          "UK"
         ]
       },
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] },
       {
         "game": "SingStar Rocks!",
         "platform": "PS2",
@@ -9576,10 +9576,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
           "FR",
           "HR",
           "NL",
-          "UK",
-      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
+          "UK"
         ]
-      }
+      },
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
     ]
   },
   "Gwen Stefani feat. Akon - The Sweet Escape": {
@@ -10606,10 +10606,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
           "DE",
           "FR",
           "IT",
-          "UK",
-      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
+          "UK"
         ]
-      }
+      },
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
     ]
   },
   "Jamiroquai - Deeper Underground": {
@@ -12390,10 +12390,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "game": "SingStar Country",
         "platform": "PS2",
         "countries": [
-          "NA",
-      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] }
+          "NA"
         ]
-      }
+      },
+      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] }
     ]
   },
   "Kellie Pickler - Red High Heels": {
@@ -12648,10 +12648,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "platform": "PS3",
         "countries": [
           "DE",
-          "UK",
-      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
+          "UK"
         ]
-      }
+      },
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
     ]
   },
   "Koos Alberts - Zijn Het Je Ogen": {
@@ -12734,10 +12734,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
           "DE",
           "DK",
           "PT",
-          "UK",
-      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] }
+          "UK"
         ]
-      }
+      },
+      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] }
     ]
   },
   "Kylie Minogue - Can't Get You Out Of My Head": {
@@ -13006,10 +13006,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "game": "SingStar Chart Hits",
         "platform": "PS3",
         "countries": [
-          "AU",
-      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
+          "AU"
         ]
-      }
+      },
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
     ]
   },
   "La Sonrisa de Julia - Llevo Tu Voz": {
@@ -13100,10 +13100,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "game": "SingStar Chart Hits",
         "platform": "PS3",
         "countries": [
-          "AU",
-      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
+          "AU"
         ]
       },
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] },
       {
         "game": "SingStar Starter Pack",
         "platform": "PS3",
@@ -15162,10 +15162,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "platform": "PS2",
         "countries": [
           "NA",
-          "UK",
-      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
+          "UK"
         ]
-      }
+      },
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
     ]
   },
   "McFly - 5 Colours in Her Hair": {
@@ -19011,10 +19011,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
           "DE",
           "DK",
           "PT",
-          "UK",
-      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] }
+          "UK"
         ]
-      }
+      },
+      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] }
     ]
   },
   "Pupo - Su Di Noi": {
@@ -20095,10 +20095,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
           "ES",
           "FR",
           "IT",
-          "UK",
-      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
+          "UK"
         ]
-      }
+      },
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
     ]
   },
   "Right Said Fred - Stand Up (For The Champions)": {
@@ -21644,10 +21644,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "platform": "PS2",
         "countries": [
           "NA",
-          "UK",
-      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
+          "UK"
         ]
-      }
+      },
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
     ]
   },
   "Sistars - Na Dwa": {
@@ -24378,10 +24378,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
           "FR",
           "IT",
           "NA",
-          "UK",
-      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
+          "UK"
         ]
       },
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] },
       {
         "game": "SingStar Motown",
         "platform": "PS3",
@@ -24842,10 +24842,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "game": "SingStar Anthems",
         "platform": "PS2",
         "countries": [
-          "UK",
-      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
+          "UK"
         ]
-      }
+      },
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
     ]
   },
   "The Pussycat Dolls - Hush Hush; Hush Hush": {
@@ -24895,10 +24895,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "game": "SingStar Pop",
         "platform": "PS2",
         "countries": [
-          "NA",
-      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] }
+          "NA"
         ]
-      }
+      },
+      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] }
     ]
   },
   "The Rasmus - In the Shadows": {
@@ -26585,10 +26585,10 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
           "FR",
           "NO",
           "UK",
-          "US",
-      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] }
+          "US"
         ]
       },
+      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] },
       {
         "game": "SingStar Pop Hits",
         "platform": "PS2",
