@@ -29,6 +29,7 @@ interface EditState {
   tags: string
   gap: number
   videoGap: number
+  start: number | undefined
   videoUrl: string
   coverUrl: string
   cover: string
@@ -44,6 +45,7 @@ type EditAction =
   | { type: 'SET_TAGS'; value: string }
   | { type: 'SET_GAP'; value: number }
   | { type: 'SET_VIDEO_GAP'; value: number }
+  | { type: 'SET_START'; value: number | undefined }
   | { type: 'SET_VIDEO_URL'; value: string }
   | { type: 'SET_COVER_URL'; value: string }
   | { type: 'SET_COVER'; value: string }
@@ -59,6 +61,7 @@ function editReducer(state: EditState, action: EditAction): EditState {
     case 'SET_TAGS':       return { ...state, tags: action.value }
     case 'SET_GAP':        return { ...state, gap: action.value }
     case 'SET_VIDEO_GAP':  return { ...state, videoGap: action.value }
+    case 'SET_START':      return { ...state, start: action.value }
     case 'SET_VIDEO_URL':  return { ...state, videoUrl: action.value }
     case 'SET_COVER_URL':  return { ...state, coverUrl: action.value }
     case 'SET_COVER':      return { ...state, cover: action.value }
@@ -136,13 +139,14 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
     tags: (header.tags as string | undefined) ?? '',
     gap: header.gap,
     videoGap: header.videoGap ?? 0,
+    start: header.start,
     videoUrl: header.videoUrl ?? '',
     coverUrl: header.coverUrl ?? '',
     cover: header.cover ?? '',
   })
   const { title: editTitle, artist: editArtist, year: editYear, genres: editGenres,
           languages: editLanguages, edition: editEdition, tags: editTags,
-          gap, videoGap, videoUrl: editVideoUrl, coverUrl: editCoverUrl, cover: editCover } = edit
+          gap, videoGap, start, videoUrl: editVideoUrl, coverUrl: editCoverUrl, cover: editCover } = edit
 
   const [suggestedYear, setSuggestedYear] = useState<number | null>(null)
   const [suggestedGenre, setSuggestedGenre] = useState<string | null>(null)
@@ -208,6 +212,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
       edition: editEdition.length > 0 ? editEdition.join(', ') : undefined,
       tags: editTags.trim() || undefined,
       gap,
+      start: start ?? undefined,
       videoGap: videoGap || undefined,
       videoUrl: editVideoUrl || undefined,
       audio: selectedAudioFile ? selectedAudioFile.name : header.audio,
@@ -469,7 +474,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
 
         <aside className="video-sidebar">
           <GapSync
-            timing={{ gap, onChange: v => dispatch({ type: 'SET_GAP', value: v }), videoGap, onVideoGapChange: v => dispatch({ type: 'SET_VIDEO_GAP', value: v }) }}
+            timing={{ gap, onChange: v => dispatch({ type: 'SET_GAP', value: v }), videoGap, onVideoGapChange: v => dispatch({ type: 'SET_VIDEO_GAP', value: v }), start, onStartChange: v => dispatch({ type: 'SET_START', value: v }) }}
             media={{ videoUrl: videoUrl ?? undefined, audioUrl: audioUrl ?? undefined, backgroundUrl: backgroundUrl ?? undefined, initialVideoUrl: editVideoUrl || undefined, onVideoUrlChange: v => dispatch({ type: 'SET_VIDEO_URL', value: v }), onVideoFileSelect: setSelectedVideoFile, onAudioFileSelect: setSelectedAudioFile, forceYoutube: videoMismatchDismissed && !selectedVideoFile && !!videoMismatch }}
             song={{ artist: header.artist, title: header.title }}
             startSignal={startSignal}

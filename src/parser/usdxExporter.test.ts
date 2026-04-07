@@ -60,6 +60,20 @@ describe('exportUsdx', () => {
     expect(output).not.toContain('#MP3')
   })
 
+  it('preserves #START when present', () => {
+    const src = SONG.replace('#GAP:1000', '#GAP:1000\n#START:89')
+    const song = parseUsdx(src)
+    expect(song.header.start).toBe(89)
+    const output = exportUsdx(song, {})
+    expect(output).toContain('#START:89')
+  })
+
+  it('omits #START when not set', () => {
+    const song = parseUsdx(SONG)
+    const output = exportUsdx(song, {})
+    expect(output).not.toContain('#START')
+  })
+
   it('omits #AUDIO/#MP3 when audio filename equals video filename', () => {
     // When audio and video are the same file, UltraStar uses the video's audio track.
     // Including both causes VIDEOGAP to be applied to the audio too (double offset).

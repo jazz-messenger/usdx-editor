@@ -44,6 +44,7 @@ export function exportUsdx(
   }
   lines.push(`#BPM:${header.bpm}`)
   lines.push(`#GAP:${Math.round(header.gap)}`)
+  if (header.start !== undefined) lines.push(`#START:${header.start}`)
   if (header.videoGap)      lines.push(`#VIDEOGAP:${Math.round(header.videoGap)}`)
   if (header.video)         lines.push(`#VIDEO:${header.video}`)
   if (header.videoUrl)      lines.push(`#VIDEOURL:${header.videoUrl}`)

@@ -82,6 +82,10 @@ export interface GapSyncTiming {
   /** Offset in seconds between video start and song start (from #VIDEOGAP). */
   videoGap: number
   onVideoGapChange: (vg: number) => void
+  /** Intro skip in seconds (#START). Both audio and video seek to this position on load/reset.
+   *  GAP remains absolute from the file start — not relative to START. */
+  start?: number
+  onStartChange: (s: number | undefined) => void
 }
 
 export interface GapSyncMedia {
@@ -119,7 +123,7 @@ export function shouldHandover(pendingTime: number | null, playerState: string):
 }
 
 export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSignal }: GapSyncProps) {
-  const { gap, onChange, videoGap, onVideoGapChange } = timing
+  const { gap, onChange, videoGap, onVideoGapChange, start, onStartChange } = timing
   const { videoUrl, audioUrl, backgroundUrl, initialVideoUrl, onVideoUrlChange, onVideoFileSelect, onAudioFileSelect, forceYoutube } = media
   const { artist, title } = song ?? {}
   const { t } = useLanguage()
@@ -252,12 +256,13 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
     return () => cancelAnimationFrame(rafId)
   }, [isPlaying, onTimeUpdate, getCurrentTime, videoGap, activeTab]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Seek to song-start position and play.
-  // Audio tab: audio begins at t=0, so seek to 0.
-  // Video/YouTube tab: the video frame for beat 0 is at VIDEOGAP seconds.
+  // Seek to the intro-skip position (#START) and play.
+  // Audio tab: seek to START (or 0 if unset).
+  // Video/YouTube tab: seek to VIDEOGAP + START (or VIDEOGAP if START unset).
+  const startS = start ?? 0
   const handleStart = () => {
     onReset?.()
-    seekTo(activeTab === 'audio' ? 0 : videoGap)
+    seekTo(activeTab === 'audio' ? startS : videoGap + startS)
     play()
   }
 
@@ -355,6 +360,27 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
           )
           : <span />
         }
+
+        <label className="gap-sync-label" htmlFor="start-input">
+          {t.gapsync.startLabel2}
+          <Tooltip text={t.gapsync.startTooltip} />
+        </label>
+        <div className="gap-input-group">
+          <input
+            id="start-input"
+            type="number"
+            className="gap-input"
+            value={startS}
+            step={1}
+            min={0}
+            onChange={(e) => {
+              const v = Number(e.target.value)
+              onStartChange(v > 0 ? v : undefined)
+            }}
+          />
+          <span className="gap-unit">{t.gapsync.s}</span>
+        </div>
+        <span />
 
         <label className="gap-sync-label" htmlFor="videogap-input">
           {t.gapsync.videogapLabel}
@@ -582,10 +608,10 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
       {isPlayerReady && (
         <>
           <div className="gap-sync-transport">
-            {/* Reset-to-start: audio→t=0, video→VIDEOGAP */}
-            <Tooltip text={activeTab === 'audio' || videoGap === 0 ? t.gapsync.startFromBeginning : t.gapsync.startWithGap(videoGap)}>
+            {/* Reset-to-start: seeks to START (intro skip). Falls back to 0/VIDEOGAP if unset. */}
+            <Tooltip text={startS > 0 ? t.gapsync.startWithGap(startS) : t.gapsync.startFromBeginning}>
               <button className="btn-transport" onClick={handleStart}>
-                {activeTab === 'audio' ? '↩ Start' : t.gapsync.startLabel(videoGap)}
+                {t.gapsync.startLabel(startS)}
               </button>
             </Tooltip>
             <Tooltip text={t.gapsync.jumpToGapTooltip}>

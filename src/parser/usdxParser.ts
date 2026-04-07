@@ -30,6 +30,10 @@ export interface UsdxHeader {
   /** Offset in seconds between the start of the video file and the start of the song.
    *  Positive value = the video has intro footage before the song begins. */
   videoGap?: number
+  /** Seek offset in seconds applied to both audio and video on load.
+   *  UltraStar skips this many seconds of intro before playback begins.
+   *  GAP remains absolute from the file start — not relative to START. */
+  start?: number
   audio?: string
   video?: string
   cover?: string
@@ -98,7 +102,7 @@ const STRING_FIELDS: Record<string, keyof UsdxHeader> = {
 }
 
 const FLOAT_FIELDS: Record<string, keyof UsdxHeader> = {
-  BPM: 'bpm', GAP: 'gap', VIDEOGAP: 'videoGap', PREVIEWSTART: 'previewStart',
+  BPM: 'bpm', GAP: 'gap', VIDEOGAP: 'videoGap', PREVIEWSTART: 'previewStart', START: 'start',
 }
 
 const INT_FIELDS: Record<string, keyof UsdxHeader> = {

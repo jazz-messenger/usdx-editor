@@ -6,7 +6,7 @@ import { LanguageProvider } from '../i18n/LanguageContext'
 import type { GapSyncTiming, GapSyncMedia } from './GapSync'
 
 function makeTiming(overrides: Partial<GapSyncTiming> = {}): GapSyncTiming {
-  return { gap: 5000, onChange: vi.fn(), videoGap: 0, onVideoGapChange: vi.fn(), ...overrides }
+  return { gap: 5000, onChange: vi.fn(), videoGap: 0, onVideoGapChange: vi.fn(), onStartChange: vi.fn(), ...overrides }
 }
 
 const emptyMedia: GapSyncMedia = {}
@@ -54,7 +54,7 @@ describe('GapSync', () => {
       </LanguageProvider>
     )
     const inputs = screen.getAllByRole('spinbutton')
-    const videoGapInput = inputs[1]
+    const videoGapInput = inputs[2] // index 0=GAP, 1=START, 2=VIDEOGAP
     await userEvent.clear(videoGapInput)
     await userEvent.type(videoGapInput, '3')
     expect(timing.onVideoGapChange).toHaveBeenCalled()
