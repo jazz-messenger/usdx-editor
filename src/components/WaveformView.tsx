@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { useLanguage } from '../i18n/LanguageContext'
+import { Tooltip } from './Tooltip'
 
 interface WaveformViewProps {
   file: File | null
@@ -257,24 +258,27 @@ export function WaveformView({ file, gap, playheadS, onSetGap, onJumpToGap }: Wa
           {/* Zoom controls — always visible when waveform is loaded */}
           {peaks && (
             <div className="waveform-zoom-group">
-              <button
-                className="btn-sm waveform-zoom-btn"
-                onClick={() => zoomBy(1 / ZOOM_STEP)}
-                disabled={zoom <= ZOOM_MIN}
-                title={t.waveform.zoomOut}
-              >−</button>
-              <button
-                className="btn-sm waveform-zoom-level"
-                onClick={resetZoom}
-                disabled={zoom <= ZOOM_MIN}
-                title={t.waveform.zoomReset}
-              >{zoom > 1 ? `${Math.round(zoom)}×` : '1×'}</button>
-              <button
-                className="btn-sm waveform-zoom-btn"
-                onClick={() => zoomBy(ZOOM_STEP)}
-                disabled={zoom >= ZOOM_MAX}
-                title={t.waveform.zoomIn}
-              >+</button>
+              <Tooltip text={t.waveform.zoomOut}>
+                <button
+                  className="btn-sm waveform-zoom-btn"
+                  onClick={() => zoomBy(1 / ZOOM_STEP)}
+                  disabled={zoom <= ZOOM_MIN}
+                >−</button>
+              </Tooltip>
+              <Tooltip text={t.waveform.zoomReset}>
+                <button
+                  className="btn-sm waveform-zoom-level"
+                  onClick={resetZoom}
+                  disabled={zoom <= ZOOM_MIN}
+                >{zoom > 1 ? `${Math.round(zoom)}×` : '1×'}</button>
+              </Tooltip>
+              <Tooltip text={t.waveform.zoomIn}>
+                <button
+                  className="btn-sm waveform-zoom-btn"
+                  onClick={() => zoomBy(ZOOM_STEP)}
+                  disabled={zoom >= ZOOM_MAX}
+                >+</button>
+              </Tooltip>
             </div>
           )}
           {/* Jump to GAP — only useful when zoomed */}

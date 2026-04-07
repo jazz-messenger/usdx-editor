@@ -86,15 +86,16 @@ export function TagEditor({ tags, onChange, suggestions, label, maxTags, warnTag
     <div className="tag-editor" ref={wrapRef}>
       {tags.map((tag) => (
         <span key={tag} className={`tag tag--editable${warnTags.includes(tag) ? ' tag--warn' : ''}`}>
-          {warnTags.includes(tag) && <span className="tag-warn-icon" title={t.tagEditor.unknownTag}>⚠</span>}
+          {warnTags.includes(tag) && <Tooltip text={t.tagEditor.unknownTag}><span className="tag-warn-icon">⚠</span></Tooltip>}
           {tag}
-          <button
-            className="tag-remove"
-            onClick={() => onChange(tags.filter((x) => x !== tag))}
-            title={t.tagEditor.removeTag(tag)}
-          >
-            ✕
-          </button>
+          <Tooltip text={t.tagEditor.removeTag(tag)}>
+            <button
+              className="tag-remove"
+              onClick={() => onChange(tags.filter((x) => x !== tag))}
+            >
+              ✕
+            </button>
+          </Tooltip>
         </span>
       ))}
       <div className="tag-add-wrap">
@@ -103,19 +104,19 @@ export function TagEditor({ tags, onChange, suggestions, label, maxTags, warnTag
             <button
               className={tags.length === 0 ? 'tag-add-btn tag-add-btn--labeled' : 'tag-add-btn'}
               onClick={() => setOpen((v) => !v)}
-              title={t.tagEditor.addTitle}
             >
               {tags.length === 0 ? t.tagEditor.addLabelEmpty(label) : t.tagEditor.addLabelHasTags}
             </button>
           </Tooltip>
         ) : (
-          <button
-            className={tags.length === 0 ? 'tag-add-btn tag-add-btn--labeled' : 'tag-add-btn'}
-            onClick={() => setOpen((v) => !v)}
-            title={t.tagEditor.addTitle}
-          >
-            {tags.length === 0 ? t.tagEditor.addLabelEmpty(label) : t.tagEditor.addLabelHasTags}
-          </button>
+          <Tooltip text={t.tagEditor.addTitle}>
+            <button
+              className={tags.length === 0 ? 'tag-add-btn tag-add-btn--labeled' : 'tag-add-btn'}
+              onClick={() => setOpen((v) => !v)}
+            >
+              {tags.length === 0 ? t.tagEditor.addLabelEmpty(label) : t.tagEditor.addLabelHasTags}
+            </button>
+          </Tooltip>
         )}
         {open && (
           <div className="tag-dropdown">

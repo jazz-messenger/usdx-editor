@@ -3,6 +3,7 @@ import type { UsdxHeader } from '../parser/usdxParser'
 import { findCoverFiles, fetchRemoteCovers } from '../utils/fileLoader'
 import type { SongFileMap } from '../utils/fileLoader'
 import { useLanguage } from '../i18n/LanguageContext'
+import { Tooltip } from './Tooltip'
 
 interface CoverArtProps {
   header: UsdxHeader
@@ -149,13 +150,14 @@ export function CoverArt({ header, files, onCoverUrl, onCoverFileSaved }: CoverA
   return (
     <div className="song-cover-wrap">
       {/* Thumbnail — click only */}
-      <img
-        className="song-cover song-cover--clickable"
-        src={displayUrl}
-        alt={t.coverart.alt}
-        onClick={() => setLightboxOpen(true)}
-        title={t.coverart.openPreview}
-      />
+      <Tooltip text={t.coverart.openPreview}>
+        <img
+          className="song-cover song-cover--clickable"
+          src={displayUrl}
+          alt={t.coverart.alt}
+          onClick={() => setLightboxOpen(true)}
+        />
+      </Tooltip>
 
       {/* Lightbox */}
       {lightboxOpen && (
@@ -166,21 +168,23 @@ export function CoverArt({ header, files, onCoverUrl, onCoverFileSaved }: CoverA
             {/* Navigation row */}
             {(hasMultiLocal || hasMultiRemote) && (
               <div className="cover-lightbox-nav">
-                <button
-                  className="cover-lightbox-nav-btn"
-                  onClick={() => hasMultiLocal ? navigateLocal(-1) : navigateRemote(-1)}
-                  title={t.coverart.prevCover}
-                >‹</button>
+                <Tooltip text={t.coverart.prevCover}>
+                  <button
+                    className="cover-lightbox-nav-btn"
+                    onClick={() => hasMultiLocal ? navigateLocal(-1) : navigateRemote(-1)}
+                  >‹</button>
+                </Tooltip>
                 <span className="cover-lightbox-nav-index">
                   {hasMultiLocal
                     ? t.coverart.coverOf(localIndex + 1, localFiles.length)
                     : t.coverart.coverOf(remoteIndex + 1, remoteUrls.length)}
                 </span>
-                <button
-                  className="cover-lightbox-nav-btn"
-                  onClick={() => hasMultiLocal ? navigateLocal(1) : navigateRemote(1)}
-                  title={t.coverart.nextCover}
-                >›</button>
+                <Tooltip text={t.coverart.nextCover}>
+                  <button
+                    className="cover-lightbox-nav-btn"
+                    onClick={() => hasMultiLocal ? navigateLocal(1) : navigateRemote(1)}
+                  >›</button>
+                </Tooltip>
               </div>
             )}
 
@@ -189,34 +193,37 @@ export function CoverArt({ header, files, onCoverUrl, onCoverFileSaved }: CoverA
               {!showRemote ? (
                 <>
                   <span className="cover-lightbox-selected-label">{t.coverart.selectedCover}</span>
-                  <button
-                    className="cover-lightbox-action-btn"
-                    onClick={handleFlip}
-                    title={t.coverart.loadOnline}
-                  >
-                    {loading ? '…' : t.coverart.btnLoadOnline}
-                  </button>
+                  <Tooltip text={t.coverart.loadOnline}>
+                    <button
+                      className="cover-lightbox-action-btn"
+                      onClick={handleFlip}
+                    >
+                      {loading ? '…' : t.coverart.btnLoadOnline}
+                    </button>
+                  </Tooltip>
                 </>
               ) : (
                 <>
                   {hasLocalCover && (
-                    <button
-                      className="cover-lightbox-action-btn"
-                      onClick={handleFlip}
-                      title={t.coverart.showLocal}
-                    >
-                      {t.coverart.btnShowLocal}
-                    </button>
+                    <Tooltip text={t.coverart.showLocal}>
+                      <button
+                        className="cover-lightbox-action-btn"
+                        onClick={handleFlip}
+                      >
+                        {t.coverart.btnShowLocal}
+                      </button>
+                    </Tooltip>
                   )}
                   {remoteUrl && (
-                    <button
-                      className="cover-lightbox-action-btn cover-lightbox-action-btn--primary"
-                      onClick={handleSetAsCover}
-                      disabled={saving}
-                      title={t.coverart.download}
-                    >
-                      {saving ? '…' : t.coverart.setAsCover}
-                    </button>
+                    <Tooltip text={t.coverart.download}>
+                      <button
+                        className="cover-lightbox-action-btn cover-lightbox-action-btn--primary"
+                        onClick={handleSetAsCover}
+                        disabled={saving}
+                      >
+                        {saving ? '…' : t.coverart.setAsCover}
+                      </button>
+                    </Tooltip>
                   )}
                 </>
               )}

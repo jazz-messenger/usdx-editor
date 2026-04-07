@@ -58,7 +58,7 @@ describe('SongView', () => {
 
   it('dismisses deprecation banner on click', async () => {
     renderSongView({ deprecatedFields: ['AUTHOR'] })
-    const dismiss = screen.getAllByTitle(/schließen/i)[0]
+    const dismiss = screen.getAllByRole('button', { name: '✕' })[0]
     await userEvent.click(dismiss)
     expect(screen.queryByText(/veraltete felder erkannt/i)).not.toBeInTheDocument()
   })

@@ -1,5 +1,6 @@
 import { TagEditor } from './TagEditor'
 import { CoverArt } from './CoverArt'
+import { Tooltip } from './Tooltip'
 import { KNOWN_SINGSTAR_GAMES } from '../utils/singstarEditions'
 import type { SingStarEditionMatch } from '../utils/singstarEditions'
 import type { UsdxHeader } from '../parser/usdxParser'
@@ -105,13 +106,14 @@ export function HeaderEditor({
           />
           {suggestedYear !== null && suggestedYear !== year && (
             <span className="year-suggestion">
-              <button
-                className="year-suggestion-accept"
-                onClick={onAcceptYear}
-                title={t.header.yearSuggestionTitle}
-              >
-                {t.header.acceptYear(suggestedYear)}
-              </button>
+              <Tooltip text={t.header.yearSuggestionTitle}>
+                <button
+                  className="year-suggestion-accept"
+                  onClick={onAcceptYear}
+                >
+                  {t.header.acceptYear(suggestedYear)}
+                </button>
+              </Tooltip>
               <button className="year-suggestion-dismiss" onClick={onDismissYear} aria-label={t.header.dismissSuggestion}>×</button>
             </span>
           )}
@@ -119,13 +121,14 @@ export function HeaderEditor({
           <TagEditor tags={genres} onChange={setGenres as (v: string[]) => void} suggestions={GENRE_SUGGESTIONS} label={t.header.genreLabel} tooltip={t.tagEditor.tooltipGenre} />
           {suggestedGenre !== null && !genres.includes(suggestedGenre) && (
             <span className="year-suggestion">
-              <button
-                className="year-suggestion-accept"
-                onClick={onAcceptGenre}
-                title={t.header.genreSuggestionTitle}
-              >
-                {t.header.addGenre(suggestedGenre)}
-              </button>
+              <Tooltip text={t.header.genreSuggestionTitle}>
+                <button
+                  className="year-suggestion-accept"
+                  onClick={onAcceptGenre}
+                >
+                  {t.header.addGenre(suggestedGenre)}
+                </button>
+              </Tooltip>
               <button className="year-suggestion-dismiss" onClick={onDismissGenre} aria-label={t.header.dismissSuggestion}>×</button>
             </span>
           )}
@@ -143,13 +146,14 @@ export function HeaderEditor({
           />
           {singstarMatch !== null && !edition.includes(singstarMatch.suggestedEdition) && (
             <span className="year-suggestion">
-              <button
-                className="year-suggestion-accept"
-                onClick={onAcceptSingstar}
-                title={t.header.singstarSuggestionTitle(singstarMatch.platforms.join(', '))}
-              >
-                {t.header.acceptEdition(singstarMatch.suggestedEdition)}
-              </button>
+              <Tooltip text={t.header.singstarSuggestionTitle(singstarMatch.platforms.join(', '))}>
+                <button
+                  className="year-suggestion-accept"
+                  onClick={onAcceptSingstar}
+                >
+                  {t.header.acceptEdition(singstarMatch.suggestedEdition)}
+                </button>
+              </Tooltip>
               <button className="year-suggestion-dismiss" onClick={onDismissSingstar} aria-label={t.header.dismissSuggestion}>×</button>
             </span>
           )}
@@ -169,7 +173,9 @@ export function HeaderEditor({
       </div>
       <div className="meta-actions">
         <button className="btn-primary" onClick={onDownload}>{t.header.save}</button>
-        <button className="btn-secondary" onClick={onReset} title={filename}>{t.header.changeFile}</button>
+        <Tooltip text={filename}>
+          <button className="btn-secondary" onClick={onReset}>{t.header.changeFile}</button>
+        </Tooltip>
       </div>
     </div>
   )

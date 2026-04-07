@@ -294,7 +294,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
         <div className="missing-files-banner missing-files-banner--info">
           <span className="missing-files-icon">ℹ</span>
           <span className="missing-files-text">{t.songview.deprecationBanner(song.deprecatedFields.filter(f => f !== 'MP3'))}</span>
-          <button className="missing-files-dismiss" onClick={() => setDeprecationDismissed(true)} title={t.songview.closeMissing}>✕</button>
+          <Tooltip text={t.songview.closeMissing}><button className="missing-files-dismiss" onClick={() => setDeprecationDismissed(true)}>✕</button></Tooltip>
         </div>
       )}
 
@@ -362,7 +362,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
           {missingFiles.map(({ tag, filename: fn }) => (
             <span key={tag} className="missing-file-pill">{tag}: {fn}</span>
           ))}
-          <button className="missing-files-dismiss" onClick={() => setWarningDismissed(true)} title={t.songview.closeMissing}>✕</button>
+          <Tooltip text={t.songview.closeMissing}><button className="missing-files-dismiss" onClick={() => setWarningDismissed(true)}>✕</button></Tooltip>
         </div>
       )}
 

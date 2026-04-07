@@ -488,26 +488,28 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
           {videoId
             ? (
               /* Clear selection → go back to search results if cached */
-              <button
-                className="btn-yt-clear"
-                onClick={() => {
-                  updateYoutubeUrl('')
-                  setShowResults(searchResults !== null && searchResults.length > 0)
-                }}
-                title={t.gapsync.clearVideo}
-              >
-                ✕
-              </button>
+              <Tooltip text={t.gapsync.clearVideo}>
+                <button
+                  className="btn-yt-clear"
+                  onClick={() => {
+                    updateYoutubeUrl('')
+                    setShowResults(searchResults !== null && searchResults.length > 0)
+                  }}
+                >
+                  ✕
+                </button>
+              </Tooltip>
             )
             : (artist || title) && (
-              <button
-                className="btn-yt-search"
-                onClick={handleSearch}
-                disabled={isSearching}
-                title={t.gapsync.searchVideo}
-              >
-                {isSearching ? '…' : '🔍'}
-              </button>
+              <Tooltip text={t.gapsync.searchVideo}>
+                <button
+                  className="btn-yt-search"
+                  onClick={handleSearch}
+                  disabled={isSearching}
+                >
+                  {isSearching ? '…' : '🔍'}
+                </button>
+              </Tooltip>
             )
           }
         </div>
@@ -600,7 +602,7 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
             onTimeUpdate?.(toSongMs(t))
           }}
           onPointerUp={() => { isDraggingSlider.current = false }}
-          title={t.gapsync.seekTitle}
+          aria-label={t.gapsync.seekTitle}
         />
       )}
 
