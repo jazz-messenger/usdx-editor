@@ -30,6 +30,7 @@ export type CountryCode =
   | "PL"
   | "PT"
   | "SE"
+  | "TR"
   | "UK"
   | "US";
 
