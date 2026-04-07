@@ -50,6 +50,13 @@ describe('lookupSingStarEdition', () => {
       expect(result!.suggestedEdition).toBe('SingStar ABBA')
     })
 
+    it('matches when title contains typographic apostrophe (U+2019) instead of straight apostrophe', () => {
+      // USDX files from some editors use curly apostrophes — must still match
+      const result = lookupSingStarEdition('Backstreet Boys', 'Everybody (Backstreet\u2019s Back)')
+      expect(result).not.toBeNull()
+      expect(result!.suggestedEdition).toBe('SingStar Dance')
+    })
+
     it('normalises multiple internal spaces', () => {
       // "ABBA" with double space should still match "ABBA"
       const result = lookupSingStarEdition('ABBA', 'Dancing  Queen')

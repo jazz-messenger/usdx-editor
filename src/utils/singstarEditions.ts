@@ -81,7 +81,11 @@ export interface SingStarEditionMatch {
 }
 
 function normalize(s: string): string {
-  return s.toLowerCase().trim().replace(/\s+/g, ' ')
+  return s
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, ' ')
+    .replace(/[\u2018\u2019\u201A\u201B\u2032]/g, "'") // curly/typographic apostrophes → straight
 }
 
 // Build a case-insensitive lookup index once at module load time.

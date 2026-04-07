@@ -41,1042 +41,8 @@ export type SongEditionEntry = {
     platform: Platform;
     countries: CountryCode[];
   }>;
-
-  "Banaroo - Dubi Dam Dam": {
-    "artist": "Banaroo",
-    "title": "Dubi Dam Dam",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Bellamy Brothers - Let Your Love Flow": {
-    "artist": "Bellamy Brothers",
-    "title": "Let Your Love Flow",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "DJ Bobo - Chihuahua 2002": {
-    "artist": "DJ Bobo",
-    "title": "Chihuahua 2002",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "DJ Ötzi & Nik P. - Ein Stern (Der Deinen Namen Trägt)": {
-    "artist": "DJ Ötzi & Nik P.",
-    "title": "Ein Stern (Der Deinen Namen Trägt)",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "E.A.V. (Erste Allgemeine Verunsicherung) - Ding Dong": {
-    "artist": "E.A.V. (Erste Allgemeine Verunsicherung)",
-    "title": "Ding Dong",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Fritz & The Downhill Gang - Genie Auf Die Ski": {
-    "artist": "Fritz & The Downhill Gang",
-    "title": "Genie Auf Die Ski",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Guildo Horn & Die Orthopädischen Strümpfe - Guildo Hat Euch Lieb": {
-    "artist": "Guildo Horn & Die Orthopädischen Strümpfe",
-    "title": "Guildo Hat Euch Lieb",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Hermes House Band - Country Roads": {
-    "artist": "Hermes House Band",
-    "title": "Country Roads",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Höhner - Viva Colonia (Da Simmer Dabei, Dat Is Prima!)": {
-    "artist": "Höhner",
-    "title": "Viva Colonia (Da Simmer Dabei, Dat Is Prima!)",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Höhner - Wenn Nicht Jetzt, Wann Dann (Weltmeister Version)?": {
-    "artist": "Höhner",
-    "title": "Wenn Nicht Jetzt, Wann Dann (Weltmeister Version)?",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Jumpy & Mungo Jerry - In Der Winterzeit": {
-    "artist": "Jumpy & Mungo Jerry",
-    "title": "In Der Winterzeit",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "K 2 - Der Berg Ruft": {
-    "artist": "K 2",
-    "title": "Der Berg Ruft",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Krümel - Zieh Dich Aus Wir Müssen Reden": {
-    "artist": "Krümel",
-    "title": "Zieh Dich Aus Wir Müssen Reden",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Lollies - Wenn Du Denkst Du Denkst...": {
-    "artist": "Lollies",
-    "title": "Wenn Du Denkst Du Denkst...",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Mickie Krause - Finger Im Po Mexiko": {
-    "artist": "Mickie Krause",
-    "title": "Finger Im Po Mexiko",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Mickie Krause - Laudato Si": {
-    "artist": "Mickie Krause",
-    "title": "Laudato Si",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Nena - Irgendwie, Irgendwo, Irgendwann": {
-    "artist": "Nena",
-    "title": "Irgendwie, Irgendwo, Irgendwann",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Olaf Henning - Cowboy Und Indianer": {
-    "artist": "Olaf Henning",
-    "title": "Cowboy Und Indianer",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Oliver Pocher - Schwarz Und Weiss": {
-    "artist": "Oliver Pocher",
-    "title": "Schwarz Und Weiss",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE",
-      { "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }] }]
-  },
-  "Peter Wackel - Ladioo": {
-    "artist": "Peter Wackel",
-    "title": "Ladioo",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Peter Wackel - Ü 30": {
-    "artist": "Peter Wackel",
-    "title": "Ü 30",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "PS Alex - Eine Frau Die Mich Nach Hause Trägt": {
-    "artist": "PS Alex",
-    "title": "Eine Frau Die Mich Nach Hause Trägt",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Rabaue - Was Kann Ich Denn Dafür ... (Dass Ich Schön Bin)": {
-    "artist": "Rabaue",
-    "title": "Was Kann Ich Denn Dafür ... (Dass Ich Schön Bin)",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "De Randfichten - Lebt Denn Dr Alte Holzmichl Noch...?": {
-    "artist": "De Randfichten",
-    "title": "Lebt Denn Dr Alte Holzmichl Noch...?",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Rednex - Cotton Eye Joe": {
-    "artist": "Rednex",
-    "title": "Cotton Eye Joe",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Die Rheinländer - Wir Alle Wollen Immer Nur Das Eine": {
-    "artist": "Die Rheinländer",
-    "title": "Wir Alle Wollen Immer Nur Das Eine",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Right Said Fred - You're My Mate": {
-    "artist": "Right Said Fred",
-    "title": "You're My Mate",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Rühmann's (Sch)erben - Ein Freund, Ein Guter Freund": {
-    "artist": "Rühmann's (Sch)erben",
-    "title": "Ein Freund, Ein Guter Freund",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Wolfgang Petry - Wahnsinn": {
-    "artist": "Wolfgang Petry",
-    "title": "Wahnsinn",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Yoomiii - A Kiss Is All I Miss": {
-    "artist": "Yoomiii",
-    "title": "A Kiss Is All I Miss",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Bernd Clüver - Der Junge Mit Der Mundharmonika": {
-    "artist": "Bernd Clüver",
-    "title": "Der Junge Mit Der Mundharmonika",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Bino - Mama Leone (Deutsche Version)": {
-    "artist": "Bino",
-    "title": "Mama Leone (Deutsche Version)",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Chris Roberts - Du Kannst Nicht Immer 17 Sein": {
-    "artist": "Chris Roberts",
-    "title": "Du Kannst Nicht Immer 17 Sein",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Cindy & Bert - Immer Wieder Sonntags": {
-    "artist": "Cindy & Bert",
-    "title": "Immer Wieder Sonntags",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Costa Cordalis - Anita": {
-    "artist": "Costa Cordalis",
-    "title": "Anita",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Dschinghis Khan - Dschinghis Khan": {
-    "artist": "Dschinghis Khan",
-    "title": "Dschinghis Khan",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Gebrüder Blattschuss - Kreuzberger Nächte": {
-    "artist": "Gebrüder Blattschuss",
-    "title": "Kreuzberger Nächte",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Gitte - So Schön Kann Doch Kein Mann Sein": {
-    "artist": "Gitte",
-    "title": "So Schön Kann Doch Kein Mann Sein",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Gus Backus - Da Sprach Der Alte Häuptling Der Indianer": {
-    "artist": "Gus Backus",
-    "title": "Da Sprach Der Alte Häuptling Der Indianer",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Henry Valentino & Uschi - Im Wagen Vor Mir": {
-    "artist": "Henry Valentino & Uschi",
-    "title": "Im Wagen Vor Mir",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Howard Carpendale - Hello Again": {
-    "artist": "Howard Carpendale",
-    "title": "Hello Again",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Howard Carpendale - Tür An Tür Mit Alice": {
-    "artist": "Howard Carpendale",
-    "title": "Tür An Tür Mit Alice",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Juliane Werding - Am Tag Als Conny Kramer Starb": {
-    "artist": "Juliane Werding",
-    "title": "Am Tag Als Conny Kramer Starb",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Jürgen Marcus - Eine Neue Liebe Ist Wie Ein Neues Leben": {
-    "artist": "Jürgen Marcus",
-    "title": "Eine Neue Liebe Ist Wie Ein Neues Leben",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Klaus & Klaus - An Der Nordseeküste": {
-    "artist": "Klaus & Klaus",
-    "title": "An Der Nordseeküste",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Marianne Rosenberg - Er Gehört Zu Mir": {
-    "artist": "Marianne Rosenberg",
-    "title": "Er Gehört Zu Mir",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Michael Holm - Mendocino": {
-    "artist": "Michael Holm",
-    "title": "Mendocino",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Michael Holm - Tränen Lügen Nicht": {
-    "artist": "Michael Holm",
-    "title": "Tränen Lügen Nicht",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Nicole - Ein Bißchen Frieden": {
-    "artist": "Nicole",
-    "title": "Ein Bißchen Frieden",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Peter Alexander - Kleine Kneipe": {
-    "artist": "Peter Alexander",
-    "title": "Kleine Kneipe",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Peter Maffay - Und Es War Sommer": {
-    "artist": "Peter Maffay",
-    "title": "Und Es War Sommer",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Rainhard Fendrich - Macho Macho": {
-    "artist": "Rainhard Fendrich",
-    "title": "Macho Macho",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Rex Gildo - Fiesta Mexicana": {
-    "artist": "Rex Gildo",
-    "title": "Fiesta Mexicana",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Roberto Blanco - Ein Bisschen Spaß Muss Sein!": {
-    "artist": "Roberto Blanco",
-    "title": "Ein Bisschen Spaß Muss Sein!",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Roland Kaiser - Dich Zu Lieben": {
-    "artist": "Roland Kaiser",
-    "title": "Dich Zu Lieben",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Roy Black & Anita - Schön Ist Es Auf Der Welt Zu Sein": {
-    "artist": "Roy Black & Anita",
-    "title": "Schön Ist Es Auf Der Welt Zu Sein",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Siw Malmkvist - Liebeskummer Lohnt Sich Nicht": {
-    "artist": "Siw Malmkvist",
-    "title": "Liebeskummer Lohnt Sich Nicht",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Tony Marshall - Schöne Maid": {
-    "artist": "Tony Marshall",
-    "title": "Schöne Maid",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Wencke Myhre - Er Hat Ein Knallrotes Gummiboot": {
-    "artist": "Wencke Myhre",
-    "title": "Er Hat Ein Knallrotes Gummiboot",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Wolfgang Petry - Verlieben, Verloren, Vergessen, Verzeih'n": {
-    "artist": "Wolfgang Petry",
-    "title": "Verlieben, Verloren, Vergessen, Verzeih'n",
-    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
-  },
-
-  "Blink-182 - What's My Age Again?": {
-    "artist": "Blink-182",
-    "title": "What's My Age Again?",
-    "editions": [{ "game": "SingStar Pop", "platform": "PS2", "countries": ["DE"] }]
-  },
-  "Joss Stone - Super Duper Love (Are You Diggin' on Me) Pt. 1": {
-    "artist": "Joss Stone",
-    "title": "Super Duper Love (Are You Diggin' on Me) Pt. 1",
-    "editions": [{ "game": "SingStar Pop", "platform": "PS2", "countries": ["DE"] }]
-  },
-
-  "2raumwohnung - Wir Trafen Uns In Einem Garten": {
-    "artist": "2raumwohnung",
-    "title": "Wir Trafen Uns In Einem Garten",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Annett Louisan - Das Gefühl": {
-    "artist": "Annett Louisan",
-    "title": "Das Gefühl",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Ayman - Mein Stern": {
-    "artist": "Ayman",
-    "title": "Mein Stern",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Buddy - Ab In Den Süden 2004": {
-    "artist": "Buddy",
-    "title": "Ab In Den Süden 2004",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Christina Stürmer - Immer An Euch Geglaubt": {
-    "artist": "Christina Stürmer",
-    "title": "Immer An Euch Geglaubt",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Clueso - Kein Bock Zu Geh'n": {
-    "artist": "Clueso",
-    "title": "Kein Bock Zu Geh'n",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Echt - Weinst Du": {
-    "artist": "Echt",
-    "title": "Weinst Du",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Familie - Und Tschüss": {
-    "artist": "Die Familie",
-    "title": "Und Tschüss",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Franziska - Schau Mir Ins Gesicht": {
-    "artist": "Franziska",
-    "title": "Schau Mir Ins Gesicht",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Glashaus - Haltet Die Welt An": {
-    "artist": "Glashaus",
-    "title": "Haltet Die Welt An",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Halogenpoeten - Die Ersten": {
-    "artist": "Halogenpoeten",
-    "title": "Die Ersten",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Hund Am Strand - Jungen Mädchen": {
-    "artist": "Hund Am Strand",
-    "title": "Jungen Mädchen",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Ich + Ich - Du Erinnerst Mich An Liebe": {
-    "artist": "Ich + Ich",
-    "title": "Du Erinnerst Mich An Liebe",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Juli - Geile Zeit": {
-    "artist": "Juli",
-    "title": "Geile Zeit",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Juli - Regen Und Meer": {
-    "artist": "Juli",
-    "title": "Regen Und Meer",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Laith Al-Deen - Leb Den Tag": {
-    "artist": "Laith Al-Deen",
-    "title": "Leb Den Tag",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Luka Neuser - Zeit Für Helden": {
-    "artist": "Luka Neuser",
-    "title": "Zeit Für Helden",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Maya Saban + Cosmo Klein - Das Alles Ändert Nichts Daran": {
-    "artist": "Maya Saban + Cosmo Klein",
-    "title": "Das Alles Ändert Nichts Daran",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Ohrbooten - An Alle Ladies": {
-    "artist": "Ohrbooten",
-    "title": "An Alle Ladies",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Olesoul - Was Kostet Die Welt": {
-    "artist": "Olesoul",
-    "title": "Was Kostet Die Welt",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Revolverheld - Freunde Bleiben": {
-    "artist": "Revolverheld",
-    "title": "Freunde Bleiben",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Rosenstolz - Ich Bin Ich (Wir Sind Wir)": {
-    "artist": "Rosenstolz",
-    "title": "Ich Bin Ich (Wir Sind Wir)",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Söhne Mannheims - Und Wenn Ein Lied": {
-    "artist": "Söhne Mannheims",
-    "title": "Und Wenn Ein Lied",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Tokio Hotel - Durch Den Monsun": {
-    "artist": "Tokio Hotel",
-    "title": "Durch Den Monsun",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Toten Hosen - Alles Aus Liebe": {
-    "artist": "Die Toten Hosen",
-    "title": "Alles Aus Liebe",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH",
-      { "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }] }]
-  },
-  "Die Toten Hosen - Hier Kommt Alex (Unplugged)": {
-    "artist": "Die Toten Hosen",
-    "title": "Hier Kommt Alex (Unplugged)",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH",
-      { "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }] }]
-  },
-  "Wir Sind Helden - Nur Ein Wort": {
-    "artist": "Wir Sind Helden",
-    "title": "Nur Ein Wort",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Wir Sind Helden - Von Hier An Blind": {
-    "artist": "Wir Sind Helden",
-    "title": "Von Hier An Blind",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Xavier Naidoo - Dieser Weg": {
-    "artist": "Xavier Naidoo",
-    "title": "Dieser Weg",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Yvonne Catterfeld - Sag Mir - Was Meinst Du?": {
-    "artist": "Yvonne Catterfeld",
-    "title": "Sag Mir - Was Meinst Du?",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-
-  "Die Toten Hosen - Auld Lang Syne": {
-    "artist": "Die Toten Hosen",
-    "title": "Auld Lang Syne",
-    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Toten Hosen - All Die Ganzen Jahre": {
-    "artist": "Die Toten Hosen",
-    "title": "All Die Ganzen Jahre",
-    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Toten Hosen - Alles Wird Vorübergehen": {
-    "artist": "Die Toten Hosen",
-    "title": "Alles Wird Vorübergehen",
-    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Toten Hosen - Bayern": {
-    "artist": "Die Toten Hosen",
-    "title": "Bayern",
-    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Toten Hosen - Bonnie & Clyde": {
-    "artist": "Die Toten Hosen",
-    "title": "Bonnie & Clyde",
-    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Toten Hosen - Eisgekühlter Bommerlunder": {
-    "artist": "Die Toten Hosen",
-    "title": "Eisgekühlter Bommerlunder",
-    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Toten Hosen - Freunde": {
-    "artist": "Die Toten Hosen",
-    "title": "Freunde",
-    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Toten Hosen - Friss Oder Stirb": {
-    "artist": "Die Toten Hosen",
-    "title": "Friss Oder Stirb",
-    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Toten Hosen - Hier Kommt Alex": {
-    "artist": "Die Toten Hosen",
-    "title": "Hier Kommt Alex",
-    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Toten Hosen - Ich Bin Die Sehnsucht In Dir": {
-    "artist": "Die Toten Hosen",
-    "title": "Ich Bin Die Sehnsucht In Dir",
-    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Toten Hosen - Kein Alkohol (ist auch keine Lösung)!": {
-    "artist": "Die Toten Hosen",
-    "title": "Kein Alkohol (ist auch keine Lösung)!",
-    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Toten Hosen - Nur Zu Besuch": {
-    "artist": "Die Toten Hosen",
-    "title": "Nur Zu Besuch",
-    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Toten Hosen - Paradies": {
-    "artist": "Die Toten Hosen",
-    "title": "Paradies",
-    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Toten Hosen - Pushed Again": {
-    "artist": "Die Toten Hosen",
-    "title": "Pushed Again",
-    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Toten Hosen - Schön Sein": {
-    "artist": "Die Toten Hosen",
-    "title": "Schön Sein",
-    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Toten Hosen - Still, Still, Still": {
-    "artist": "Die Toten Hosen",
-    "title": "Still, Still, Still",
-    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Toten Hosen - Walkampf": {
-    "artist": "Die Toten Hosen",
-    "title": "Walkampf",
-    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Toten Hosen - Was Zählt": {
-    "artist": "Die Toten Hosen",
-    "title": "Was Zählt",
-    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Toten Hosen - Wünsch DIR Was": {
-    "artist": "Die Toten Hosen",
-    "title": "Wünsch DIR Was",
-    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Toten Hosen - Zehn Kleine Jägermeister": {
-    "artist": "Die Toten Hosen",
-    "title": "Zehn Kleine Jägermeister",
-    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-
-  "2raumwohnung - 36grad": {
-    "artist": "2raumwohnung",
-    "title": "36grad",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Beatplanet - Dreh Dich Um Und Geh": {
-    "artist": "Beatplanet",
-    "title": "Dreh Dich Um Und Geh",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Christina Stürmer - Scherbenmeer": {
-    "artist": "Christina Stürmer",
-    "title": "Scherbenmeer",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Helge Schneider - Käsebrot": {
-    "artist": "Helge Schneider",
-    "title": "Käsebrot",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Ich + Ich - Umarme Mich": {
-    "artist": "Ich + Ich",
-    "title": "Umarme Mich",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Jan Delay - Klar": {
-    "artist": "Jan Delay",
-    "title": "Klar",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Joy Denalane - Was auch immer": {
-    "artist": "Joy Denalane",
-    "title": "Was auch immer",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Juli - Wir Beide": {
-    "artist": "Juli",
-    "title": "Wir Beide",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Killerpilze - Ich Kann Auch Ohne Dich": {
-    "artist": "Killerpilze",
-    "title": "Ich Kann Auch Ohne Dich",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Kim Frank - Lara": {
-    "artist": "Kim Frank",
-    "title": "Lara",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Luttenberger-Klug - Super Sommer": {
-    "artist": "Luttenberger-Klug",
-    "title": "Super Sommer",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Madsen - Du Schreibst Geschichte": {
-    "artist": "Madsen",
-    "title": "Du Schreibst Geschichte",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Maya Saban - Hautnah": {
-    "artist": "Maya Saban",
-    "title": "Hautnah",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Mellow Mark - Was Geht Ab Mit Der Liebe": {
-    "artist": "Mellow Mark",
-    "title": "Was Geht Ab Mit Der Liebe",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "MIA. - Zirkus": {
-    "artist": "MIA.",
-    "title": "Zirkus",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Moulinettes - Herr Rossi Sucht Das Glück": {
-    "artist": "Die Moulinettes",
-    "title": "Herr Rossi Sucht Das Glück",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Ohrbooten - Bewegung": {
-    "artist": "Ohrbooten",
-    "title": "Bewegung",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Pohlmann. - Wenn Jetzt Sommer Wär": {
-    "artist": "Pohlmann.",
-    "title": "Wenn Jetzt Sommer Wär",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Die Prinzen - Alles Nur Geklaut": {
-    "artist": "Die Prinzen",
-    "title": "Alles Nur Geklaut",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Pur - Ein Graues Haar": {
-    "artist": "Pur",
-    "title": "Ein Graues Haar",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Revolverheld - Generation Rock": {
-    "artist": "Revolverheld",
-    "title": "Generation Rock",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Roger Cicero - Zieh Die Schuh Aus": {
-    "artist": "Roger Cicero",
-    "title": "Zieh Die Schuh Aus",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Rosenstolz - Aus Liebe Wollt Ich Alles Wissen": {
-    "artist": "Rosenstolz",
-    "title": "Aus Liebe Wollt Ich Alles Wissen",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "RZA feat. Xavier Naidoo - Ich Kenne Nichts (Das So Schön Ist Wie Du)": {
-    "artist": "RZA feat. Xavier Naidoo",
-    "title": "Ich Kenne Nichts (Das So Schön Ist Wie Du)",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "SDP - Der Anfang Anzufangen": {
-    "artist": "SDP",
-    "title": "Der Anfang Anzufangen",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Tele - Mario": {
-    "artist": "Tele",
-    "title": "Mario",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Tokio Hotel - Schrei": {
-    "artist": "Tokio Hotel",
-    "title": "Schrei",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Virginia Jetzt - Mehr Als Das": {
-    "artist": "Virginia Jetzt",
-    "title": "Mehr Als Das",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-  "Wir Sind Helden - Soundso": {
-    "artist": "Wir Sind Helden",
-    "title": "Soundso",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE", "AT", "CH"] }]
-  },
-
-  "Alişan - Olay Bitmiştir": {
-    "artist": "Alişan",
-    "title": "Olay Bitmiştir",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Ankaralı Namık - Hovarda": {
-    "artist": "Ankaralı Namık",
-    "title": "Hovarda",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Burcu Güneş - Çile Bülbülüm": {
-    "artist": "Burcu Güneş",
-    "title": "Çile Bülbülüm",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Demet Akalın - Tatil": {
-    "artist": "Demet Akalın",
-    "title": "Tatil",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Ferda Anıl Yarkin - Ayrılmayalım": {
-    "artist": "Ferda Anıl Yarkin",
-    "title": "Ayrılmayalım",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Ferdi Tayfur - Çiçekler Açsın": {
-    "artist": "Ferdi Tayfur",
-    "title": "Çiçekler Açsın",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Gülben Ergen - Sürpriz": {
-    "artist": "Gülben Ergen",
-    "title": "Sürpriz",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Gülşen - Of Of": {
-    "artist": "Gülşen",
-    "title": "Of Of",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Gündoğarken - Elimde Olsaydı": {
-    "artist": "Gündoğarken",
-    "title": "Elimde Olsaydı",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Hande Yener - Kırmızı": {
-    "artist": "Hande Yener",
-    "title": "Kırmızı",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "İbrahim Tatlıses - Ağrı Dağın": {
-    "artist": "İbrahim Tatlıses",
-    "title": "Ağrı Dağın",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Kargo - Ateş Ve Su": {
-    "artist": "Kargo",
-    "title": "Ateş Ve Su",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Kayahan - Seninle Herşeye Varım Ben": {
-    "artist": "Kayahan",
-    "title": "Seninle Herşeye Varım Ben",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Kenan Doğulu - Baş Harfi Ben": {
-    "artist": "Kenan Doğulu",
-    "title": "Baş Harfi Ben",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Kutsi - Sana Ne": {
-    "artist": "Kutsi",
-    "title": "Sana Ne",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Mor Ve Ötesi - Cambaz": {
-    "artist": "Mor Ve Ötesi",
-    "title": "Cambaz",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Muazzez Ersoy - Emanetim": {
-    "artist": "Muazzez Ersoy",
-    "title": "Emanetim",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Murat Boz - Püf": {
-    "artist": "Murat Boz",
-    "title": "Püf",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Mustafa Sandal - Aşka Yürek Gerek": {
-    "artist": "Mustafa Sandal",
-    "title": "Aşka Yürek Gerek",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Mustafa Sandal - İndir": {
-    "artist": "Mustafa Sandal",
-    "title": "İndir",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Mustafa Sandal - İsyankar": {
-    "artist": "Mustafa Sandal",
-    "title": "İsyankar",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Öykü & Berk - Evlerinin Önü Boyalı Direk": {
-    "artist": "Öykü & Berk",
-    "title": "Evlerinin Önü Boyalı Direk",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Rober Hatemo - Senden Çok Var": {
-    "artist": "Rober Hatemo",
-    "title": "Senden Çok Var",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Seda Sayan - Bebeğim": {
-    "artist": "Seda Sayan",
-    "title": "Bebeğim",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Sezen Aksu - Şarkı Soylemek Lazım": {
-    "artist": "Sezen Aksu",
-    "title": "Şarkı Soylemek Lazım",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Sezen Aksu & Teoman - Paramparça": {
-    "artist": "Sezen Aksu & Teoman",
-    "title": "Paramparça",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Tarkan - Kuzu Kuzu": {
-    "artist": "Tarkan",
-    "title": "Kuzu Kuzu",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Tarkan - Şımarık (Kiss Kiss)": {
-    "artist": "Tarkan",
-    "title": "Şımarık (Kiss Kiss)",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Yıldız Tilbe - Ben Senin Var Ya": {
-    "artist": "Yıldız Tilbe",
-    "title": "Ben Senin Var Ya",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "Yurtseven Kardeşler - Şimdi Halay Zamanı": {
-    "artist": "Yurtseven Kardeşler",
-    "title": "Şimdi Halay Zamanı",
-    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
-  },
-  "101 Dalmatians - Cruella De Vil": {
-    "artist": "101 Dalmatians",
-    "title": "Cruella De Vil",
-    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
-  },
-  "Aladdin - A Whole New World": {
-    "artist": "Aladdin",
-    "title": "A Whole New World",
-    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
-  },
-  "Beauty And The Beast - Beauty And The Beast": {
-    "artist": "Beauty And The Beast",
-    "title": "Beauty And The Beast",
-    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
-  },
-  "Cinderella - Bibbidi-Bobbidi-Boo": {
-    "artist": "Cinderella",
-    "title": "Bibbidi-Bobbidi-Boo",
-    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
-  },
-  "Cinderella - The Work Song": {
-    "artist": "Cinderella",
-    "title": "The Work Song",
-    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
-  },
-  "Lady And The Tramp - He's A Tramp": {
-    "artist": "Lady And The Tramp",
-    "title": "He's A Tramp",
-    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
-  },
-  "Peter Pan - Following The Leader": {
-    "artist": "Peter Pan",
-    "title": "Following The Leader",
-    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
-  },
-  "Peter Pan - You Can Fly": {
-    "artist": "Peter Pan",
-    "title": "You Can Fly",
-    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
-  },
-  "Pinocchio - When You Wish Upon A Star": {
-    "artist": "Pinocchio",
-    "title": "When You Wish Upon A Star",
-    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
-  },
-  "Sleeping Beauty - Once Upon A Dream": {
-    "artist": "Sleeping Beauty",
-    "title": "Once Upon A Dream",
-    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
-  },
-  "Tarzan - Son Of Man": {
-    "artist": "Tarzan",
-    "title": "Son Of Man",
-    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
-  },
-  "The Aristocats - Ev'rybody Wants To Be A Cat": {
-    "artist": "The Aristocats",
-    "title": "Ev'rybody Wants To Be A Cat",
-    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
-  },
-  "The Jungle Book - The Bare Necessities": {
-    "artist": "The Jungle Book",
-    "title": "The Bare Necessities",
-    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
-  },
-  "The Jungle Book - I Wanna Be Like You": {
-    "artist": "The Jungle Book",
-    "title": "I Wanna Be Like You",
-    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
-  },
-  "The Little Mermaid - Under The Sea": {
-    "artist": "The Little Mermaid",
-    "title": "Under The Sea",
-    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
-  },
-  "The Little Mermaid - Kiss The Girl": {
-    "artist": "The Little Mermaid",
-    "title": "Kiss The Girl",
-    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
-  },
-  "The Lion King - I Just Can't Wait To Be King": {
-    "artist": "The Lion King",
-    "title": "I Just Can't Wait To Be King",
-    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
-  },
-  "The Lion King - Circle Of Life": {
-    "artist": "The Lion King",
-    "title": "Circle Of Life",
-    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
-  },
-  "Toy Story - You've Got A Friend In Me": {
-    "artist": "Toy Story",
-    "title": "You've Got A Friend In Me",
-    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
-  },
-  "Winnie The Pooh - Winnie The Pooh": {
-    "artist": "Winnie The Pooh",
-    "title": "Winnie The Pooh",
-    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
-  },
-
-  "'N Sync - Bye Bye Bye": {
-    "artist": "'N Sync",
-    "title": "Bye Bye Bye",
-    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
-  },
-  "Cyndi Lauper - Girls Just Want to Have Fun": {
-    "artist": "Cyndi Lauper",
-    "title": "Girls Just Want to Have Fun",
-    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
-  },
-  "Diana Ross and The Supremes - Baby Love": {
-    "artist": "Diana Ross and The Supremes",
-    "title": "Baby Love",
-    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
-  },
-  "KC and the Sunshine Band - That's the Way (I Like It)": {
-    "artist": "KC and the Sunshine Band",
-    "title": "That's the Way (I Like It)",
-    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
-  },
-  "Kid Cudi vs Crookers - Day 'n' Nite": {
-    "artist": "Kid Cudi vs Crookers",
-    "title": "Day 'n' Nite",
-    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
-  },
-  "New Kids on the Block - Hangin' Tough": {
-    "artist": "New Kids on the Block",
-    "title": "Hangin' Tough",
-    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
-  },
-  "Paula Abdul - Straight Up": {
-    "artist": "Paula Abdul",
-    "title": "Straight Up",
-    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
-  },
-  "Pitbull - I Know You Want Me (Calle Ocho)": {
-    "artist": "Pitbull",
-    "title": "I Know You Want Me (Calle Ocho)",
-    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
-  },
-  "Reel 2 Real feat. The Mad Stuntman - I Like to Move It": {
-    "artist": "Reel 2 Real feat. The Mad Stuntman",
-    "title": "I Like to Move It",
-    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
-  },
-  "Run-D.M.C. vs Jason Nevins - It's Like That": {
-    "artist": "Run-D.M.C. vs Jason Nevins",
-    "title": "It's Like That",
-    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
-  },
-  "Salt-N-Pepa - Push It": {
-    "artist": "Salt-N-Pepa",
-    "title": "Push It",
-    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
-  },
-  "Shaggy - Boombastic": {
-    "artist": "Shaggy",
-    "title": "Boombastic",
-    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
-  },
-  "Soulja Boy Tell 'Em - Crank That": {
-    "artist": "Soulja Boy Tell 'Em",
-    "title": "Crank That",
-    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
-  },
-  "Backstreet Boys - Everybody (Backstreet's Back)": {
-    "artist": "Backstreet Boys",
-    "title": "Everybody (Backstreet's Back)",
-    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
-  },
 };
+
 export const singstarSongDictionary: Record<string, SongEditionEntry> = {
   "-M- - Mama Sam (Live)": {
     "artist": "-M-",
@@ -1139,11 +105,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "platform": "PS2",
         "countries": [
           "NA",
-      {
-        "game": "SingStar Guitar",
-        "platform": "PS3",
-        "countries": []
-      }
+      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] }
         ]
       }
     ]
@@ -4164,11 +3126,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
           "IT",
           "NL",
           "UK",
-      {
-        "game": "SingStar Dance",
-        "platform": "PS3",
-        "countries": []
-      }
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
         ]
       }
     ]
@@ -4379,11 +3337,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
           "FR",
           "IT",
           "UK",
-      {
-        "game": "SingStar Dance",
-        "platform": "PS3",
-        "countries": []
-      }
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
         ]
       },
       {
@@ -4545,11 +3499,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
           "NA",
           "NL",
           "UK",
-      {
-        "game": "SingStar Guitar",
-        "platform": "PS3",
-        "countries": []
-      }
+      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] }
         ]
       }
     ]
@@ -5664,11 +4614,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "countries": [
           "DE",
           "UK",
-      {
-        "game": "SingStar Dance",
-        "platform": "PS3",
-        "countries": []
-      }
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
         ]
       }
     ]
@@ -5929,11 +4875,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
           "AU",
           "DE",
           "PT",
-      {
-        "game": "SingStar Guitar",
-        "platform": "PS3",
-        "countries": []
-      }
+      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] }
         ]
       },
       {
@@ -7478,7 +6420,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "platform": "PS2",
         "countries": [
           "DE",
-      { "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE", "AT", "CH"] }
+      { "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": [] }
         ]
       }
     ]
@@ -10160,11 +9102,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "platform": "PS2",
         "countries": [
           "UK",
-      {
-        "game": "SingStar Dance",
-        "platform": "PS3",
-        "countries": []
-      }
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
         ]
       },
       {
@@ -10639,11 +9577,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
           "HR",
           "NL",
           "UK",
-      {
-        "game": "SingStar Dance",
-        "platform": "PS3",
-        "countries": []
-      }
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
         ]
       }
     ]
@@ -11673,11 +10607,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
           "FR",
           "IT",
           "UK",
-      {
-        "game": "SingStar Dance",
-        "platform": "PS3",
-        "countries": []
-      }
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
         ]
       }
     ]
@@ -13461,11 +12391,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "platform": "PS2",
         "countries": [
           "NA",
-      {
-        "game": "SingStar Guitar",
-        "platform": "PS3",
-        "countries": []
-      }
+      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] }
         ]
       }
     ]
@@ -13723,11 +12649,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "countries": [
           "DE",
           "UK",
-      {
-        "game": "SingStar Dance",
-        "platform": "PS3",
-        "countries": []
-      }
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
         ]
       }
     ]
@@ -13813,11 +12735,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
           "DK",
           "PT",
           "UK",
-      {
-        "game": "SingStar Guitar",
-        "platform": "PS3",
-        "countries": []
-      }
+      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] }
         ]
       }
     ]
@@ -14089,11 +13007,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "platform": "PS3",
         "countries": [
           "AU",
-      {
-        "game": "SingStar Dance",
-        "platform": "PS3",
-        "countries": []
-      }
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
         ]
       }
     ]
@@ -14187,11 +13101,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "platform": "PS3",
         "countries": [
           "AU",
-      {
-        "game": "SingStar Dance",
-        "platform": "PS3",
-        "countries": []
-      }
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
         ]
       },
       {
@@ -16253,11 +15163,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "countries": [
           "NA",
           "UK",
-      {
-        "game": "SingStar Dance",
-        "platform": "PS3",
-        "countries": []
-      }
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
         ]
       }
     ]
@@ -20106,11 +19012,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
           "DK",
           "PT",
           "UK",
-      {
-        "game": "SingStar Guitar",
-        "platform": "PS3",
-        "countries": []
-      }
+      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] }
         ]
       }
     ]
@@ -21194,11 +20096,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
           "FR",
           "IT",
           "UK",
-      {
-        "game": "SingStar Dance",
-        "platform": "PS3",
-        "countries": []
-      }
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
         ]
       }
     ]
@@ -22747,11 +21645,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "countries": [
           "NA",
           "UK",
-      {
-        "game": "SingStar Dance",
-        "platform": "PS3",
-        "countries": []
-      }
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
         ]
       }
     ]
@@ -25485,11 +24379,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
           "IT",
           "NA",
           "UK",
-      {
-        "game": "SingStar Dance",
-        "platform": "PS3",
-        "countries": []
-      }
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
         ]
       },
       {
@@ -25953,11 +24843,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "platform": "PS2",
         "countries": [
           "UK",
-      {
-        "game": "SingStar Dance",
-        "platform": "PS3",
-        "countries": []
-      }
+      { "game": "SingStar Dance", "platform": "PS3", "countries": [] }
         ]
       }
     ]
@@ -26010,11 +24896,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         "platform": "PS2",
         "countries": [
           "NA",
-      {
-        "game": "SingStar Guitar",
-        "platform": "PS3",
-        "countries": []
-      }
+      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] }
         ]
       }
     ]
@@ -27704,11 +26586,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
           "NO",
           "UK",
           "US",
-      {
-        "game": "SingStar Guitar",
-        "platform": "PS3",
-        "countries": []
-      }
+      { "game": "SingStar Guitar", "platform": "PS3", "countries": [] }
         ]
       },
       {
@@ -29209,5 +28087,1215 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
         ]
       }
     ]
-  }
+  },
+  "'N Sync - Bye Bye Bye": {
+    "artist": "'N Sync",
+    "title": "Bye Bye Bye",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Cyndi Lauper - Girls Just Want to Have Fun": {
+    "artist": "Cyndi Lauper",
+    "title": "Girls Just Want to Have Fun",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Diana Ross and The Supremes - Baby Love": {
+    "artist": "Diana Ross and The Supremes",
+    "title": "Baby Love",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "KC and the Sunshine Band - That's the Way (I Like It)": {
+    "artist": "KC and the Sunshine Band",
+    "title": "That's the Way (I Like It)",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Kid Cudi vs Crookers - Day 'n' Nite": {
+    "artist": "Kid Cudi vs Crookers",
+    "title": "Day 'n' Nite",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "New Kids on the Block - Hangin' Tough": {
+    "artist": "New Kids on the Block",
+    "title": "Hangin' Tough",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Paula Abdul - Straight Up": {
+    "artist": "Paula Abdul",
+    "title": "Straight Up",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Pitbull - I Know You Want Me (Calle Ocho)": {
+    "artist": "Pitbull",
+    "title": "I Know You Want Me (Calle Ocho)",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Reel 2 Real feat. The Mad Stuntman - I Like to Move It": {
+    "artist": "Reel 2 Real feat. The Mad Stuntman",
+    "title": "I Like to Move It",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Run-D.M.C. vs Jason Nevins - It's Like That": {
+    "artist": "Run-D.M.C. vs Jason Nevins",
+    "title": "It's Like That",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Salt-N-Pepa - Push It": {
+    "artist": "Salt-N-Pepa",
+    "title": "Push It",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Shaggy - Boombastic": {
+    "artist": "Shaggy",
+    "title": "Boombastic",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Soulja Boy Tell 'Em - Crank That": {
+    "artist": "Soulja Boy Tell 'Em",
+    "title": "Crank That",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Backstreet Boys - Everybody (Backstreet's Back)": {
+    "artist": "Backstreet Boys",
+    "title": "Everybody (Backstreet's Back)",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Auletta - Meine Stadt": {
+    "artist": "Auletta",
+    "title": "Meine Stadt",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Bloc Party - Helicopter": {
+    "artist": "Bloc Party",
+    "title": "Helicopter",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Buzzcocks - Ever Fallen in Love": {
+    "artist": "Buzzcocks",
+    "title": "Ever Fallen in Love",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Choirboys - Run to Paradise": {
+    "artist": "Choirboys",
+    "title": "Run to Paradise",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "David Bowie - The Man Who Sold the World": {
+    "artist": "David Bowie",
+    "title": "The Man Who Sold the World",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Die Toten Hosen - Ertrinken": {
+    "artist": "Die Toten Hosen",
+    "title": "Ertrinken",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Elbow - Grounds for Divorce": {
+    "artist": "Elbow",
+    "title": "Grounds for Divorce",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Eskimo Joe - From the Sea": {
+    "artist": "Eskimo Joe",
+    "title": "From the Sea",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Florence and the Machine - Kiss with a Fist": {
+    "artist": "Florence and the Machine",
+    "title": "Kiss with a Fist",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Franz Ferdinand - No You Girls": {
+    "artist": "Franz Ferdinand",
+    "title": "No You Girls",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Ich + Ich - Pflaster": {
+    "artist": "Ich + Ich",
+    "title": "Pflaster",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Jamiroquai - Too Young to Die": {
+    "artist": "Jamiroquai",
+    "title": "Too Young to Die",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Jennifer Rostock - Kopf oder Zahl": {
+    "artist": "Jennifer Rostock",
+    "title": "Kopf oder Zahl",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Kasabian - Fire": {
+    "artist": "Kasabian",
+    "title": "Fire",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Ladyhawke - My Delirium": {
+    "artist": "Ladyhawke",
+    "title": "My Delirium",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Madsen - Lass die Liebe regieren": {
+    "artist": "Madsen",
+    "title": "Lass die Liebe regieren",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Muse - Supermassive Black Hole": {
+    "artist": "Muse",
+    "title": "Supermassive Black Hole",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Pixies - Debaser": {
+    "artist": "Pixies",
+    "title": "Debaser",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Queen & David Bowie - Under Pressure": {
+    "artist": "Queen & David Bowie",
+    "title": "Under Pressure",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Revolverheld - Spinner": {
+    "artist": "Revolverheld",
+    "title": "Spinner",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Stereophonics - Just Looking": {
+    "artist": "Stereophonics",
+    "title": "Just Looking",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "The Angels - Take a Long Line": {
+    "artist": "The Angels",
+    "title": "Take a Long Line",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "The Stone Roses - Waterfall": {
+    "artist": "The Stone Roses",
+    "title": "Waterfall",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "The BossHoss - Go! Go! Go!": {
+    "artist": "The BossHoss",
+    "title": "Go! Go! Go!",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "The Clash - Rock the Casbah": {
+    "artist": "The Clash",
+    "title": "Rock the Casbah",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "The Cult - She Sells Sanctuary": {
+    "artist": "The Cult",
+    "title": "She Sells Sanctuary",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "The Cure - The Lovecats": {
+    "artist": "The Cure",
+    "title": "The Lovecats",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "The Living End - Prisoner of Society": {
+    "artist": "The Living End",
+    "title": "Prisoner of Society",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "The Veronicas - Untouched": {
+    "artist": "The Veronicas",
+    "title": "Untouched",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "The White Stripes - Fell In Love With a Girl": {
+    "artist": "The White Stripes",
+    "title": "Fell In Love With a Girl",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "The Wrights - Evie Part 1 (Let Your Hair Hang Down)": {
+    "artist": "The Wrights",
+    "title": "Evie Part 1 (Let Your Hair Hang Down)",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Tina Turner - Steamy Windows": {
+    "artist": "Tina Turner",
+    "title": "Steamy Windows",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Tokio Hotel - Automatisch": {
+    "artist": "Tokio Hotel",
+    "title": "Automatisch",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Vampire Weekend - A-Punk": {
+    "artist": "Vampire Weekend",
+    "title": "A-Punk",
+    "editions": [{ "game": "SingStar Guitar", "platform": "PS3", "countries": [] }]
+  },
+  "Banaroo - Dubi Dam Dam": {
+    "artist": "Banaroo",
+    "title": "Dubi Dam Dam",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Bellamy Brothers - Let Your Love Flow": {
+    "artist": "Bellamy Brothers",
+    "title": "Let Your Love Flow",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "DJ Bobo - Chihuahua 2002": {
+    "artist": "DJ Bobo",
+    "title": "Chihuahua 2002",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "DJ Ötzi & Nik P. - Ein Stern (Der Deinen Namen Trägt)": {
+    "artist": "DJ Ötzi & Nik P.",
+    "title": "Ein Stern (Der Deinen Namen Trägt)",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "E.A.V. (Erste Allgemeine Verunsicherung) - Ding Dong": {
+    "artist": "E.A.V. (Erste Allgemeine Verunsicherung)",
+    "title": "Ding Dong",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Fritz & The Downhill Gang - Genie Auf Die Ski": {
+    "artist": "Fritz & The Downhill Gang",
+    "title": "Genie Auf Die Ski",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Guildo Horn & Die Orthopädischen Strümpfe - Guildo Hat Euch Lieb": {
+    "artist": "Guildo Horn & Die Orthopädischen Strümpfe",
+    "title": "Guildo Hat Euch Lieb",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Hermes House Band - Country Roads": {
+    "artist": "Hermes House Band",
+    "title": "Country Roads",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Höhner - Viva Colonia (Da Simmer Dabei, Dat Is Prima!)": {
+    "artist": "Höhner",
+    "title": "Viva Colonia (Da Simmer Dabei, Dat Is Prima!)",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Höhner - Wenn Nicht Jetzt, Wann Dann (Weltmeister Version)?": {
+    "artist": "Höhner",
+    "title": "Wenn Nicht Jetzt, Wann Dann (Weltmeister Version)?",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Jumpy & Mungo Jerry - In Der Winterzeit": {
+    "artist": "Jumpy & Mungo Jerry",
+    "title": "In Der Winterzeit",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "K 2 - Der Berg Ruft": {
+    "artist": "K 2",
+    "title": "Der Berg Ruft",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Krümel - Zieh Dich Aus Wir Müssen Reden": {
+    "artist": "Krümel",
+    "title": "Zieh Dich Aus Wir Müssen Reden",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Lollies - Wenn Du Denkst Du Denkst...": {
+    "artist": "Lollies",
+    "title": "Wenn Du Denkst Du Denkst...",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Mickie Krause - Finger Im Po Mexiko": {
+    "artist": "Mickie Krause",
+    "title": "Finger Im Po Mexiko",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Mickie Krause - Laudato Si": {
+    "artist": "Mickie Krause",
+    "title": "Laudato Si",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Nena - Irgendwie, Irgendwo, Irgendwann": {
+    "artist": "Nena",
+    "title": "Irgendwie, Irgendwo, Irgendwann",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Olaf Henning - Cowboy Und Indianer": {
+    "artist": "Olaf Henning",
+    "title": "Cowboy Und Indianer",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Oliver Pocher - Schwarz Und Weiss": {
+    "artist": "Oliver Pocher",
+    "title": "Schwarz Und Weiss",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Peter Wackel - Ladioo": {
+    "artist": "Peter Wackel",
+    "title": "Ladioo",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Peter Wackel - Ü 30": {
+    "artist": "Peter Wackel",
+    "title": "Ü 30",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "PS Alex - Eine Frau Die Mich Nach Hause Trägt": {
+    "artist": "PS Alex",
+    "title": "Eine Frau Die Mich Nach Hause Trägt",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Rabaue - Was Kann Ich Denn Dafür ... (Dass Ich Schön Bin)": {
+    "artist": "Rabaue",
+    "title": "Was Kann Ich Denn Dafür ... (Dass Ich Schön Bin)",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "De Randfichten - Lebt Denn Dr Alte Holzmichl Noch...?": {
+    "artist": "De Randfichten",
+    "title": "Lebt Denn Dr Alte Holzmichl Noch...?",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Rednex - Cotton Eye Joe": {
+    "artist": "Rednex",
+    "title": "Cotton Eye Joe",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Die Rheinländer - Wir Alle Wollen Immer Nur Das Eine": {
+    "artist": "Die Rheinländer",
+    "title": "Wir Alle Wollen Immer Nur Das Eine",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Right Said Fred - You're My Mate": {
+    "artist": "Right Said Fred",
+    "title": "You're My Mate",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Rühmann's (Sch)erben - Ein Freund, Ein Guter Freund": {
+    "artist": "Rühmann's (Sch)erben",
+    "title": "Ein Freund, Ein Guter Freund",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Wolfgang Petry - Wahnsinn": {
+    "artist": "Wolfgang Petry",
+    "title": "Wahnsinn",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Yoomiii - A Kiss Is All I Miss": {
+    "artist": "Yoomiii",
+    "title": "A Kiss Is All I Miss",
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Bernd Clüver - Der Junge Mit Der Mundharmonika": {
+    "artist": "Bernd Clüver",
+    "title": "Der Junge Mit Der Mundharmonika",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Bino - Mama Leone (Deutsche Version)": {
+    "artist": "Bino",
+    "title": "Mama Leone (Deutsche Version)",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Chris Roberts - Du Kannst Nicht Immer 17 Sein": {
+    "artist": "Chris Roberts",
+    "title": "Du Kannst Nicht Immer 17 Sein",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Cindy & Bert - Immer Wieder Sonntags": {
+    "artist": "Cindy & Bert",
+    "title": "Immer Wieder Sonntags",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Costa Cordalis - Anita": {
+    "artist": "Costa Cordalis",
+    "title": "Anita",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Dschinghis Khan - Dschinghis Khan": {
+    "artist": "Dschinghis Khan",
+    "title": "Dschinghis Khan",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Gebrüder Blattschuss - Kreuzberger Nächte": {
+    "artist": "Gebrüder Blattschuss",
+    "title": "Kreuzberger Nächte",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Gitte - So Schön Kann Doch Kein Mann Sein": {
+    "artist": "Gitte",
+    "title": "So Schön Kann Doch Kein Mann Sein",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Gus Backus - Da Sprach Der Alte Häuptling Der Indianer": {
+    "artist": "Gus Backus",
+    "title": "Da Sprach Der Alte Häuptling Der Indianer",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Henry Valentino & Uschi - Im Wagen Vor Mir": {
+    "artist": "Henry Valentino & Uschi",
+    "title": "Im Wagen Vor Mir",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Howard Carpendale - Hello Again": {
+    "artist": "Howard Carpendale",
+    "title": "Hello Again",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Howard Carpendale - Tür An Tür Mit Alice": {
+    "artist": "Howard Carpendale",
+    "title": "Tür An Tür Mit Alice",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Juliane Werding - Am Tag Als Conny Kramer Starb": {
+    "artist": "Juliane Werding",
+    "title": "Am Tag Als Conny Kramer Starb",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Jürgen Marcus - Eine Neue Liebe Ist Wie Ein Neues Leben": {
+    "artist": "Jürgen Marcus",
+    "title": "Eine Neue Liebe Ist Wie Ein Neues Leben",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Klaus & Klaus - An Der Nordseeküste": {
+    "artist": "Klaus & Klaus",
+    "title": "An Der Nordseeküste",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Marianne Rosenberg - Er Gehört Zu Mir": {
+    "artist": "Marianne Rosenberg",
+    "title": "Er Gehört Zu Mir",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Michael Holm - Mendocino": {
+    "artist": "Michael Holm",
+    "title": "Mendocino",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Michael Holm - Tränen Lügen Nicht": {
+    "artist": "Michael Holm",
+    "title": "Tränen Lügen Nicht",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Nicole - Ein Bißchen Frieden": {
+    "artist": "Nicole",
+    "title": "Ein Bißchen Frieden",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Peter Alexander - Kleine Kneipe": {
+    "artist": "Peter Alexander",
+    "title": "Kleine Kneipe",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Peter Maffay - Und Es War Sommer": {
+    "artist": "Peter Maffay",
+    "title": "Und Es War Sommer",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Rainhard Fendrich - Macho Macho": {
+    "artist": "Rainhard Fendrich",
+    "title": "Macho Macho",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Rex Gildo - Fiesta Mexicana": {
+    "artist": "Rex Gildo",
+    "title": "Fiesta Mexicana",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Roberto Blanco - Ein Bisschen Spaß Muss Sein!": {
+    "artist": "Roberto Blanco",
+    "title": "Ein Bisschen Spaß Muss Sein!",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Roland Kaiser - Dich Zu Lieben": {
+    "artist": "Roland Kaiser",
+    "title": "Dich Zu Lieben",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Roy Black & Anita - Schön Ist Es Auf Der Welt Zu Sein": {
+    "artist": "Roy Black & Anita",
+    "title": "Schön Ist Es Auf Der Welt Zu Sein",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Siw Malmkvist - Liebeskummer Lohnt Sich Nicht": {
+    "artist": "Siw Malmkvist",
+    "title": "Liebeskummer Lohnt Sich Nicht",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Tony Marshall - Schöne Maid": {
+    "artist": "Tony Marshall",
+    "title": "Schöne Maid",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Wencke Myhre - Er Hat Ein Knallrotes Gummiboot": {
+    "artist": "Wencke Myhre",
+    "title": "Er Hat Ein Knallrotes Gummiboot",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Wolfgang Petry - Verlieben, Verloren, Vergessen, Verzeih'n": {
+    "artist": "Wolfgang Petry",
+    "title": "Verlieben, Verloren, Vergessen, Verzeih'n",
+    "editions": [{ "game": "SingStar Schlager", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "2raumwohnung - Wir Trafen Uns In Einem Garten": {
+    "artist": "2raumwohnung",
+    "title": "Wir Trafen Uns In Einem Garten",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Annett Louisan - Das Gefühl": {
+    "artist": "Annett Louisan",
+    "title": "Das Gefühl",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Ayman - Mein Stern": {
+    "artist": "Ayman",
+    "title": "Mein Stern",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Buddy - Ab In Den Süden 2004": {
+    "artist": "Buddy",
+    "title": "Ab In Den Süden 2004",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Christina Stürmer - Immer An Euch Geglaubt": {
+    "artist": "Christina Stürmer",
+    "title": "Immer An Euch Geglaubt",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Clueso - Kein Bock Zu Geh'n": {
+    "artist": "Clueso",
+    "title": "Kein Bock Zu Geh'n",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Echt - Weinst Du": {
+    "artist": "Echt",
+    "title": "Weinst Du",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Familie - Und Tschüss": {
+    "artist": "Die Familie",
+    "title": "Und Tschüss",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Franziska - Schau Mir Ins Gesicht": {
+    "artist": "Franziska",
+    "title": "Schau Mir Ins Gesicht",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Glashaus - Haltet Die Welt An": {
+    "artist": "Glashaus",
+    "title": "Haltet Die Welt An",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Halogenpoeten - Die Ersten": {
+    "artist": "Halogenpoeten",
+    "title": "Die Ersten",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Hund Am Strand - Jungen Mädchen": {
+    "artist": "Hund Am Strand",
+    "title": "Jungen Mädchen",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Ich + Ich - Du Erinnerst Mich An Liebe": {
+    "artist": "Ich + Ich",
+    "title": "Du Erinnerst Mich An Liebe",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Juli - Geile Zeit": {
+    "artist": "Juli",
+    "title": "Geile Zeit",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Juli - Regen Und Meer": {
+    "artist": "Juli",
+    "title": "Regen Und Meer",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Laith Al-Deen - Leb Den Tag": {
+    "artist": "Laith Al-Deen",
+    "title": "Leb Den Tag",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Luka Neuser - Zeit Für Helden": {
+    "artist": "Luka Neuser",
+    "title": "Zeit Für Helden",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Maya Saban + Cosmo Klein - Das Alles Ändert Nichts Daran": {
+    "artist": "Maya Saban + Cosmo Klein",
+    "title": "Das Alles Ändert Nichts Daran",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Ohrbooten - An Alle Ladies": {
+    "artist": "Ohrbooten",
+    "title": "An Alle Ladies",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Olesoul - Was Kostet Die Welt": {
+    "artist": "Olesoul",
+    "title": "Was Kostet Die Welt",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Revolverheld - Freunde Bleiben": {
+    "artist": "Revolverheld",
+    "title": "Freunde Bleiben",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Rosenstolz - Ich Bin Ich (Wir Sind Wir)": {
+    "artist": "Rosenstolz",
+    "title": "Ich Bin Ich (Wir Sind Wir)",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Söhne Mannheims - Und Wenn Ein Lied": {
+    "artist": "Söhne Mannheims",
+    "title": "Und Wenn Ein Lied",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Tokio Hotel - Durch Den Monsun": {
+    "artist": "Tokio Hotel",
+    "title": "Durch Den Monsun",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Alles Aus Liebe": {
+    "artist": "Die Toten Hosen",
+    "title": "Alles Aus Liebe",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Hier Kommt Alex (Unplugged)": {
+    "artist": "Die Toten Hosen",
+    "title": "Hier Kommt Alex (Unplugged)",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Wir Sind Helden - Nur Ein Wort": {
+    "artist": "Wir Sind Helden",
+    "title": "Nur Ein Wort",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Wir Sind Helden - Von Hier An Blind": {
+    "artist": "Wir Sind Helden",
+    "title": "Von Hier An Blind",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Xavier Naidoo - Dieser Weg": {
+    "artist": "Xavier Naidoo",
+    "title": "Dieser Weg",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Yvonne Catterfeld - Sag Mir - Was Meinst Du?": {
+    "artist": "Yvonne Catterfeld",
+    "title": "Sag Mir - Was Meinst Du?",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Auld Lang Syne": {
+    "artist": "Die Toten Hosen",
+    "title": "Auld Lang Syne",
+    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - All Die Ganzen Jahre": {
+    "artist": "Die Toten Hosen",
+    "title": "All Die Ganzen Jahre",
+    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Alles Aus Liebe": {
+    "artist": "Die Toten Hosen",
+    "title": "Alles Aus Liebe",
+    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Alles Wird Vorübergehen": {
+    "artist": "Die Toten Hosen",
+    "title": "Alles Wird Vorübergehen",
+    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Bayern": {
+    "artist": "Die Toten Hosen",
+    "title": "Bayern",
+    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Bonnie & Clyde": {
+    "artist": "Die Toten Hosen",
+    "title": "Bonnie & Clyde",
+    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Eisgekühlter Bommerlunder": {
+    "artist": "Die Toten Hosen",
+    "title": "Eisgekühlter Bommerlunder",
+    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Freunde": {
+    "artist": "Die Toten Hosen",
+    "title": "Freunde",
+    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Friss Oder Stirb": {
+    "artist": "Die Toten Hosen",
+    "title": "Friss Oder Stirb",
+    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Hier Kommt Alex": {
+    "artist": "Die Toten Hosen",
+    "title": "Hier Kommt Alex",
+    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Hier Kommt Alex (Unplugged)": {
+    "artist": "Die Toten Hosen",
+    "title": "Hier Kommt Alex (Unplugged)",
+    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Ich Bin Die Sehnsucht In Dir": {
+    "artist": "Die Toten Hosen",
+    "title": "Ich Bin Die Sehnsucht In Dir",
+    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Kein Alkohol (ist auch keine Lösung)!": {
+    "artist": "Die Toten Hosen",
+    "title": "Kein Alkohol (ist auch keine Lösung)!",
+    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Nur Zu Besuch": {
+    "artist": "Die Toten Hosen",
+    "title": "Nur Zu Besuch",
+    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Paradies": {
+    "artist": "Die Toten Hosen",
+    "title": "Paradies",
+    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Pushed Again": {
+    "artist": "Die Toten Hosen",
+    "title": "Pushed Again",
+    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Schön Sein": {
+    "artist": "Die Toten Hosen",
+    "title": "Schön Sein",
+    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Still, Still, Still": {
+    "artist": "Die Toten Hosen",
+    "title": "Still, Still, Still",
+    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Walkampf": {
+    "artist": "Die Toten Hosen",
+    "title": "Walkampf",
+    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Was Zählt": {
+    "artist": "Die Toten Hosen",
+    "title": "Was Zählt",
+    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Wünsch DIR Was": {
+    "artist": "Die Toten Hosen",
+    "title": "Wünsch DIR Was",
+    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Toten Hosen - Zehn Kleine Jägermeister": {
+    "artist": "Die Toten Hosen",
+    "title": "Zehn Kleine Jägermeister",
+    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "2raumwohnung - 36grad": {
+    "artist": "2raumwohnung",
+    "title": "36grad",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Beatplanet - Dreh Dich Um Und Geh": {
+    "artist": "Beatplanet",
+    "title": "Dreh Dich Um Und Geh",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Christina Stürmer - Scherbenmeer": {
+    "artist": "Christina Stürmer",
+    "title": "Scherbenmeer",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Helge Schneider - Käsebrot": {
+    "artist": "Helge Schneider",
+    "title": "Käsebrot",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Ich + Ich - Umarme Mich": {
+    "artist": "Ich + Ich",
+    "title": "Umarme Mich",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Jan Delay - Klar": {
+    "artist": "Jan Delay",
+    "title": "Klar",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Joy Denalane - Was auch immer": {
+    "artist": "Joy Denalane",
+    "title": "Was auch immer",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Juli - Wir Beide": {
+    "artist": "Juli",
+    "title": "Wir Beide",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Killerpilze - Ich Kann Auch Ohne Dich": {
+    "artist": "Killerpilze",
+    "title": "Ich Kann Auch Ohne Dich",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Kim Frank - Lara": {
+    "artist": "Kim Frank",
+    "title": "Lara",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Luttenberger-Klug - Super Sommer": {
+    "artist": "Luttenberger-Klug",
+    "title": "Super Sommer",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Madsen - Du Schreibst Geschichte": {
+    "artist": "Madsen",
+    "title": "Du Schreibst Geschichte",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Maya Saban - Hautnah": {
+    "artist": "Maya Saban",
+    "title": "Hautnah",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Mellow Mark - Was Geht Ab Mit Der Liebe": {
+    "artist": "Mellow Mark",
+    "title": "Was Geht Ab Mit Der Liebe",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "MIA. - Zirkus": {
+    "artist": "MIA.",
+    "title": "Zirkus",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Moulinettes - Herr Rossi Sucht Das Glück": {
+    "artist": "Die Moulinettes",
+    "title": "Herr Rossi Sucht Das Glück",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Ohrbooten - Bewegung": {
+    "artist": "Ohrbooten",
+    "title": "Bewegung",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Oliver Pocher - Schwarz Und Weiss": {
+    "artist": "Oliver Pocher",
+    "title": "Schwarz Und Weiss",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Pohlmann. - Wenn Jetzt Sommer Wär": {
+    "artist": "Pohlmann.",
+    "title": "Wenn Jetzt Sommer Wär",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Die Prinzen - Alles Nur Geklaut": {
+    "artist": "Die Prinzen",
+    "title": "Alles Nur Geklaut",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Pur - Ein Graues Haar": {
+    "artist": "Pur",
+    "title": "Ein Graues Haar",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Revolverheld - Generation Rock": {
+    "artist": "Revolverheld",
+    "title": "Generation Rock",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Roger Cicero - Zieh Die Schuh Aus": {
+    "artist": "Roger Cicero",
+    "title": "Zieh Die Schuh Aus",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Rosenstolz - Aus Liebe Wollt Ich Alles Wissen": {
+    "artist": "Rosenstolz",
+    "title": "Aus Liebe Wollt Ich Alles Wissen",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "RZA feat. Xavier Naidoo - Ich Kenne Nichts (Das So Schön Ist Wie Du)": {
+    "artist": "RZA feat. Xavier Naidoo",
+    "title": "Ich Kenne Nichts (Das So Schön Ist Wie Du)",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "SDP - Der Anfang Anzufangen": {
+    "artist": "SDP",
+    "title": "Der Anfang Anzufangen",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Tele - Mario": {
+    "artist": "Tele",
+    "title": "Mario",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Tokio Hotel - Schrei": {
+    "artist": "Tokio Hotel",
+    "title": "Schrei",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Virginia Jetzt - Mehr Als Das": {
+    "artist": "Virginia Jetzt",
+    "title": "Mehr Als Das",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Wir Sind Helden - Soundso": {
+    "artist": "Wir Sind Helden",
+    "title": "Soundso",
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+  },
+  "Alişan - Olay Bitmiştir": {
+    "artist": "Alişan",
+    "title": "Olay Bitmiştir",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Ankaralı Namık - Hovarda": {
+    "artist": "Ankaralı Namık",
+    "title": "Hovarda",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Burcu Güneş - Çile Bülbülüm": {
+    "artist": "Burcu Güneş",
+    "title": "Çile Bülbülüm",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Demet Akalın - Tatil": {
+    "artist": "Demet Akalın",
+    "title": "Tatil",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Ferda Anıl Yarkin - Ayrılmayalım": {
+    "artist": "Ferda Anıl Yarkin",
+    "title": "Ayrılmayalım",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Ferdi Tayfur - Çiçekler Açsın": {
+    "artist": "Ferdi Tayfur",
+    "title": "Çiçekler Açsın",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Gülben Ergen - Sürpriz": {
+    "artist": "Gülben Ergen",
+    "title": "Sürpriz",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Gülşen - Of Of": {
+    "artist": "Gülşen",
+    "title": "Of Of",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Gündoğarken - Elimde Olsaydı": {
+    "artist": "Gündoğarken",
+    "title": "Elimde Olsaydı",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Hande Yener - Kırmızı": {
+    "artist": "Hande Yener",
+    "title": "Kırmızı",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "İbrahim Tatlıses - Ağrı Dağın": {
+    "artist": "İbrahim Tatlıses",
+    "title": "Ağrı Dağın",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Kargo - Ateş Ve Su": {
+    "artist": "Kargo",
+    "title": "Ateş Ve Su",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Kayahan - Seninle Herşeye Varım Ben": {
+    "artist": "Kayahan",
+    "title": "Seninle Herşeye Varım Ben",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Kenan Doğulu - Baş Harfi Ben": {
+    "artist": "Kenan Doğulu",
+    "title": "Baş Harfi Ben",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Kutsi - Sana Ne": {
+    "artist": "Kutsi",
+    "title": "Sana Ne",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Mor Ve Ötesi - Cambaz": {
+    "artist": "Mor Ve Ötesi",
+    "title": "Cambaz",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Muazzez Ersoy - Emanetim": {
+    "artist": "Muazzez Ersoy",
+    "title": "Emanetim",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Murat Boz - Püf": {
+    "artist": "Murat Boz",
+    "title": "Püf",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Mustafa Sandal - Aşka Yürek Gerek": {
+    "artist": "Mustafa Sandal",
+    "title": "Aşka Yürek Gerek",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Mustafa Sandal - İndir": {
+    "artist": "Mustafa Sandal",
+    "title": "İndir",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Mustafa Sandal - İsyankar": {
+    "artist": "Mustafa Sandal",
+    "title": "İsyankar",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Öykü & Berk - Evlerinin Önü Boyalı Direk": {
+    "artist": "Öykü & Berk",
+    "title": "Evlerinin Önü Boyalı Direk",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Rober Hatemo - Senden Çok Var": {
+    "artist": "Rober Hatemo",
+    "title": "Senden Çok Var",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Seda Sayan - Bebeğim": {
+    "artist": "Seda Sayan",
+    "title": "Bebeğim",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Sezen Aksu - Şarkı Soylemek Lazım": {
+    "artist": "Sezen Aksu",
+    "title": "Şarkı Soylemek Lazım",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Sezen Aksu & Teoman - Paramparça": {
+    "artist": "Sezen Aksu & Teoman",
+    "title": "Paramparça",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Tarkan - Kuzu Kuzu": {
+    "artist": "Tarkan",
+    "title": "Kuzu Kuzu",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Tarkan - Şımarık (Kiss Kiss)": {
+    "artist": "Tarkan",
+    "title": "Şımarık (Kiss Kiss)",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Yıldız Tilbe - Ben Senin Var Ya": {
+    "artist": "Yıldız Tilbe",
+    "title": "Ben Senin Var Ya",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "Yurtseven Kardeşler - Şimdi Halay Zamanı": {
+    "artist": "Yurtseven Kardeşler",
+    "title": "Şimdi Halay Zamanı",
+    "editions": [{ "game": "SingStar Turkish Party", "platform": "PS2", "countries": ["TR"] }]
+  },
+  "101 Dalmatians - Cruella De Vil": {
+    "artist": "101 Dalmatians",
+    "title": "Cruella De Vil",
+    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
+  },
+  "Aladdin - A Whole New World": {
+    "artist": "Aladdin",
+    "title": "A Whole New World",
+    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
+  },
+  "Beauty And The Beast - Beauty And The Beast": {
+    "artist": "Beauty And The Beast",
+    "title": "Beauty And The Beast",
+    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
+  },
+  "Cinderella - Bibbidi-Bobbidi-Boo": {
+    "artist": "Cinderella",
+    "title": "Bibbidi-Bobbidi-Boo",
+    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
+  },
+  "Cinderella - The Work Song": {
+    "artist": "Cinderella",
+    "title": "The Work Song",
+    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
+  },
+  "Lady And The Tramp - He's A Tramp": {
+    "artist": "Lady And The Tramp",
+    "title": "He's A Tramp",
+    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
+  },
+  "Peter Pan - Following The Leader": {
+    "artist": "Peter Pan",
+    "title": "Following The Leader",
+    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
+  },
+  "Peter Pan - You Can Fly": {
+    "artist": "Peter Pan",
+    "title": "You Can Fly",
+    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
+  },
+  "Pinocchio - When You Wish Upon A Star": {
+    "artist": "Pinocchio",
+    "title": "When You Wish Upon A Star",
+    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
+  },
+  "Sleeping Beauty - Once Upon A Dream": {
+    "artist": "Sleeping Beauty",
+    "title": "Once Upon A Dream",
+    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
+  },
+  "Tarzan - Son Of Man": {
+    "artist": "Tarzan",
+    "title": "Son Of Man",
+    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
+  },
+  "The Aristocats - Ev'rybody Wants To Be A Cat": {
+    "artist": "The Aristocats",
+    "title": "Ev'rybody Wants To Be A Cat",
+    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
+  },
+  "The Jungle Book - The Bare Necessities": {
+    "artist": "The Jungle Book",
+    "title": "The Bare Necessities",
+    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
+  },
+  "The Jungle Book - I Wanna Be Like You": {
+    "artist": "The Jungle Book",
+    "title": "I Wanna Be Like You",
+    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
+  },
+  "The Little Mermaid - Under The Sea": {
+    "artist": "The Little Mermaid",
+    "title": "Under The Sea",
+    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
+  },
+  "The Little Mermaid - Kiss The Girl": {
+    "artist": "The Little Mermaid",
+    "title": "Kiss The Girl",
+    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
+  },
+  "The Lion King - I Just Can't Wait To Be King": {
+    "artist": "The Lion King",
+    "title": "I Just Can't Wait To Be King",
+    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
+  },
+  "The Lion King - Circle Of Life": {
+    "artist": "The Lion King",
+    "title": "Circle Of Life",
+    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
+  },
+  "Toy Story - You've Got A Friend In Me": {
+    "artist": "Toy Story",
+    "title": "You've Got A Friend In Me",
+    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
+  },
+  "Winnie The Pooh - Winnie The Pooh": {
+    "artist": "Winnie The Pooh",
+    "title": "Winnie The Pooh",
+    "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
+  },
+  "Blink-182 - What's My Age Again?": {
+    "artist": "Blink-182",
+    "title": "What's My Age Again?",
+    "editions": [{ "game": "SingStar Pop", "platform": "PS2", "countries": ["DE"] }]
+  },
+  "Joss Stone - Super Duper Love (Are You Diggin' on Me) Pt. 1": {
+    "artist": "Joss Stone",
+    "title": "Super Duper Love (Are You Diggin' on Me) Pt. 1",
+    "editions": [{ "game": "SingStar Pop", "platform": "PS2", "countries": ["DE"] }]
+  },
 } as const;
