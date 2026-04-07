@@ -13,10 +13,16 @@ export type SingStarGame =
   | "SingStar ABBA"
   | "SingStar Amped"
   | "SingStar Anthems"
+  | "SingStar Après-Ski Party"
   | "SingStar Boy Bands vs Girl Bands"
   | "SingStar Chart Hits"
   | "SingStar Chartbreaker"
   | "SingStar Country"
+  | "SingStar Dance"
+  | "SingStar Deutsch Rock-Pop"
+  | "SingStar Deutsch Rock-Pop Vol. 2"
+  | "SingStar Die Toten Hosen"
+  | "SingStar Guitar"
   | "SingStar Hits"
   | "SingStar Hottest Hits"
   | "SingStar Legends"
@@ -35,11 +41,14 @@ export type SingStarGame =
   | "SingStar R&B"
   | "SingStar Rock Ballads"
   | "SingStar Rocks!"
+  | "SingStar Schlager"
   | "SingStar Starter Pack"
   | "SingStar Studio 100"
   | "SingStar Summer Party"
+  | "SingStar Singalong with Disney"
   | "SingStar Take That"
   | "SingStar The Wiggles"
+  | "SingStar Turkish Party"
   | "SingStar Ultimate Party"
   | "SingStar Vasco"
   | "SingStar Vol. 2"
@@ -93,10 +102,16 @@ export const KNOWN_SINGSTAR_GAMES = new Set<string>([
   "SingStar ABBA",
   "SingStar Amped",
   "SingStar Anthems",
+  "SingStar Après-Ski Party",
   "SingStar Boy Bands vs Girl Bands",
   "SingStar Chart Hits",
   "SingStar Chartbreaker",
   "SingStar Country",
+  "SingStar Dance",
+  "SingStar Deutsch Rock-Pop",
+  "SingStar Deutsch Rock-Pop Vol. 2",
+  "SingStar Die Toten Hosen",
+  "SingStar Guitar",
   "SingStar Hits",
   "SingStar Hottest Hits",
   "SingStar Legends",
@@ -115,11 +130,14 @@ export const KNOWN_SINGSTAR_GAMES = new Set<string>([
   "SingStar R&B",
   "SingStar Rock Ballads",
   "SingStar Rocks!",
+  "SingStar Schlager",
   "SingStar Starter Pack",
   "SingStar Studio 100",
   "SingStar Summer Party",
+  "SingStar Singalong with Disney",
   "SingStar Take That",
   "SingStar The Wiggles",
+  "SingStar Turkish Party",
   "SingStar Ultimate Party",
   "SingStar Vasco",
   "SingStar Vol. 2",

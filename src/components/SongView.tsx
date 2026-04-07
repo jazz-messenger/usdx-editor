@@ -284,10 +284,11 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
       />
 
       {/* ── Deprecated fields notice ── */}
-      {song.deprecatedFields.length > 0 && !deprecationDismissed && (
+      {/* 'MP3' is intentionally excluded: we preserve it as-is on export, so nothing changes on save. */}
+      {song.deprecatedFields.filter(f => f !== 'MP3').length > 0 && !deprecationDismissed && (
         <div className="missing-files-banner missing-files-banner--info">
           <span className="missing-files-icon">ℹ</span>
-          <span className="missing-files-text">{t.songview.deprecationBanner(song.deprecatedFields)}</span>
+          <span className="missing-files-text">{t.songview.deprecationBanner(song.deprecatedFields.filter(f => f !== 'MP3'))}</span>
           <button className="missing-files-dismiss" onClick={() => setDeprecationDismissed(true)} title={t.songview.closeMissing}>✕</button>
         </div>
       )}

@@ -42,15 +42,22 @@ describe('SongView', () => {
     expect(screen.getByText('Hello')).toBeInTheDocument()
   })
 
-  it('shows deprecation banner when deprecated fields are present', () => {
+  it('shows deprecation banner for non-MP3 deprecated fields', () => {
     renderSongView({ deprecatedFields: ['MP3', 'AUTHOR'] })
     expect(screen.getByText(/veraltete felder erkannt/i)).toBeInTheDocument()
-    expect(screen.getByText(/MP3/)).toBeInTheDocument()
+    // MP3 is preserved as-is on export → not shown in the banner
+    expect(screen.queryByText(/\bMP3\b/)).not.toBeInTheDocument()
     expect(screen.getByText(/AUTHOR/)).toBeInTheDocument()
   })
 
-  it('dismisses deprecation banner on click', async () => {
+  it('does not show deprecation banner when only MP3 is deprecated', () => {
+    // MP3 is preserved on export — no user action needed, so no banner
     renderSongView({ deprecatedFields: ['MP3'] })
+    expect(screen.queryByText(/veraltete felder erkannt/i)).not.toBeInTheDocument()
+  })
+
+  it('dismisses deprecation banner on click', async () => {
+    renderSongView({ deprecatedFields: ['AUTHOR'] })
     const dismiss = screen.getAllByTitle(/schließen/i)[0]
     await userEvent.click(dismiss)
     expect(screen.queryByText(/veraltete felder erkannt/i)).not.toBeInTheDocument()

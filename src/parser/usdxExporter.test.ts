@@ -60,6 +60,25 @@ describe('exportUsdx', () => {
     expect(output).not.toContain('#MP3')
   })
 
+  it('omits #AUDIO/#MP3 when audio filename equals video filename', () => {
+    // When audio and video are the same file, UltraStar uses the video's audio track.
+    // Including both causes VIDEOGAP to be applied to the audio too (double offset).
+    const src = SONG.replace('#MP3:test.mp3', '#AUDIO:song.mp4\n#VIDEO:song.mp4')
+    const song = parseUsdx(src)
+    const output = exportUsdx(song, {})
+    expect(output).not.toContain('#AUDIO')
+    expect(output).not.toContain('#MP3')
+    expect(output).toContain('#VIDEO:song.mp4')
+  })
+
+  it('keeps #AUDIO when audio and video have different filenames', () => {
+    const src = SONG.replace('#MP3:test.mp3', '#AUDIO:song.mp3\n#VIDEO:song.mp4')
+    const song = parseUsdx(src)
+    const output = exportUsdx(song, {})
+    expect(output).toContain('#AUDIO:song.mp3')
+    expect(output).toContain('#VIDEO:song.mp4')
+  })
+
   it('does not write a trailing bare dash before E', () => {
     // A bare "-" as the last line before "E" causes USDX to skip the song
     const song = parseUsdx(SONG)

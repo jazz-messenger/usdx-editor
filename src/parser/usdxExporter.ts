@@ -36,7 +36,12 @@ export function exportUsdx(
   // #VERSION omitted until USDX officially supports it (currently causes song to be skipped)
   lines.push(`#TITLE:${header.title}`)
   lines.push(`#ARTIST:${header.artist}`)
-  if (header.audio) lines.push(`${song.deprecatedFields.includes('MP3') ? '#MP3' : '#AUDIO'}:${header.audio}`)
+  // Omit audio tag when the video file IS the audio source — UltraStar will use
+  // the video's embedded audio track. Including both with the same filename causes
+  // UltraStar to apply VIDEOGAP to the audio too, creating a duplicate offset.
+  if (header.audio && header.audio !== header.video) {
+    lines.push(`${song.deprecatedFields.includes('MP3') ? '#MP3' : '#AUDIO'}:${header.audio}`)
+  }
   lines.push(`#BPM:${header.bpm}`)
   lines.push(`#GAP:${Math.round(header.gap)}`)
   if (header.videoGap)      lines.push(`#VIDEOGAP:${Math.round(header.videoGap)}`)

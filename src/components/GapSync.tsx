@@ -194,9 +194,20 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
 
   const switchTab = useCallback((tab: typeof activeTab) => {
     if (tab === activeTab) return
-    handoverTimeRef.current = isPlaying ? getCurrentTime() : null
+    if (isPlaying) {
+      const rawTime = getCurrentTime()
+      // Convert to new tab's reference frame: audio ↔ video differ by videoGap
+      const fromAudio = activeTab === 'audio'
+      const toAudio   = tab === 'audio'
+      let newTime = rawTime
+      if (fromAudio && !toAudio) newTime = rawTime + videoGap   // audio→video: shift forward
+      else if (!fromAudio && toAudio) newTime = rawTime - videoGap // video→audio: shift back
+      handoverTimeRef.current = newTime
+    } else {
+      handoverTimeRef.current = null
+    }
     setActiveTab(tab)
-  }, [activeTab, isPlaying, getCurrentTime])
+  }, [activeTab, isPlaying, getCurrentTime, videoGap])
 
   // Pause the player that just became inactive
   useEffect(() => {
@@ -222,6 +233,11 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
   // Displayed video clock — updated by RAF while playing, or after seeks
   const [videoTime, setVideoTime] = useState(0)
 
+  // Converts a raw player time to song-relative ms.
+  // Audio tab: player time IS audio time → multiply directly.
+  // Video/YouTube tab: subtract VIDEOGAP first (video is offset by that amount).
+  const toSongMs = (t: number) => activeTab === 'audio' ? t * 1000 : (t - videoGap) * 1000
+
   // Drive highlight updates and video clock via requestAnimationFrame (~60 fps).
   useEffect(() => {
     if (!isPlaying) return
@@ -229,29 +245,33 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
     const tick = () => {
       const t = getCurrentTime()
       if (!isDraggingSlider.current) setVideoTime(t)
-      onTimeUpdate?.((t - videoGap) * 1000)
+      onTimeUpdate?.(toSongMs(t))
       rafId = requestAnimationFrame(tick)
     }
     rafId = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(rafId)
-  }, [isPlaying, onTimeUpdate, getCurrentTime, videoGap])
+  }, [isPlaying, onTimeUpdate, getCurrentTime, videoGap, activeTab]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Seek to VIDEOGAP position and start — puts video right at song beat 0.
+  // Seek to song-start position and play.
+  // Audio tab: audio begins at t=0, so seek to 0.
+  // Video/YouTube tab: the video frame for beat 0 is at VIDEOGAP seconds.
   const handleStart = () => {
     onReset?.()
-    seekTo(videoGap)
+    seekTo(activeTab === 'audio' ? 0 : videoGap)
     play()
   }
 
-  // External jump-to-GAP trigger from WaveformView — seeks to GAP position offset by VIDEOGAP
+  // External jump-to-GAP trigger from WaveformView — seeks to beat-0 position.
+  // Audio tab: beat 0 = GAP/1000 seconds into audio.
+  // Video/YouTube tab: beat 0 = VIDEOGAP + GAP/1000 seconds into video.
   const lastStartSignal = useRef(0)
   useEffect(() => {
     if (!startSignal || startSignal === lastStartSignal.current || playerState !== 'ready') return
     lastStartSignal.current = startSignal
     onReset?.()
-    seekTo(videoGap + gap / 1000)
+    seekTo(activeTab === 'audio' ? gap / 1000 : videoGap + gap / 1000)
     play()
-  }, [startSignal, playerState, gap, videoGap, seekTo, play, onReset])
+  }, [startSignal, playerState, gap, videoGap, activeTab, seekTo, play, onReset])
 
   // Changing VIDEOGAP: update state AND immediately seek so the video frame
   // jumps to the new position for instant visual feedback.
@@ -263,11 +283,18 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
     }
   }
 
-  // Set GAP from the current video position, corrected for VIDEOGAP.
-  // GAP (ms into audio) = (videoTime − videoGap) × 1000
+  // Set GAP from the current playback position (tab-aware).
+  // Audio tab: GAP = currentTime * 1000
+  // Video/YT tab: GAP = (currentTime − videoGap) × 1000
   const handleSync = () => {
-    const ms = Math.round((getCurrentTime() - videoGap) * 1000)
-    onChange(ms)
+    onChange(Math.round(toSongMs(getCurrentTime())))
+  }
+
+  // Set VIDEOGAP from the current video position — only active in video/youtube tabs.
+  // The user should seek to beat 0 first; then: VIDEOGAP = currentVideoTime − GAP/1000
+  const handleSyncVideoGap = () => {
+    const vg = Math.round((getCurrentTime() - gap / 1000) * 10) / 10
+    onVideoGapChange(vg)
   }
 
   const handleSearch = async () => {
@@ -344,7 +371,16 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
           />
           <span className="gap-unit">{t.gapsync.s}</span>
         </div>
-        <span />
+        {isPlayerReady && activeTab !== 'audio'
+          ? (
+            <Tooltip text={t.gapsync.syncVideoGapTitle}>
+              <button className="btn-sync" onClick={handleSyncVideoGap}>
+                {t.gapsync.syncNow}
+              </button>
+            </Tooltip>
+          )
+          : <span />
+        }
       </div>
 
       {/* ── Source switcher — 3 fixed tabs ── */}
@@ -535,7 +571,7 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
             setVideoTime(t)
             seekTo(t)
             // Notify App even while paused so activePos updates and lyrics scroll
-            onTimeUpdate?.((t - videoGap) * 1000)
+            onTimeUpdate?.(toSongMs(t))
           }}
           onPointerUp={() => { isDraggingSlider.current = false }}
           title={t.gapsync.seekTitle}
@@ -546,14 +582,14 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
       {isPlayerReady && (
         <>
           <div className="gap-sync-transport">
-            {/* Reset-to-start: always seeks to videoGap position */}
-            <Tooltip text={videoGap > 0 ? t.gapsync.startWithGap(videoGap) : t.gapsync.startFromBeginning}>
+            {/* Reset-to-start: audio→t=0, video→VIDEOGAP */}
+            <Tooltip text={activeTab === 'audio' || videoGap === 0 ? t.gapsync.startFromBeginning : t.gapsync.startWithGap(videoGap)}>
               <button className="btn-transport" onClick={handleStart}>
-                {t.gapsync.startLabel(videoGap)}
+                {activeTab === 'audio' ? '↩ Start' : t.gapsync.startLabel(videoGap)}
               </button>
             </Tooltip>
             <Tooltip text={t.gapsync.jumpToGapTooltip}>
-              <button className="btn-transport" onClick={() => { onReset?.(); seekTo(videoGap + gap / 1000); play() }}>
+              <button className="btn-transport" onClick={() => { onReset?.(); seekTo(activeTab === 'audio' ? gap / 1000 : videoGap + gap / 1000); play() }}>
                 {t.gapsync.jumpToGapLabel}
               </button>
             </Tooltip>
