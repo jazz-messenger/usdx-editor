@@ -7,6 +7,7 @@ import { KofiWidget } from './components/KofiWidget'
 import { HelpModal } from './components/HelpModal'
 import type { SongFileMap } from './utils/fileLoader'
 import { useLanguage } from './i18n/LanguageContext'
+import { version } from '../package.json'
 import type { Locale } from './i18n/translations'
 
 export default function App() {
@@ -77,7 +78,7 @@ export default function App() {
               <footer className="landing-footer">
                 <a href="/impressum.html">{t.app.impressum}</a>
                 <a href="/datenschutz.html">{t.app.datenschutz}</a>
-                <span className="landing-footer-version">v1.1.0</span>
+                <span className="landing-footer-version">v{version}</span>
               </footer>
             </div>
           )
