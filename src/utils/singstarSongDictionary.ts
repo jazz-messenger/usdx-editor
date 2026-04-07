@@ -3276,7 +3276,7 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
           "SE",
           "UK"
         ]
-      }
+  }
     ]
   },
   "Bloc Party - Banquet": {
@@ -28422,7 +28422,9 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
   "Oliver Pocher - Schwarz Und Weiss": {
     "artist": "Oliver Pocher",
     "title": "Schwarz Und Weiss",
-    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] }]
+    "editions": [{ "game": "SingStar Après-Ski Party", "platform": "PS2", "countries": ["DE"] },
+      { "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }
+    ]
   },
   "Peter Wackel - Ladioo": {
     "artist": "Peter Wackel",
@@ -28752,12 +28754,16 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
   "Die Toten Hosen - Alles Aus Liebe": {
     "artist": "Die Toten Hosen",
     "title": "Alles Aus Liebe",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] },
+      { "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }
+    ]
   },
   "Die Toten Hosen - Hier Kommt Alex (Unplugged)": {
     "artist": "Die Toten Hosen",
     "title": "Hier Kommt Alex (Unplugged)",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] }]
+    "editions": [{ "game": "SingStar Deutsch Rock-Pop", "platform": "PS2", "countries": ["DE","AT","CH"] },
+      { "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }
+    ]
   },
   "Wir Sind Helden - Nur Ein Wort": {
     "artist": "Wir Sind Helden",
@@ -28787,11 +28793,6 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
   "Die Toten Hosen - All Die Ganzen Jahre": {
     "artist": "Die Toten Hosen",
     "title": "All Die Ganzen Jahre",
-    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
-  },
-  "Die Toten Hosen - Alles Aus Liebe": {
-    "artist": "Die Toten Hosen",
-    "title": "Alles Aus Liebe",
     "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
   },
   "Die Toten Hosen - Alles Wird Vorübergehen": {
@@ -28827,11 +28828,6 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
   "Die Toten Hosen - Hier Kommt Alex": {
     "artist": "Die Toten Hosen",
     "title": "Hier Kommt Alex",
-    "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
-  },
-  "Die Toten Hosen - Hier Kommt Alex (Unplugged)": {
-    "artist": "Die Toten Hosen",
-    "title": "Hier Kommt Alex (Unplugged)",
     "editions": [{ "game": "SingStar Die Toten Hosen", "platform": "PS2", "countries": ["DE","AT","CH"] }]
   },
   "Die Toten Hosen - Ich Bin Die Sehnsucht In Dir": {
@@ -28972,11 +28968,6 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
   "Ohrbooten - Bewegung": {
     "artist": "Ohrbooten",
     "title": "Bewegung",
-    "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
-  },
-  "Oliver Pocher - Schwarz Und Weiss": {
-    "artist": "Oliver Pocher",
-    "title": "Schwarz Und Weiss",
     "editions": [{ "game": "SingStar Deutsch Rock-Pop Vol. 2", "platform": "PS2", "countries": ["DE","AT","CH"] }]
   },
   "Pohlmann. - Wenn Jetzt Sommer Wär": {
@@ -29288,11 +29279,6 @@ export const singstarSongDictionary: Record<string, SongEditionEntry> = {
     "artist": "Winnie The Pooh",
     "title": "Winnie The Pooh",
     "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
-  },
-  "Blink-182 - What's My Age Again?": {
-    "artist": "Blink-182",
-    "title": "What's My Age Again?",
-    "editions": [{ "game": "SingStar Pop", "platform": "PS2", "countries": ["DE"] }]
   },
   "Joss Stone - Super Duper Love (Are You Diggin' on Me) Pt. 1": {
     "artist": "Joss Stone",
