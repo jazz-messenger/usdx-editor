@@ -1005,6 +1005,77 @@ export type SongEditionEntry = {
     "title": "Winnie The Pooh",
     "editions": [{ "game": "SingStar Singalong with Disney", "platform": "PS2", "countries": [] }]
   },
+
+  "'N Sync - Bye Bye Bye": {
+    "artist": "'N Sync",
+    "title": "Bye Bye Bye",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Cyndi Lauper - Girls Just Want to Have Fun": {
+    "artist": "Cyndi Lauper",
+    "title": "Girls Just Want to Have Fun",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Diana Ross and The Supremes - Baby Love": {
+    "artist": "Diana Ross and The Supremes",
+    "title": "Baby Love",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "KC and the Sunshine Band - That's the Way (I Like It)": {
+    "artist": "KC and the Sunshine Band",
+    "title": "That's the Way (I Like It)",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Kid Cudi vs Crookers - Day 'n' Nite": {
+    "artist": "Kid Cudi vs Crookers",
+    "title": "Day 'n' Nite",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "New Kids on the Block - Hangin' Tough": {
+    "artist": "New Kids on the Block",
+    "title": "Hangin' Tough",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Paula Abdul - Straight Up": {
+    "artist": "Paula Abdul",
+    "title": "Straight Up",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Pitbull - I Know You Want Me (Calle Ocho)": {
+    "artist": "Pitbull",
+    "title": "I Know You Want Me (Calle Ocho)",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Reel 2 Real feat. The Mad Stuntman - I Like to Move It": {
+    "artist": "Reel 2 Real feat. The Mad Stuntman",
+    "title": "I Like to Move It",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Run-D.M.C. vs Jason Nevins - It's Like That": {
+    "artist": "Run-D.M.C. vs Jason Nevins",
+    "title": "It's Like That",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Salt-N-Pepa - Push It": {
+    "artist": "Salt-N-Pepa",
+    "title": "Push It",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Shaggy - Boombastic": {
+    "artist": "Shaggy",
+    "title": "Boombastic",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Soulja Boy Tell 'Em - Crank That": {
+    "artist": "Soulja Boy Tell 'Em",
+    "title": "Crank That",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
+  "Backstreet Boys - Everybody (Backstreet's Back)": {
+    "artist": "Backstreet Boys",
+    "title": "Everybody (Backstreet's Back)",
+    "editions": [{ "game": "SingStar Dance", "platform": "PS3", "countries": [] }]
+  },
 };
 export const singstarSongDictionary: Record<string, SongEditionEntry> = {
   "-M- - Mama Sam (Live)": {
