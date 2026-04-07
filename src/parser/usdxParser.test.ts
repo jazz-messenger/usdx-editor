@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { parseUsdx } from './usdxParser'
+import { parseUsdx, parseUsdbVideoField } from './usdxParser'
 
 const MINIMAL_SONG = `#ARTIST:Womack And Womack
 #TITLE:Teardrops
@@ -135,6 +135,70 @@ describe('parseUsdx', () => {
     it('returns empty deprecatedFields when no deprecated tags are present', () => {
       const song = parseUsdx(`#ARTIST:A\n#TITLE:T\n#AUDIO:a.mp3\n#BPM:120\n#GAP:0\n${NOTES}`)
       expect(song.deprecatedFields).toEqual([])
+    })
+  })
+
+  describe('USDB embedded #VIDEO params', () => {
+    const BASE = `#ARTIST:Nina Chuba\n#TITLE:Wildberry Lillet\n#BPM:120\n#GAP:0\n`
+    const NOTES = `: 0 4 60 Hi\nE`
+
+    it('extracts YouTube ID from USDB VIDEO field and sets videoUrl', () => {
+      const song = parseUsdx(`${BASE}#VIDEO:v=3J9sIoCll3E,co=cover.jpg,preview=108.62,p1=Nina Chuba,p2=Chapo102\n${NOTES}`)
+      expect(song.header.videoUrl).toBe('https://www.youtube.com/watch?v=3J9sIoCll3E')
+      expect(song.header.video).toBeUndefined()
+    })
+
+    it('sets singerP1 and singerP2 from USDB VIDEO field when not already set', () => {
+      const song = parseUsdx(`${BASE}#VIDEO:v=abc1234,p1=Nina Chuba,p2=Chapo102\n${NOTES}`)
+      expect(song.header.singerP1).toBe('Nina Chuba')
+      expect(song.header.singerP2).toBe('Chapo102')
+    })
+
+    it('does not overwrite existing #P1/#P2 with USDB VIDEO params', () => {
+      const song = parseUsdx(`${BASE}#P1:Alice\n#P2:Bob\n#VIDEO:v=abc1234,p1=Override,p2=Override\n${NOTES}`)
+      expect(song.header.singerP1).toBe('Alice')
+      expect(song.header.singerP2).toBe('Bob')
+    })
+
+    it('sets previewStart from USDB VIDEO preview param when not already set', () => {
+      const song = parseUsdx(`${BASE}#VIDEO:v=abc1234,preview=108.62\n${NOTES}`)
+      expect(song.header.previewStart).toBeCloseTo(108.62)
+    })
+
+    it('does not overwrite existing #PREVIEWSTART with USDB VIDEO preview param', () => {
+      const song = parseUsdx(`${BASE}#PREVIEWSTART:42\n#VIDEO:v=abc1234,preview=108.62\n${NOTES}`)
+      expect(song.header.previewStart).toBe(42)
+    })
+
+    it('treats plain filename in #VIDEO as a normal video file', () => {
+      const song = parseUsdx(`${BASE}#VIDEO:song.mp4\n${NOTES}`)
+      expect(song.header.video).toBe('song.mp4')
+      expect(song.header.videoUrl).toBeUndefined()
+    })
+
+    it('does not overwrite existing #VIDEOURL with USDB VIDEO ID', () => {
+      const song = parseUsdx(`${BASE}#VIDEOURL:https://www.youtube.com/watch?v=existing\n#VIDEO:v=abc1234\n${NOTES}`)
+      expect(song.header.videoUrl).toBe('https://www.youtube.com/watch?v=existing')
+    })
+  })
+
+  describe('parseUsdbVideoField', () => {
+    it('parses all known params', () => {
+      const r = parseUsdbVideoField('v=3J9sIoCll3E,co=cover.jpg,preview=108.62,p1=Nina Chuba,p2=Chapo102')
+      expect(r).toEqual({ videoId: '3J9sIoCll3E', previewStart: 108.62, singerP1: 'Nina Chuba', singerP2: 'Chapo102' })
+    })
+
+    it('returns null for a plain filename', () => {
+      expect(parseUsdbVideoField('song.mp4')).toBeNull()
+    })
+
+    it('returns null for empty string', () => {
+      expect(parseUsdbVideoField('')).toBeNull()
+    })
+
+    it('ignores co= param (USDB internal)', () => {
+      const r = parseUsdbVideoField('co=cover.jpg')
+      expect(r).toBeNull()
     })
   })
 

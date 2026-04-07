@@ -91,10 +91,45 @@ function buildPhraseText(notes: Note[]): string {
     .replace(/~$/, '')
 }
 
+// ── USDB embedded VIDEO params ────────────────────────────────────────────────
+// Some community files store YouTube ID and metadata directly in #VIDEO:
+//   #VIDEO:v=dQw4w9WgXcQ,co=cover.jpg,preview=108.62,p1=Singer A,p2=Singer B
+// We extract the parameters and populate the appropriate header fields.
+
+interface UsdbVideoParams {
+  videoId?: string
+  singerP1?: string
+  singerP2?: string
+  previewStart?: number
+}
+
+export function parseUsdbVideoField(value: string): UsdbVideoParams | null {
+  // Must contain at least one key=value pair separated by commas
+  if (!value.includes('=')) return null
+  const params: UsdbVideoParams = {}
+  let matched = false
+  for (const part of value.split(',')) {
+    const eq = part.indexOf('=')
+    if (eq === -1) continue
+    const key = part.slice(0, eq).trim().toLowerCase()
+    const val = part.slice(eq + 1).trim()
+    if (!val) continue
+    if (key === 'v')       { params.videoId = val; matched = true }
+    else if (key === 'p1') { params.singerP1 = val; matched = true }
+    else if (key === 'p2') { params.singerP2 = val; matched = true }
+    else if (key === 'preview') {
+      const n = parseFloat(val)
+      if (!isNaN(n)) { params.previewStart = n; matched = true }
+    }
+    // co= is a USDB-internal cover filename — not a usable URL, ignored
+  }
+  return matched ? params : null
+}
+
 // ── Declarative header field maps ─────────────────────────────────────────────
 
 const STRING_FIELDS: Record<string, keyof UsdxHeader> = {
-  TITLE: 'title', ARTIST: 'artist', AUDIO: 'audio', VIDEO: 'video',
+  TITLE: 'title', ARTIST: 'artist', AUDIO: 'audio',
   COVER: 'cover', BACKGROUND: 'background', VIDEOURL: 'videoUrl',
   COVERURL: 'coverUrl', LANGUAGE: 'language', GENRE: 'genre',
   EDITION: 'edition', TAGS: 'tags', CREATOR: 'creator',
@@ -169,6 +204,23 @@ export function parseUsdx(content: string): UsdxSong {
       // ── Special fields ────────────────────────────────────────────────────
       if (tag === 'P1') { if (value) header.singerP1 = value; continue }
       if (tag === 'P2') { if (value) header.singerP2 = value; continue }
+
+      if (tag === 'VIDEO') {
+        const usdb = parseUsdbVideoField(value)
+        if (usdb) {
+          // USDB embedded format — extract params, do NOT treat as a filename
+          if (usdb.videoId && !header.videoUrl)
+            header.videoUrl = `https://www.youtube.com/watch?v=${usdb.videoId}`
+          if (usdb.singerP1 && !header.singerP1) header.singerP1 = usdb.singerP1
+          if (usdb.singerP2 && !header.singerP2) header.singerP2 = usdb.singerP2
+          if (usdb.previewStart !== undefined && header.previewStart === undefined)
+            header.previewStart = usdb.previewStart
+          // Leave header.video undefined — no actual video file
+        } else {
+          header.video = value
+        }
+        continue
+      }
 
       // ── Deprecated fields: migrate where possible, always track ──────────
       if (tag === 'MP3') {
