@@ -31,6 +31,7 @@ public/
 
 - **Branch-Strategie:** `main` ist der Release-Kandidat. Feature-Branches für größere Arbeiten (`feature/xxx`). Jan merged selbst — kein PR-Review nötig.
 - **Commit-Sprache:** Englisch, Conventional Commits (`feat:`, `fix:`, `test:`, `chore:`)
+- **GitHub Release bei jedem Version-Bump:** `git tag vX.Y.Z` + `git push --tags` reicht nicht — zusätzlich `gh release create vX.Y.Z --generate-notes` ausführen. Erfordert `gh` CLI + `GITHUB_TOKEN` in der Shell; wenn nicht verfügbar, Jan darauf hinweisen.
 - **Keine nativen `title`-Attribute** — stattdessen `<Tooltip>` aus `src/components/Tooltip.tsx`
 - **Hover-Stile:** subtiler oranger Tint (`rgb(var(--accent-primary) / .08–.12)`), kein voller Farbwechsel
 - **Dezimalstellen:** GAP, VIDEOGAP, Zeitanzeigen immer ganzzahlig (`Math.round`)
