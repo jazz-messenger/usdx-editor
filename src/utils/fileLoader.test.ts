@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { findCoverFiles, fetchRemoteCovers } from './fileLoader'
+import { findCoverFiles, fetchRemoteCovers, readDroppedEntry } from './fileLoader'
 import type { SongFileMap } from './fileLoader'
 import type { UsdxHeader } from '../parser/usdxParser'
 
@@ -80,6 +80,71 @@ describe('findCoverFiles', () => {
     const result = findCoverFiles(emptyHeader(), files)
     expect(result.map((f) => f.name)).toContain('Song [CO].png')
     expect(result.map((f) => f.name)).toContain('cover.webp')
+  })
+})
+
+// ── readDroppedEntry ──────────────────────────────────────────────────────────
+
+function makeFileEntry(name: string, fails = false): FileSystemFileEntry {
+  return {
+    isFile: true,
+    isDirectory: false,
+    name,
+    file: (onSuccess: (f: File) => void, onError?: () => void) => {
+      if (fails) onError?.()
+      else onSuccess(makeFile(name))
+    },
+  } as unknown as FileSystemFileEntry
+}
+
+/** Directory entry whose reader hands out `entries` in batches of `batchSize`
+ *  — mimics Chromium's ~100-entry readEntries() limit. */
+function makeDirEntry(entries: FileSystemEntry[], batchSize = 100): FileSystemDirectoryEntry {
+  let cursor = 0
+  return {
+    isFile: false,
+    isDirectory: true,
+    name: 'dir',
+    createReader: () => ({
+      readEntries: (onSuccess: (e: FileSystemEntry[]) => void) => {
+        const batch = entries.slice(cursor, cursor + batchSize)
+        cursor += batch.length
+        onSuccess(batch)
+      },
+    }),
+  } as unknown as FileSystemDirectoryEntry
+}
+
+describe('readDroppedEntry', () => {
+  it('reads all files from a folder with more than 100 entries', async () => {
+    const entries = Array.from({ length: 250 }, (_, i) => makeFileEntry(`file-${i}.mp3`))
+    const files = await readDroppedEntry(makeDirEntry(entries, 100))
+    expect(files.size).toBe(250)
+  })
+
+  it('accepts a single dropped file (not a folder)', async () => {
+    const files = await readDroppedEntry(makeFileEntry('Song.txt'))
+    expect(files.size).toBe(1)
+    expect(files.has('song.txt')).toBe(true)
+  })
+
+  it('resolves instead of hanging when a file entry errors', async () => {
+    const entries = [makeFileEntry('ok.mp3'), makeFileEntry('broken.mp3', true)]
+    const files = await readDroppedEntry(makeDirEntry(entries))
+    expect(files.size).toBe(1)
+    expect(files.has('ok.mp3')).toBe(true)
+  })
+
+  it('resolves to an empty map when readEntries errors', async () => {
+    const dir = {
+      isFile: false,
+      isDirectory: true,
+      createReader: () => ({
+        readEntries: (_: unknown, onError?: () => void) => onError?.(),
+      }),
+    } as unknown as FileSystemDirectoryEntry
+    const files = await readDroppedEntry(dir)
+    expect(files.size).toBe(0)
   })
 })
 

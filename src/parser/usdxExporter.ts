@@ -55,7 +55,9 @@ export function exportUsdx(
   lines.push(`#BPM:${header.bpm}`)
   lines.push(`#GAP:${Math.round(header.gap)}`)
   if (header.start !== undefined) lines.push(`#START:${header.start}`)
-  if (header.videoGap)      lines.push(`#VIDEOGAP:${Math.round(header.videoGap)}`)
+  // One decimal place — matches the UI's 0.1 s steps; full-second rounding
+  // would visibly break the sync the user just set.
+  if (header.videoGap)      lines.push(`#VIDEOGAP:${Math.round(header.videoGap * 10) / 10}`)
   if (header.video)         lines.push(`#VIDEO:${header.video}`)
   if (header.videoUrl)      lines.push(`#VIDEOURL:${header.videoUrl}`)
   if (header.cover)         lines.push(`#COVER:${header.cover}`)

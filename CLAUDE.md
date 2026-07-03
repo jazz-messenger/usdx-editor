@@ -34,7 +34,7 @@ public/
 - **GitHub Release bei jedem Version-Bump:** `git tag vX.Y.Z` + `git push --tags` reicht nicht — zusätzlich Release anlegen: `/opt/homebrew/bin/gh release create vX.Y.Z --repo jazz-messenger/usdx-editor --title "vX.Y.Z" --notes "..." --target <sha>`
 - **Keine nativen `title`-Attribute** — stattdessen `<Tooltip>` aus `src/components/Tooltip.tsx`
 - **Hover-Stile:** subtiler oranger Tint (`rgb(var(--accent-primary) / .08–.12)`), kein voller Farbwechsel
-- **Dezimalstellen:** GAP, VIDEOGAP, Zeitanzeigen immer ganzzahlig (`Math.round`)
+- **Dezimalstellen:** GAP und Zeitanzeigen ganzzahlig (`Math.round`); VIDEOGAP mit **einer** Nachkommastelle (UI arbeitet in 0,1-s-Schritten — Export muss dazu passen)
 - **Beide Sprachen:** Jede Änderung in `translations.ts` betrifft immer `de` UND `en`
 
 ## SingStar-Dictionary (`singstarSongDictionary.ts`)

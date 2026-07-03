@@ -35,11 +35,20 @@ export function DropZone({ onLoad }: { onLoad: (song: UsdxSong, filename: string
   const onDrop = async (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault()
     setDragOver(false)
-    const item = e.dataTransfer.items[0]
-    if (!item) return
-    const entry = item.webkitGetAsEntry()
-    if (!entry) return
-    const files = await readDroppedEntry(entry)
+    // Resolve ALL entries synchronously before the first await — the browser
+    // invalidates dataTransfer.items as soon as the handler yields.
+    const entries = Array.from(e.dataTransfer.items)
+      .map((item) => item.webkitGetAsEntry())
+      .filter((entry): entry is FileSystemEntry => entry !== null)
+    if (entries.length === 0) return
+    // Supports a dropped folder, several files, or a mix — everything lands
+    // in one flat map, later entries win on name collisions.
+    const files: SongFileMap = new Map()
+    for (const entry of entries) {
+      for (const [name, file] of await readDroppedEntry(entry)) {
+        files.set(name, file)
+      }
+    }
     processFileMap(files)
   }
 

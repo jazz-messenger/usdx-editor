@@ -12,6 +12,7 @@ import type { ActivePos } from '../utils/duetMerge'
 import { lookupReleaseInfo } from '../utils/musicbrainz'
 import { lookupSingStarEdition } from '../utils/singstarEditions'
 import type { SingStarEditionMatch } from '../utils/singstarEditions'
+import { useObjectUrl } from '../hooks/useObjectUrl'
 import { findVideoFile, findAudioFile, findBackgroundFile, findVideoMismatch, findAudioMismatch } from '../utils/fileLoader'
 import type { SongFileMap } from '../utils/fileLoader'
 import type { UsdxSong } from '../parser/usdxParser'
@@ -97,10 +98,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
   )
   const [selectedVideoFile, setSelectedVideoFile] = useState<File | null>(null)
   const effectiveVideoFile = selectedVideoFile ?? videoFile
-  const videoUrl = useMemo(
-    () => (effectiveVideoFile ? URL.createObjectURL(effectiveVideoFile) : null),
-    [effectiveVideoFile]
-  )
+  const videoUrl = useObjectUrl(effectiveVideoFile)
 
   const audioMismatch = useMemo(() => findAudioMismatch(header, files), [header, files])
   const [audioMismatchDismissed, setAudioMismatchDismissed] = useState(false)
@@ -110,15 +108,9 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
   )
   const [selectedAudioFile, setSelectedAudioFile] = useState<File | null>(null)
   const effectiveAudioFile = selectedAudioFile ?? audioFile
-  const audioUrl = useMemo(
-    () => (effectiveAudioFile ? URL.createObjectURL(effectiveAudioFile) : null),
-    [effectiveAudioFile]
-  )
+  const audioUrl = useObjectUrl(effectiveAudioFile)
   const backgroundFile = useMemo(() => findBackgroundFile(header, files), [header, files])
-  const backgroundUrl = useMemo(
-    () => (backgroundFile ? URL.createObjectURL(backgroundFile) : null),
-    [backgroundFile]
-  )
+  const backgroundUrl = useObjectUrl(backgroundFile)
 
   const [singerMap, setSingerMap] = useState<Record<number, 1 | 2 | 3>>(
     () => mergedDuet?.singerMap ?? {}
@@ -166,12 +158,17 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
   const [warningDismissed, setWarningDismissed] = useState(false)
   const [deprecationDismissed, setDeprecationDismissed] = useState(false)
 
-  // MusicBrainz lookup — year + genre, runs once when the song is loaded
+  // MusicBrainz lookup — year + genre, runs once when the song is loaded.
+  // The cancelled guard keeps a late response for a previous song from
+  // overwriting the current suggestions.
   useEffect(() => {
+    let cancelled = false
     lookupReleaseInfo(header.artist, header.title).then(({ year, genre }) => {
+      if (cancelled) return
       if (year !== null) setSuggestedYear(year)
       if (genre !== null) setSuggestedGenre(genre)
     })
+    return () => { cancelled = true }
   }, [header.artist, header.title])
 
   // SingStar edition lookup — reacts to editArtist/editTitle changes.

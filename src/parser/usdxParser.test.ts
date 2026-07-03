@@ -59,6 +59,14 @@ describe('parseUsdx', () => {
       expect(firstNote.syllable).toBe('When')
     })
 
+    it('skips malformed note lines instead of producing NaN values', () => {
+      const src = `#TITLE:x\n#ARTIST:y\n#BPM:120\n#GAP:0\n: kaputt\n: 0 abc 60 Hi\n: 0 4 60 Ok\nE`
+      const result = parseUsdx(src)
+      const notes = result.tracks[0].phrases[0].notes
+      expect(notes).toHaveLength(1)
+      expect(notes[0].syllable).toBe('Ok')
+    })
+
     it('keeps all notes when the trailing E terminator is missing', () => {
       const withoutE = MINIMAL_SONG.replace(/\nE$/, '')
       const result = parseUsdx(withoutE)

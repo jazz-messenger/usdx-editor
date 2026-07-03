@@ -119,6 +119,14 @@ describe('exportUsdx', () => {
     expect(song.header.comment).toBe('original comment')
   })
 
+  it('exports VIDEOGAP with one decimal place (matches the UI 0.1s steps)', () => {
+    const src = SONG.replace('#GAP:1000', '#GAP:1000\n#VIDEOGAP:2,7\n#VIDEO:v.mp4')
+    const song = parseUsdx(src)
+    const output = exportUsdx(song, {})
+    expect(output).toContain('#VIDEOGAP:2.7')
+    expect(output).not.toContain('#VIDEOGAP:3')
+  })
+
   it('round-trips unknown header tags (e.g. medley parameters)', () => {
     const src = SONG.replace(
       '#GAP:1000',

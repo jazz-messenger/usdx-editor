@@ -298,6 +298,9 @@ export function parseUsdx(content: string): UsdxSong {
       const beat = parseInt(parts[0], 10)
       const length = parseInt(parts[1], 10)
       const pitch = parseInt(parts[2], 10)
+      // Malformed note line — skip instead of letting NaN propagate into the
+      // UI and the exported file (": NaN NaN NaN").
+      if (isNaN(beat) || isNaN(length) || isNaN(pitch)) continue
       // Syllable is extracted from the raw line (only newlines stripped) so that
       // trailing spaces — used as word-boundary markers in some USDX files — are preserved.
       const rawRest = line.replace(/[\r\n]+$/, '').trimStart().slice(spaceAfterType + 1)

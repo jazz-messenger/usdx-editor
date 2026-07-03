@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from 'react'
 import type { UsdxHeader } from '../parser/usdxParser'
+import { useObjectUrl } from '../hooks/useObjectUrl'
 import { findCoverFiles, fetchRemoteCovers } from '../utils/fileLoader'
 import type { SongFileMap } from '../utils/fileLoader'
 import { useLanguage } from '../i18n/LanguageContext'
@@ -21,10 +22,7 @@ export function CoverArt({ header, files, onCoverUrl, onCoverFileSaved }: CoverA
   const localFiles = useMemo(() => findCoverFiles(header, files), [header, files])
   const [localIndex, setLocalIndex] = useState(0)
   const localFile = localFiles[localIndex] ?? null
-  const localUrl = useMemo(
-    () => (localFile ? URL.createObjectURL(localFile) : null),
-    [localFile]
-  )
+  const localUrl = useObjectUrl(localFile)
 
   // ── Remote covers ────────────────────────────────────────────────────────────
   const [remoteUrls, setRemoteUrls] = useState<string[]>([])
@@ -46,16 +44,20 @@ export function CoverArt({ header, files, onCoverUrl, onCoverFileSaved }: CoverA
     setRemoteIndex(0)
   }, [header.artist, header.title]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Auto-fetch remote covers when no local file is present
+  // Auto-fetch remote covers when no local file is present. The cancelled
+  // guard keeps a late response for a previous artist/title from overwriting
+  // the covers of the current one.
   useEffect(() => {
-    if (localFiles.length === 0) {
-      setLoading(true)
-      fetchRemoteCovers(header.artist, header.title).then((urls) => {
-        setRemoteUrls(urls)
-        if (urls.length > 0) { setShowRemote(true); onCoverUrl?.(urls[0]) }
-        setLoading(false)
-      })
-    }
+    if (localFiles.length !== 0) return
+    let cancelled = false
+    setLoading(true)
+    fetchRemoteCovers(header.artist, header.title).then((urls) => {
+      if (cancelled) return
+      setRemoteUrls(urls)
+      if (urls.length > 0) { setShowRemote(true); onCoverUrl?.(urls[0]) }
+      setLoading(false)
+    })
+    return () => { cancelled = true }
   }, [header.artist, header.title, localFiles.length]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Close lightbox on Escape

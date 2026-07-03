@@ -12,22 +12,40 @@ export async function readTxtFile(file: File): Promise<string> {
   return new TextDecoder(detectEncoding(bytes)).decode(buf)
 }
 
+/** Resolves a file entry to its File, or null if the entry errors. */
+function entryToFile(entry: FileSystemFileEntry): Promise<File | null> {
+  return new Promise((resolve) => entry.file(resolve, () => resolve(null)))
+}
+
 export async function readDroppedEntry(entry: FileSystemEntry): Promise<SongFileMap> {
   const files: SongFileMap = new Map()
+
+  // Single dropped file (not a folder)
+  if (entry.isFile) {
+    const f = await entryToFile(entry as FileSystemFileEntry)
+    if (f) files.set(f.name.toLowerCase(), f)
+    return files
+  }
   if (!entry.isDirectory) return files
+
+  // readEntries() returns at most ~100 entries per call (Chromium) — keep
+  // calling until it comes back empty. Error callbacks resolve to [] / null
+  // so a failing entry can never leave the promise hanging.
   const reader = (entry as FileSystemDirectoryEntry).createReader()
-  const entries: FileSystemEntry[] = await new Promise((resolve) =>
-    reader.readEntries(resolve)
-  )
-  await Promise.all(
-    entries.filter((e) => e.isFile).map(
-      (e) => new Promise<void>((resolve) => {
-        ;(e as FileSystemFileEntry).file((f) => {
-          files.set(f.name.toLowerCase(), f)
-          resolve()
-        })
-      })
+  const entries: FileSystemEntry[] = []
+  for (;;) {
+    const batch = await new Promise<FileSystemEntry[]>((resolve) =>
+      reader.readEntries(resolve, () => resolve([]))
     )
+    if (batch.length === 0) break
+    entries.push(...batch)
+  }
+
+  await Promise.all(
+    entries.filter((e) => e.isFile).map(async (e) => {
+      const f = await entryToFile(e as FileSystemFileEntry)
+      if (f) files.set(f.name.toLowerCase(), f)
+    })
   )
   return files
 }
