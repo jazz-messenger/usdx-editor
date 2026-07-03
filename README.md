@@ -71,11 +71,15 @@ Webserver und ist nie Teil des JS-Bundles. Einrichtung:
    YouTube Data API v3 aktivieren, API-Beschränkung auf **nur** YouTube Data API v3,
    niedriges Quota-Limit setzen (eine Suche kostet 100 Einheiten).
    **Keine** Referrer-Beschränkung — die Aufrufe kommen vom Server.
-2. Per FTP eine Datei `usdx-editor-yt-key.php` **eine Ebene über** dem
-   Deploy-Verzeichnis ablegen (neben dem `usdx-editor/`-Ordner):
+2. Per FTP eine Datei `usdx-editor-yt-key.php` **außerhalb des Webroots**
+   ablegen — zwei Ebenen über dem Deploy-Verzeichnis, also neben dem
+   Webroot-Ordner (z. B. `httpdocs/`):
    ```php
    <?php return 'AIza...dein-key...';
    ```
+   Falls die Suche danach tot bleibt, blockiert der Hoster evtl. PHP-Zugriffe
+   oberhalb des Webroots (`open_basedir`) — Details und Ausweichweg stehen im
+   Kommentar-Header von `public/api/yt-search.php`.
 
 Lokal (`npm run dev`) gibt es keinen Proxy — die eingebettete Suche meldet dann
 „keine Ergebnisse", alles andere funktioniert normal.

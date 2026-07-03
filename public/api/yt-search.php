@@ -6,14 +6,23 @@
  * this endpoint, so the key never appears in the shipped JS bundle.
  *
  * Setup (one-time, via FTP):
- *   Place a file named  usdx-editor-yt-key.php  one directory level ABOVE the
- *   app's deploy directory (i.e. next to the usdx-editor/ folder, NOT inside
- *   it), containing:
+ *   Place a file named  usdx-editor-yt-key.php  TWO directory levels ABOVE the
+ *   app's deploy directory — i.e. next to the webroot folder, outside of it:
+ *
+ *     /               ← FTP root: usdx-editor-yt-key.php goes HERE
+ *     └── httpdocs/           (webroot — name varies by host)
+ *         └── usdx-editor/    (deploy directory)
+ *             └── api/yt-search.php
+ *
+ *   File content:
  *
  *     <?php return 'AIza...your-key...';
  *
- *   Living outside the deploy directory means deployments never touch it, and
- *   as a .php file it returns nothing if requested over HTTP.
+ *   Living outside the webroot means the file is not reachable over HTTP at
+ *   all, and deployments never touch it. If the search stays dead after
+ *   setup, the host may block PHP from reading above the webroot
+ *   (open_basedir) — then move the file one level down (next to the
+ *   usdx-editor/ folder) and change the dirname() level below from 3 to 2.
  *
  *   Recommended key settings in the Google Cloud console:
  *   - API restriction: YouTube Data API v3 only
@@ -40,8 +49,9 @@ if ($q === '' || mb_strlen($q) > 200) {
     respond(['kind' => 'error']);
 }
 
-// Key file lives outside the deploy directory so deployments never touch it
-$keyFile = dirname(__DIR__, 2) . '/usdx-editor-yt-key.php';
+// Key file lives outside the webroot so it is unreachable over HTTP and
+// deployments never touch it (api/ → usdx-editor/ → webroot → FTP root)
+$keyFile = dirname(__DIR__, 3) . '/usdx-editor-yt-key.php';
 if (!is_file($keyFile)) {
     respond(['kind' => 'error']);
 }
