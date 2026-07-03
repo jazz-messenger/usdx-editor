@@ -1,0 +1,43 @@
+name: Tag & Release
+
+# Creates the git tag vX.Y.Z AND the GitHub release in one go — the project
+# convention (CLAUDE.md) requires both on every version bump.
+# Manual trigger from the Actions tab, or via API (workflow_dispatch inputs).
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version ohne v-Präfix, z. B. 1.1.10'
+        required: true
+      target:
+        description: 'Ziel-Commit-SHA (leer = HEAD des gewählten Branches)'
+        required: false
+        default: ''
+      notes:
+        description: 'Release-Notes (Markdown)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create tag and release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+          TARGET: ${{ inputs.target }}
+          NOTES: ${{ inputs.notes }}
+        run: |
+          gh release create "v${VERSION}" \
+            --repo "${{ github.repository }}" \
+            --title "v${VERSION}" \
+            --target "${TARGET:-${{ github.sha }}}" \
+            --notes "${NOTES:-Release v${VERSION}}"
