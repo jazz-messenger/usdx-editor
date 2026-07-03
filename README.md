@@ -26,11 +26,18 @@ Ein kostenloser, datenschutzfreundlicher Editor für [UltraStar Deluxe](https://
 
 **Deine Dateien verlassen nie deinen Rechner.**
 
-Der Editor verarbeitet alle Songdateien ausschließlich lokal im Browser. Es findet keine Übertragung von Songdaten, Texten oder Metadaten an externe Server statt.
+Der Editor verarbeitet alle Songdateien ausschließlich lokal im Browser.
+Song-, Audio-, Video- und Bilddateien werden nie hochgeladen.
 
-Externe Verbindungen werden nur hergestellt wenn der Nutzer dies aktiv auslöst:
-- **YouTube** — beim Einbinden eines Videos (Google Privacy Policy)
-- **MusicBrainz** — beim automatischen Jahres-/Genre-Abruf (nur Künstler + Titel)
+**Beim Laden eines Songs automatisch** (übertragen wird jeweils nur Künstler + Titel):
+- **MusicBrainz** — Jahres-/Genre-Vorschlag
+- **iTunes Search API (Apple)** — Cover-Vorschläge, nur wenn kein lokales Cover vorhanden ist
+
+**Nur auf aktive Nutzeraktion:**
+- **YouTube** — beim Einbetten eines Videos verbindet sich der Browser mit youtube.com/ytimg.com (Google Privacy Policy). Die eingebettete Video-**Suche** läuft über den eigenen Server-Proxy — Google sieht dabei die Server-IP, nicht die des Nutzers.
+- **Ko-fi** — reiner Link; eine Verbindung zu ko-fi.com entsteht erst beim Klick. Es wird bewusst kein Ko-fi-Widget-Script eingebunden.
+
+Eine Content-Security-Policy beschränkt alle Verbindungen des Browsers auf genau diese Dienste.
 
 ---
 

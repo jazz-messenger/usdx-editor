@@ -37,6 +37,15 @@ describe('parseUsdx', () => {
       const result = parseUsdx(MINIMAL_SONG)
       expect(result.header.audio).toBe('Womack And Womack - Teardrops.mp3')
     })
+
+    it('ignores tags that collide with Object internals (no prototype pollution)', () => {
+      const src = `#TITLE:x\n#ARTIST:y\n#BPM:120\n#GAP:0\n#__PROTO__:{"polluted":true}\n#CONSTRUCTOR:evil\n: 0 4 60 Hi\nE`
+      const result = parseUsdx(src)
+      expect(Object.getPrototypeOf(result.header)).toBe(Object.prototype)
+      expect(Object.prototype.hasOwnProperty.call(result.header, '__proto__')).toBe(false)
+      expect(Object.prototype.hasOwnProperty.call(result.header, 'constructor')).toBe(false)
+      expect(({} as Record<string, unknown>).polluted).toBeUndefined()
+    })
   })
 
   describe('notes', () => {

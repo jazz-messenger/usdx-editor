@@ -66,6 +66,9 @@ export interface UsdxSong {
 
 const NOTE_TYPES = new Set([':', '*', 'F', 'R', 'G'])
 
+/** Tag names that must never become dynamic object keys on the header. */
+const UNSAFE_HEADER_KEYS = new Set(['__proto__', 'constructor', 'prototype'])
+
 function parseNumber(value: string): number {
   // USDX files sometimes use comma as decimal separator
   return parseFloat(value.replace(',', '.'))
@@ -259,7 +262,12 @@ export function parseUsdx(content: string): UsdxSong {
       }
 
       // ── Unknown fields: store as-is ───────────────────────────────────────
-      header[tag.toLowerCase()] = value
+      // Guard against keys that collide with Object internals (a malicious
+      // "#__PROTO__:" tag must not become header['__proto__']).
+      const unknownKey = tag.toLowerCase()
+      if (!UNSAFE_HEADER_KEYS.has(unknownKey)) {
+        header[unknownKey] = value
+      }
       continue
     }
 
