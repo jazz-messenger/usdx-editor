@@ -174,9 +174,15 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
     })
   }, [header.artist, header.title])
 
-  // SingStar edition lookup — reacts to editArtist/editTitle changes
+  // SingStar edition lookup — reacts to editArtist/editTitle changes.
+  // Async because the dictionary is lazy-loaded; the cancelled guard prevents
+  // a stale response from overwriting the result of a newer input.
   useEffect(() => {
-    setSingstarMatch(lookupSingStarEdition(editArtist, editTitle))
+    let cancelled = false
+    lookupSingStarEdition(editArtist, editTitle).then((match) => {
+      if (!cancelled) setSingstarMatch(match)
+    })
+    return () => { cancelled = true }
   }, [editArtist, editTitle])
 
   const missingFiles = useMemo(() => {

@@ -3,105 +3,105 @@ import { lookupSingStarEdition, KNOWN_SINGSTAR_GAMES } from './singstarEditions'
 
 describe('lookupSingStarEdition', () => {
   describe('input validation', () => {
-    it('returns null for empty artist', () => {
-      expect(lookupSingStarEdition('', 'Dancing Queen')).toBeNull()
+    it('returns null for empty artist', async () => {
+      expect(await lookupSingStarEdition('', 'Dancing Queen')).toBeNull()
     })
 
-    it('returns null for empty title', () => {
-      expect(lookupSingStarEdition('ABBA', '')).toBeNull()
+    it('returns null for empty title', async () => {
+      expect(await lookupSingStarEdition('ABBA', '')).toBeNull()
     })
 
-    it('returns null for whitespace-only artist', () => {
-      expect(lookupSingStarEdition('   ', 'Dancing Queen')).toBeNull()
+    it('returns null for whitespace-only artist', async () => {
+      expect(await lookupSingStarEdition('   ', 'Dancing Queen')).toBeNull()
     })
 
-    it('returns null for whitespace-only title', () => {
-      expect(lookupSingStarEdition('ABBA', '   ')).toBeNull()
+    it('returns null for whitespace-only title', async () => {
+      expect(await lookupSingStarEdition('ABBA', '   ')).toBeNull()
     })
 
-    it('returns null for unknown song', () => {
-      expect(lookupSingStarEdition('Unknown Artist', 'Unknown Song 99999')).toBeNull()
+    it('returns null for unknown song', async () => {
+      expect(await lookupSingStarEdition('Unknown Artist', 'Unknown Song 99999')).toBeNull()
     })
   })
 
   describe('matching behaviour', () => {
-    it('finds a known song (ABBA - Dancing Queen)', () => {
-      const result = lookupSingStarEdition('ABBA', 'Dancing Queen')
+    it('finds a known song (ABBA - Dancing Queen)', async () => {
+      const result = await lookupSingStarEdition('ABBA', 'Dancing Queen')
       expect(result).not.toBeNull()
       expect(result!.games).toContain('SingStar ABBA')
     })
 
-    it('is case-insensitive for artist', () => {
-      const lower = lookupSingStarEdition('abba', 'Dancing Queen')
-      const upper = lookupSingStarEdition('ABBA', 'Dancing Queen')
+    it('is case-insensitive for artist', async () => {
+      const lower = await lookupSingStarEdition('abba', 'Dancing Queen')
+      const upper = await lookupSingStarEdition('ABBA', 'Dancing Queen')
       expect(lower).not.toBeNull()
       expect(lower!.suggestedEdition).toBe(upper!.suggestedEdition)
     })
 
-    it('is case-insensitive for title', () => {
-      const lower = lookupSingStarEdition('ABBA', 'dancing queen')
+    it('is case-insensitive for title', async () => {
+      const lower = await lookupSingStarEdition('ABBA', 'dancing queen')
       expect(lower).not.toBeNull()
       expect(lower!.suggestedEdition).toBe('SingStar ABBA')
     })
 
-    it('trims surrounding whitespace from artist and title', () => {
-      const result = lookupSingStarEdition('  ABBA  ', '  Dancing Queen  ')
+    it('trims surrounding whitespace from artist and title', async () => {
+      const result = await lookupSingStarEdition('  ABBA  ', '  Dancing Queen  ')
       expect(result).not.toBeNull()
       expect(result!.suggestedEdition).toBe('SingStar ABBA')
     })
 
-    it('matches when title contains typographic apostrophe (U+2019) instead of straight apostrophe', () => {
+    it('matches when title contains typographic apostrophe (U+2019) instead of straight apostrophe', async () => {
       // USDX files from some editors use curly apostrophes — must still match
-      const result = lookupSingStarEdition('Backstreet Boys', 'Everybody (Backstreet\u2019s Back)')
+      const result = await lookupSingStarEdition('Backstreet Boys', 'Everybody (Backstreet’s Back)')
       expect(result).not.toBeNull()
       expect(result!.suggestedEdition).toBe('SingStar Dance')
     })
 
-    it('normalises multiple internal spaces', () => {
+    it('normalises multiple internal spaces', async () => {
       // "ABBA" with double space should still match "ABBA"
-      const result = lookupSingStarEdition('ABBA', 'Dancing  Queen')
+      const result = await lookupSingStarEdition('ABBA', 'Dancing  Queen')
       // After normalisation "dancing  queen" → "dancing queen" which matches
       expect(result).not.toBeNull()
     })
   })
 
   describe('suggestedEdition logic', () => {
-    it('suggests specific game name when song appears in exactly one game', () => {
+    it('suggests specific game name when song appears in exactly one game', async () => {
       // "Die Da!?!" only appears in SingStar Made In Germany
-      const result = lookupSingStarEdition('Die Fantastischen Vier', 'Die Da!?!')
+      const result = await lookupSingStarEdition('Die Fantastischen Vier', 'Die Da!?!')
       expect(result).not.toBeNull()
       expect(result!.games).toHaveLength(1)
       expect(result!.suggestedEdition).toBe('SingStar Made In Germany')
     })
 
-    it('suggests "SingStar" fallback when song appears in multiple different games', () => {
+    it('suggests "SingStar" fallback when song appears in multiple different games', async () => {
       // "Don't Stop Me Now" appears in SingStar Queen AND SingStar Rocks!
-      const result = lookupSingStarEdition('Queen', "Don't Stop Me Now")
+      const result = await lookupSingStarEdition('Queen', "Don't Stop Me Now")
       expect(result).not.toBeNull()
       expect(result!.games.length).toBeGreaterThan(1)
       expect(result!.suggestedEdition).toBe('SingStar')
     })
 
-    it('returns the unique game name directly (no "SingStar" fallback) for a single-game song', () => {
-      const result = lookupSingStarEdition('ABBA', 'Dancing Queen')
+    it('returns the unique game name directly (no "SingStar" fallback) for a single-game song', async () => {
+      const result = await lookupSingStarEdition('ABBA', 'Dancing Queen')
       expect(result!.suggestedEdition).toBe('SingStar ABBA')
       expect(result!.suggestedEdition).not.toBe('SingStar')
     })
   })
 
   describe('result shape', () => {
-    it('returns platforms as a deduplicated array', () => {
+    it('returns platforms as a deduplicated array', async () => {
       // Dancing Queen is in PS2 and PS3
-      const result = lookupSingStarEdition('ABBA', 'Dancing Queen')
+      const result = await lookupSingStarEdition('ABBA', 'Dancing Queen')
       expect(result!.platforms).toContain('PS2')
       expect(result!.platforms).toContain('PS3')
       // No duplicates
       expect(new Set(result!.platforms).size).toBe(result!.platforms.length)
     })
 
-    it('returns countries as a deduplicated flat array', () => {
+    it('returns countries as a deduplicated flat array', async () => {
       // Dancing Queen: PS2 → [ES, UK], PS3 → [DE, UK, US]. UK appears twice.
-      const result = lookupSingStarEdition('ABBA', 'Dancing Queen')
+      const result = await lookupSingStarEdition('ABBA', 'Dancing Queen')
       expect(result!.countries).toContain('UK')
       expect(result!.countries).toContain('ES')
       expect(result!.countries).toContain('DE')
@@ -110,18 +110,18 @@ describe('lookupSingStarEdition', () => {
       expect(ukCount).toBe(1)
     })
 
-    it('returns games as a deduplicated array', () => {
-      const result = lookupSingStarEdition('ABBA', 'Dancing Queen')
+    it('returns games as a deduplicated array', async () => {
+      const result = await lookupSingStarEdition('ABBA', 'Dancing Queen')
       expect(new Set(result!.games).size).toBe(result!.games.length)
     })
   })
 
   describe('edge cases', () => {
-    it('does NOT match "Die Da !?!" (space before !?!) — title punctuation is significant', () => {
+    it('does NOT match "Die Da !?!" (space before !?!) — title punctuation is significant', async () => {
       // The dictionary entry is "Die Da!?!" (no space). Whitespace normalisation
       // collapses multiple spaces but does not strip punctuation, so the space
       // before "!?!" creates a genuinely different key.
-      const result = lookupSingStarEdition('Die Fantastischen Vier', 'Die Da !?!')
+      const result = await lookupSingStarEdition('Die Fantastischen Vier', 'Die Da !?!')
       expect(result).toBeNull()
     })
   })

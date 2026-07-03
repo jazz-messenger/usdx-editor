@@ -1,9 +1,3 @@
-// We import the raw dictionary as unknown and cast to our own interface to avoid
-// TypeScript choking on the extremely large union type it would infer from the
-// "as const" object.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-import { singstarSongDictionary as _raw } from './singstarSongDictionary'
-
 export type Platform = 'PS2' | 'PS3'
 
 export type SingStarGame =
@@ -66,9 +60,6 @@ interface DictEntry {
   editions: DictEdition[]
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const singstarSongDictionary = _raw as unknown as Record<string, DictEntry>
-
 export interface SingStarEditionMatch {
   /** All distinct game names this song appears in */
   games: SingStarGame[]
@@ -88,14 +79,27 @@ function normalize(s: string): string {
     .replace(/[\u2018\u2019\u201A\u201B\u2032]/g, "'") // curly/typographic apostrophes → straight
 }
 
-// Build a case-insensitive lookup index once at module load time.
+// Case-insensitive lookup index, built lazily on first use.
 // Key: "artist - title" (both normalized). Handles capitalisation variants
 // like "Back for Good" vs "Back For Good" without touching the source data.
-const index = new Map<string, DictEntry>()
-for (const entry of Object.values(singstarSongDictionary)) {
-  const key = `${normalize(entry.artist)} - ${normalize(entry.title)}`
-  // First writer wins — avoids overwriting a richer entry with a sparse duplicate
-  if (!index.has(key)) index.set(key, entry)
+// The dictionary (~580 KB source) is loaded via dynamic import so it lands in
+// its own chunk and stays out of the initial bundle.
+let indexPromise: Promise<Map<string, DictEntry>> | null = null
+
+function loadIndex(): Promise<Map<string, DictEntry>> {
+  indexPromise ??= import('./singstarSongDictionary').then((mod) => {
+    // Cast the raw "as const" dictionary to our own interface to avoid
+    // TypeScript choking on the extremely large union type it would infer.
+    const dict = mod.singstarSongDictionary as unknown as Record<string, DictEntry>
+    const index = new Map<string, DictEntry>()
+    for (const entry of Object.values(dict)) {
+      const key = `${normalize(entry.artist)} - ${normalize(entry.title)}`
+      // First writer wins — avoids overwriting a richer entry with a sparse duplicate
+      if (!index.has(key)) index.set(key, entry)
+    }
+    return index
+  })
+  return indexPromise
 }
 
 /** All known SingStar game names as a Set — used for warn-indicator logic in the UI */
@@ -148,14 +152,14 @@ export const KNOWN_SINGSTAR_GAMES = new Set<string>([
   "SingStar Vol. 3: Party Edition",
 ])
 
-export function lookupSingStarEdition(
+export async function lookupSingStarEdition(
   artist: string,
   title: string
-): SingStarEditionMatch | null {
+): Promise<SingStarEditionMatch | null> {
   if (!artist.trim() || !title.trim()) return null
 
   const key = `${normalize(artist)} - ${normalize(title)}`
-  const entry = index.get(key)
+  const entry = (await loadIndex()).get(key)
   if (!entry) return null
 
   const platforms = [...new Set(entry.editions.map(e => e.platform))]
