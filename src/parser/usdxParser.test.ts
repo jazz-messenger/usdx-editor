@@ -50,6 +50,14 @@ describe('parseUsdx', () => {
       expect(firstNote.syllable).toBe('When')
     })
 
+    it('keeps all notes when the trailing E terminator is missing', () => {
+      const withoutE = MINIMAL_SONG.replace(/\nE$/, '')
+      const result = parseUsdx(withoutE)
+      expect(result.tracks).toHaveLength(1)
+      expect(result.tracks[0].phrases).toHaveLength(2)
+      expect(result.tracks[0].phrases[1].notes).toHaveLength(2)
+    })
+
     it('groups notes into phrases separated by -', () => {
       const result = parseUsdx(MINIMAL_SONG)
       expect(result.tracks[0].phrases).toHaveLength(2)

@@ -300,6 +300,9 @@ export function parseUsdx(content: string): UsdxSong {
     }
   }
 
+  // Some community files omit the trailing E terminator — flush whatever remains
+  flushTrack(currentPlayer)
+
   return {
     header: header as UsdxHeader,
     tracks,

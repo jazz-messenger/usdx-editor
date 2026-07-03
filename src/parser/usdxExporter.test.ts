@@ -119,6 +119,18 @@ describe('exportUsdx', () => {
     expect(song.header.comment).toBe('original comment')
   })
 
+  it('round-trips unknown header tags (e.g. medley parameters)', () => {
+    const src = SONG.replace(
+      '#GAP:1000',
+      '#GAP:1000\n#MEDLEYSTARTBEAT:40\n#MEDLEYENDBEAT:200\n#CALCMEDLEY:off'
+    )
+    const song = parseUsdx(src)
+    const output = exportUsdx(song, {})
+    expect(output).toContain('#MEDLEYSTARTBEAT:40')
+    expect(output).toContain('#MEDLEYENDBEAT:200')
+    expect(output).toContain('#CALCMEDLEY:off')
+  })
+
   it('writes singer names as #P1/#P2 in header for duets', () => {
     const song = parseUsdx(SONG)
     const output = exportUsdx(song, { 1: 2 }, ['Smudo', 'Thomas D.'])

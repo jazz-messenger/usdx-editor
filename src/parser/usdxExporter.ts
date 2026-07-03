@@ -1,5 +1,15 @@
 import type { UsdxSong, Note, Phrase } from './usdxParser'
 
+/** Header keys the exporter writes explicitly (or intentionally handles elsewhere).
+ *  Everything else in the header is an unknown tag preserved by the parser and
+ *  must be re-emitted as-is — e.g. #MEDLEYSTARTBEAT, #MEDLEYENDBEAT, #CALCMEDLEY. */
+const KNOWN_HEADER_KEYS = new Set<string>([
+  'title', 'artist', 'audio', 'bpm', 'gap', 'start', 'videoGap', 'video',
+  'videoUrl', 'cover', 'coverUrl', 'background', 'language', 'genre', 'year',
+  'edition', 'tags', 'creator', 'providedBy', 'previewStart', 'comment',
+  'singerP1', 'singerP2',
+])
+
 function noteToLine(note: Note): string {
   return `${note.type} ${note.beat} ${note.length} ${note.pitch} ${note.syllable}`
 }
@@ -59,6 +69,14 @@ export function exportUsdx(
   if (header.creator)       lines.push(`#CREATOR:${header.creator}`)
   if (header.providedBy)    lines.push(`#PROVIDEDBY:${header.providedBy}`)
   if (header.previewStart !== undefined) lines.push(`#PREVIEWSTART:${header.previewStart}`)
+
+  // Unknown tags preserved by the parser (stored lowercase) — round-trip them
+  for (const [key, value] of Object.entries(header)) {
+    if (KNOWN_HEADER_KEYS.has(key)) continue
+    if (value === undefined || value === null || value === '') continue
+    lines.push(`#${key.toUpperCase()}:${value}`)
+  }
+
   if (header.comment)       lines.push(`#COMMENT:${header.comment}`)
 
   const track = song.tracks[0]
