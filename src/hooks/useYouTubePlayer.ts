@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 export type YTPlayerState = 'idle' | 'ready' | 'error'
 
@@ -93,11 +93,13 @@ export function useYouTubePlayer(videoId: string | null) {
     }
   }, [videoId])
 
-  const getCurrentTime = (): number => playerRef.current?.getCurrentTime() ?? 0
-  const getDuration = (): number => playerRef.current?.getDuration() ?? 0
-  const seekTo = (seconds: number) => playerRef.current?.seekTo(seconds, true)
-  const play  = () => { if (typeof playerRef.current?.playVideo  === 'function') playerRef.current.playVideo() }
-  const pause = () => { if (typeof playerRef.current?.pauseVideo === 'function') playerRef.current.pauseVideo() }
+  // Stable identities — all access goes through the ref, so consumers can
+  // safely list these in effect dependency arrays.
+  const getCurrentTime = useCallback((): number => playerRef.current?.getCurrentTime() ?? 0, [])
+  const getDuration = useCallback((): number => playerRef.current?.getDuration() ?? 0, [])
+  const seekTo = useCallback((seconds: number) => { playerRef.current?.seekTo(seconds, true) }, [])
+  const play  = useCallback(() => { if (typeof playerRef.current?.playVideo  === 'function') playerRef.current.playVideo() }, [])
+  const pause = useCallback(() => { if (typeof playerRef.current?.pauseVideo === 'function') playerRef.current.pauseVideo() }, [])
 
   return { containerRef, playerState, isPlaying, getCurrentTime, getDuration, seekTo, play, pause }
 }

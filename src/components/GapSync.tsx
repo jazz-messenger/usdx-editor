@@ -1,78 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useYouTubePlayer } from '../hooks/useYouTubePlayer'
+import { useLocalPlayer } from '../hooks/useLocalPlayer'
+import { searchYouTube, openYouTubeSearch, extractYouTubeId } from '../utils/youtubeSearch'
+import type { YtResult } from '../utils/youtubeSearch'
 import { useLanguage } from '../i18n/LanguageContext'
 import { Tooltip } from './Tooltip'
-
-function extractYouTubeId(url: string): string | null {
-  const match = url.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/)
-  return match?.[1] ?? null
-}
-
-function decodeHtml(str: string): string {
-  const el = document.createElement('textarea')
-  el.innerHTML = str
-  return el.value
-}
-
-// ── YouTube search via Data API v3 ────────────────────────────────────────────
-
-interface YtResult {
-  videoId: string
-  title: string
-  author: string
-  year: string
-}
-
-const YT_API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY as string | undefined
-
-type SearchOutcome =
-  | { kind: 'results'; items: YtResult[] }
-  | { kind: 'quota' }
-  | { kind: 'error' }
-
-async function searchYouTube(query: string): Promise<SearchOutcome> {
-  if (!YT_API_KEY) return { kind: 'error' }
-
-  try {
-    const url =
-      `https://www.googleapis.com/youtube/v3/search` +
-      `?key=${YT_API_KEY}` +
-      `&q=${encodeURIComponent(query)}` +
-      `&type=video&part=snippet&maxResults=5`
-
-    const r = await fetch(url, { signal: AbortSignal.timeout(8000) })
-    const data = await r.json()
-
-    if (!r.ok) {
-      const reason = data?.error?.errors?.[0]?.reason ?? ''
-      if (reason === 'quotaExceeded' || reason === 'dailyLimitExceeded') {
-        return { kind: 'quota' }
-      }
-      return { kind: 'error' }
-    }
-
-    const items: YtResult[] = (data.items ?? []).map((item: {
-      id: { videoId: string }
-      snippet: { title: string; channelTitle: string; publishedAt?: string }
-    }) => ({
-      videoId: item.id.videoId,
-      title: decodeHtml(item.snippet.title),
-      author: decodeHtml(item.snippet.channelTitle),
-      year: item.snippet.publishedAt
-        ? new Date(item.snippet.publishedAt).getFullYear().toString()
-        : '',
-    }))
-
-    return { kind: 'results', items }
-  } catch {
-    return { kind: 'error' }
-  }
-}
-
-function openYouTubeSearch(artist: string | undefined, title: string | undefined) {
-  const q = encodeURIComponent(`${artist ?? ''} ${title ?? ''} official video`.trim())
-  window.open(`https://www.youtube.com/results?search_query=${q}`, '_blank')
-}
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
@@ -166,23 +98,19 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
                       : null
 
   // ── Local video player ──────────────────────────────────────────────────────
-  const localVideoRef = useRef<HTMLVideoElement>(null)
-  const [localPlayerState, setLocalPlayerState] = useState<'idle' | 'ready' | 'error'>('idle')
-  const [localIsPlaying, setLocalIsPlaying] = useState(false)
-  const [localDuration, setLocalDuration] = useState(0)
+  const {
+    videoRef: localVideoRef,
+    playerState: localPlayerState,
+    isPlaying: localIsPlaying,
+    duration: localDuration,
+    getCurrentTime: localGetCurrentTime,
+    seekTo: localSeekTo,
+    play: localPlay,
+    pause: localPause,
+    handlers: localHandlers,
+  } = useLocalPlayer(localMediaUrl)
   // Prevent RAF from overwriting videoTime while the user is dragging the slider
   const isDraggingSlider = useRef(false)
-
-  // Reset local player state whenever the source changes
-  useEffect(() => {
-    setLocalPlayerState('idle')
-    setLocalIsPlaying(false)
-  }, [localMediaUrl])
-
-  const localGetCurrentTime = useCallback(() => localVideoRef.current?.currentTime ?? 0, [])
-  const localSeekTo = useCallback((s: number) => { if (localVideoRef.current) localVideoRef.current.currentTime = s }, [])
-  const localPlay = useCallback(() => { localVideoRef.current?.play() }, [])
-  const localPause = useCallback(() => { localVideoRef.current?.pause() }, [])
 
   // ── Unified player API ───────────────────────────────────────────────────────
   const useLocal = activeTab !== 'youtube' && Boolean(localMediaUrl)
@@ -192,6 +120,7 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
   const seekTo         = useLocal ? localSeekTo         : ytSeekTo
   const play           = useLocal ? localPlay           : ytPlay
   const pause          = useLocal ? localPause          : ytPause
+  const isPlayerReady  = playerState === 'ready'
 
   // ── Seamless handover when tab changes ───────────────────────────────────────
   const handoverTimeRef = useRef<number | null>(null)
@@ -213,12 +142,14 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
     setActiveTab(tab)
   }, [activeTab, isPlaying, getCurrentTime, videoGap])
 
-  // Pause the player that just became inactive
+  // Pause the player that just became inactive. Re-runs when the newly active
+  // player turns ready, so a switch to a still-loading target can't leave the
+  // old player running.
   useEffect(() => {
     if (!isPlayerReady) return
     if (activeTab === 'youtube') localPause()
     else ytPause()
-  }, [activeTab]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [activeTab, isPlayerReady, localPause, ytPause])
 
   // Once the new player is ready, seek to the captured time and resume
   useEffect(() => {
@@ -227,7 +158,7 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
     handoverTimeRef.current = null
     seekTo(t)
     play()
-  }, [playerState]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [playerState, seekTo, play])
 
   // ── Search state ────────────────────────────────────────────────────────────
   const [searchResults, setSearchResults] = useState<YtResult[] | null>(null)
@@ -240,7 +171,10 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
   // Converts a raw player time to song-relative ms.
   // Audio tab: player time IS audio time → multiply directly.
   // Video/YouTube tab: subtract VIDEOGAP first (video is offset by that amount).
-  const toSongMs = (t: number) => activeTab === 'audio' ? t * 1000 : (t - videoGap) * 1000
+  const toSongMs = useCallback(
+    (t: number) => activeTab === 'audio' ? t * 1000 : (t - videoGap) * 1000,
+    [activeTab, videoGap]
+  )
 
   // Drive highlight updates and video clock via requestAnimationFrame (~60 fps).
   useEffect(() => {
@@ -254,7 +188,7 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
     }
     rafId = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(rafId)
-  }, [isPlaying, onTimeUpdate, getCurrentTime, videoGap, activeTab]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isPlaying, onTimeUpdate, getCurrentTime, toSongMs])
 
   // Seek to the intro-skip position (#START) and play.
   // Audio tab: seek to START (or 0 if unset).
@@ -327,8 +261,6 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
     setShowResults(false)   // hide list, but keep results cached for "andere Auswahl"
     setSearchMsg(null)
   }
-
-  const isPlayerReady = playerState === 'ready'
 
   return (
     <div className="gap-sync">
@@ -563,12 +495,7 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
             ref={localVideoRef}
             className="local-video"
             src={localMediaUrl}
-            onLoadedMetadata={() => setLocalDuration(localVideoRef.current?.duration ?? 0)}
-            onCanPlay={() => setLocalPlayerState('ready')}
-            onError={() => setLocalPlayerState('error')}
-            onPlay={() => setLocalIsPlaying(true)}
-            onPause={() => setLocalIsPlaying(false)}
-            onEnded={() => setLocalIsPlaying(false)}
+            {...localHandlers}
           />
         </div>
       )}
