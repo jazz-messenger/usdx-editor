@@ -45,11 +45,10 @@ export async function lookupReleaseInfo(
     `?query=${encodeURIComponent(query)}&fmt=json&limit=5&inc=tags`
 
   try {
+    // Note: MusicBrainz asks API clients for a User-Agent, but browsers
+    // forbid setting that header in fetch — it would be silently ignored.
     const res = await fetch(url, {
-      headers: {
-        Accept: 'application/json',
-        'User-Agent': 'usdx-editor/1.0.1 (https://github.com/jazz-messenger/usdx-editor)',
-      },
+      headers: { Accept: 'application/json' },
     })
     if (!res.ok) return empty
     const data = await res.json()

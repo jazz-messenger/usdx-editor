@@ -96,7 +96,7 @@ export function DropZone({ onLoad }: { onLoad: (song: UsdxSong, filename: string
     >
       <div className="drop-zone-icon">🎵</div>
       <h2>{t.dropzone.heading}</h2>
-      <p>{t.dropzone.instruction(navigator.platform.includes('Mac') ? '⌘' : 'Strg')}</p>
+      <p>{t.dropzone.instruction(/Mac|iPhone|iPad/.test(navigator.userAgent) ? '⌘' : 'Strg')}</p>
       {error && <p className="drop-zone-error">{error}</p>}
       <label className="btn-primary drop-zone-btn">
         {t.dropzone.button}

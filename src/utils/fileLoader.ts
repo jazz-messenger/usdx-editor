@@ -171,7 +171,10 @@ export function findBackgroundFile(header: UsdxHeader, files: SongFileMap): File
 export function fetchRemoteCovers(artist: string, title: string): Promise<string[]> {
   const query = encodeURIComponent(`${artist} ${title}`)
   return fetch(`https://itunes.apple.com/search?term=${query}&entity=song&limit=5`)
-    .then((r) => r.json())
+    .then((r) => {
+      if (!r.ok) throw new Error(`iTunes search failed: ${r.status}`)
+      return r.json()
+    })
     .then((data) => (data.results ?? [])
       .map((r: { artworkUrl100?: string }) => r.artworkUrl100)
       .filter(Boolean)

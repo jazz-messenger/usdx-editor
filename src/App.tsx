@@ -3,6 +3,7 @@ import './App.css'
 import type { UsdxSong } from './parser/usdxParser'
 import { SongView } from './components/SongView'
 import { DropZone } from './components/DropZone'
+import { Tooltip } from './components/Tooltip'
 import { KofiWidget } from './components/KofiWidget'
 import { HelpModal } from './components/HelpModal'
 import type { SongFileMap } from './utils/fileLoader'
@@ -29,9 +30,11 @@ export default function App() {
     <div className="app">
       <header className="app-header">
         {song ? (
-          <button className="app-logo-btn" onClick={() => setSong(null)} title={t.app.backToHome}>
-            <img src={`${import.meta.env.BASE_URL}icon-logo.png`} alt={t.app.title} className="app-logo" />
-          </button>
+          <Tooltip text={t.app.backToHome}>
+            <button className="app-logo-btn" onClick={() => setSong(null)}>
+              <img src={`${import.meta.env.BASE_URL}icon-logo.png`} alt={t.app.title} className="app-logo" />
+            </button>
+          </Tooltip>
         ) : (
           <img src={`${import.meta.env.BASE_URL}icon-logo.png`} alt={t.app.title} className="app-logo" />
         )}

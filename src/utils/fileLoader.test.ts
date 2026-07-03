@@ -164,6 +164,7 @@ describe('fetchRemoteCovers', () => {
       artworkUrl100: `https://example.com/${i + 1}100x100bb.jpg`,
     }))
     vi.mocked(fetch).mockResolvedValue({
+      ok: true,
       json: () => Promise.resolve({ results: mockResults }),
     } as Response)
 
@@ -174,6 +175,7 @@ describe('fetchRemoteCovers', () => {
 
   it('builds the correct iTunes query URL', async () => {
     vi.mocked(fetch).mockResolvedValue({
+      ok: true,
       json: () => Promise.resolve({ results: [] }),
     } as Response)
 
@@ -188,6 +190,7 @@ describe('fetchRemoteCovers', () => {
 
   it('filters out results without artworkUrl100', async () => {
     vi.mocked(fetch).mockResolvedValue({
+      ok: true,
       json: () =>
         Promise.resolve({
           results: [{ artworkUrl100: 'https://img.example.com/art100x100bb.jpg' }, {}],
@@ -198,6 +201,12 @@ describe('fetchRemoteCovers', () => {
     expect(urls).toHaveLength(1)
   })
 
+  it('returns empty array on non-ok HTTP responses', async () => {
+    vi.mocked(fetch).mockResolvedValue({ ok: false, status: 503 } as Response)
+    const urls = await fetchRemoteCovers('A', 'T')
+    expect(urls).toEqual([])
+  })
+
   it('returns empty array on network error', async () => {
     vi.mocked(fetch).mockRejectedValue(new Error('Network error'))
     const urls = await fetchRemoteCovers('A', 'T')
@@ -206,6 +215,7 @@ describe('fetchRemoteCovers', () => {
 
   it('returns empty array when results is missing', async () => {
     vi.mocked(fetch).mockResolvedValue({
+      ok: true,
       json: () => Promise.resolve({}),
     } as Response)
     const urls = await fetchRemoteCovers('A', 'T')
