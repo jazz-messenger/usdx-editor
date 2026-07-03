@@ -81,8 +81,11 @@ Webserver und ist nie Teil des JS-Bundles. Einrichtung:
    oberhalb des Webroots (`open_basedir`) — Details und Ausweichweg stehen im
    Kommentar-Header von `public/api/yt-search.php`.
 
-Lokal (`npm run dev`) gibt es keinen Proxy — die eingebettete Suche meldet dann
-„keine Ergebnisse", alles andere funktioniert normal.
+Lokal (`npm run dev`) leitet der Vite-Dev-Server `api/`-Anfragen an die
+Live-Site weiter (siehe `server.proxy` in `vite.config.ts`) — die eingebettete
+Suche funktioniert also auch lokal, sobald der Proxy einmal deployt ist. Ein
+lokaler Key oder PHP wird nicht benötigt. Ohne Internet/deployten Proxy meldet
+die Suche „keine Ergebnisse", alles andere funktioniert normal.
 
 ```bash
 npm test        # Unit-Tests
