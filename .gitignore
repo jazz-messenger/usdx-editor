@@ -24,3 +24,8 @@ dist-ssr
 *.sw?
 .claude/
 samples/
+
+# Environment files (API keys etc.)
+.env
+.env.*
+!.env.example

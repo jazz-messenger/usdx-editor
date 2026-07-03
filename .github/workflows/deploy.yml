@@ -25,16 +25,14 @@ jobs:
 
       - name: Build
         run: npm run build
-        env:
-          VITE_YOUTUBE_API_KEY: ${{ secrets.VITE_YOUTUBE_API_KEY }}
 
-      - name: Deploy via FTP
+      - name: Deploy via FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
+          # Encrypted transfer — credentials and files never travel in plaintext
+          protocol: ftps
           local-dir: ./dist/
           server-dir: ${{ secrets.FTP_TARGET_DIR }}
-          # Force full re-upload to recover from cache/path mismatches
-          dangerous-clean-slate: true

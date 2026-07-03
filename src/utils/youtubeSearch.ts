@@ -1,16 +1,8 @@
-// ── YouTube helpers: URL parsing + search via Data API v3 ────────────────────
+// ── YouTube helpers: URL parsing + search via server-side proxy ──────────────
 
 export function extractYouTubeId(url: string): string | null {
   const match = url.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/)
   return match?.[1] ?? null
-}
-
-// API responses contain HTML entities (&amp; etc.) in titles/channel names.
-// A detached <textarea> parses them as inert RCDATA — no script execution.
-function decodeHtml(str: string): string {
-  const el = document.createElement('textarea')
-  el.innerHTML = str
-  return el.value
 }
 
 export interface YtResult {
@@ -20,53 +12,47 @@ export interface YtResult {
   year: string
 }
 
-const YT_API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY as string | undefined
-
 export type SearchOutcome =
   | { kind: 'results'; items: YtResult[] }
   | { kind: 'quota' }
   | { kind: 'error' }
 
+/**
+ * Searches YouTube via the server-side proxy (public/api/yt-search.php),
+ * which holds the API key — the key never ships in the client bundle.
+ * The proxy already answers in the SearchOutcome shape and decodes HTML
+ * entities server-side. Without a deployed proxy (e.g. local dev), the fetch
+ * fails and this resolves to { kind: 'error' }.
+ */
 export async function searchYouTube(query: string): Promise<SearchOutcome> {
-  if (!YT_API_KEY) return { kind: 'error' }
-
   try {
-    const url =
-      `https://www.googleapis.com/youtube/v3/search` +
-      `?key=${YT_API_KEY}` +
-      `&q=${encodeURIComponent(query)}` +
-      `&type=video&part=snippet&maxResults=5`
-
+    const url = `${import.meta.env.BASE_URL}api/yt-search.php?q=${encodeURIComponent(query)}`
     const r = await fetch(url, { signal: AbortSignal.timeout(8000) })
+    if (!r.ok) return { kind: 'error' }
     const data = await r.json()
 
-    if (!r.ok) {
-      const reason = data?.error?.errors?.[0]?.reason ?? ''
-      if (reason === 'quotaExceeded' || reason === 'dailyLimitExceeded') {
-        return { kind: 'quota' }
-      }
-      return { kind: 'error' }
+    if (data?.kind === 'quota') return { kind: 'quota' }
+    if (data?.kind === 'results' && Array.isArray(data.items)) {
+      const items: YtResult[] = data.items
+        .filter((it: unknown): it is YtResult =>
+          typeof it === 'object' && it !== null &&
+          typeof (it as YtResult).videoId === 'string' && (it as YtResult).videoId !== ''
+        )
+        .map((it: YtResult) => ({
+          videoId: it.videoId,
+          title: typeof it.title === 'string' ? it.title : '',
+          author: typeof it.author === 'string' ? it.author : '',
+          year: typeof it.year === 'string' ? it.year : '',
+        }))
+      return { kind: 'results', items }
     }
-
-    const items: YtResult[] = (data.items ?? []).map((item: {
-      id: { videoId: string }
-      snippet: { title: string; channelTitle: string; publishedAt?: string }
-    }) => ({
-      videoId: item.id.videoId,
-      title: decodeHtml(item.snippet.title),
-      author: decodeHtml(item.snippet.channelTitle),
-      year: item.snippet.publishedAt
-        ? new Date(item.snippet.publishedAt).getFullYear().toString()
-        : '',
-    }))
-
-    return { kind: 'results', items }
+    return { kind: 'error' }
   } catch {
     return { kind: 'error' }
   }
 }
 
-/** Opens a YouTube search for the song in a new tab (fallback when the API is unavailable). */
+/** Opens a YouTube search for the song in a new tab (fallback when the proxy is unavailable). */
 export function openYouTubeSearch(artist: string | undefined, title: string | undefined) {
   const q = encodeURIComponent(`${artist ?? ''} ${title ?? ''} official video`.trim())
   window.open(`https://www.youtube.com/results?search_query=${q}`, '_blank')

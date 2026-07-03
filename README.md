@@ -61,14 +61,24 @@ npm install
 npm run dev
 ```
 
-Für YouTube-Suche wird ein API-Key benötigt:
+### YouTube-Suche (Produktion)
 
-```bash
-cp .env.example .env.local
-# VITE_YOUTUBE_API_KEY=dein-key eintragen
-```
+Die eingebettete YouTube-Suche läuft über den serverseitigen Proxy
+`public/api/yt-search.php` — der API-Key liegt ausschließlich auf dem
+Webserver und ist nie Teil des JS-Bundles. Einrichtung:
 
-Den YouTube Data API v3 Key in der [Google Cloud Console](https://console.cloud.google.com/) erstellen und auf die eigene Domain einschränken (`korczak.at/*`).
+1. Key in der [Google Cloud Console](https://console.cloud.google.com/) erstellen:
+   YouTube Data API v3 aktivieren, API-Beschränkung auf **nur** YouTube Data API v3,
+   niedriges Quota-Limit setzen (eine Suche kostet 100 Einheiten).
+   **Keine** Referrer-Beschränkung — die Aufrufe kommen vom Server.
+2. Per FTP eine Datei `usdx-editor-yt-key.php` **eine Ebene über** dem
+   Deploy-Verzeichnis ablegen (neben dem `usdx-editor/`-Ordner):
+   ```php
+   <?php return 'AIza...dein-key...';
+   ```
+
+Lokal (`npm run dev`) gibt es keinen Proxy — die eingebettete Suche meldet dann
+„keine Ergebnisse", alles andere funktioniert normal.
 
 ```bash
 npm test        # Unit-Tests
