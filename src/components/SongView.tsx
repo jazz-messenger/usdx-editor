@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useRef, useEffect, useReducer } from 'react'
+import { memo, useState, useMemo, useCallback, useRef, useEffect, useReducer } from 'react'
 import { GapSync } from './GapSync'
 import { HeaderEditor } from './HeaderEditor'
 import { Tooltip } from './Tooltip'
@@ -6,6 +6,7 @@ import { WaveformView } from './WaveformView'
 import { useLanguage } from '../i18n/LanguageContext'
 import { exportUsdx } from '../parser/usdxExporter'
 import { phraseToSyllables } from '../parser/lyrics'
+import type { DisplaySyllable } from '../parser/lyrics'
 import { msToBeat } from '../parser/timing'
 import { mergeDuetTracks, findActivePos } from '../utils/duetMerge'
 import type { ActivePos } from '../utils/duetMerge'
@@ -76,6 +77,72 @@ interface SongViewProps {
   files: SongFileMap
   onReset: () => void
 }
+
+// ── Phrase row ────────────────────────────────────────────────────────────────
+// Memoized: during playback SongView re-renders ~60×/s (RAF-driven playhead),
+// but a row's props only change when it becomes/stops being the active phrase
+// or its singer assignment changes — every other row skips re-rendering.
+// Keep the props primitive/stable: no inline callbacks, no raw activePos.
+
+interface PhraseRowProps {
+  index: number
+  syllables: DisplaySyllable[]
+  singer: 1 | 2 | 3
+  /** Current beat while this row is the active phrase, otherwise null. */
+  activeBeat: number | null
+  onToggleSinger: (index: number) => void
+  registerRow: (index: number, el: HTMLDivElement | null) => void
+}
+
+const PhraseRow = memo(function PhraseRow({
+  index, syllables, singer, activeBeat, onToggleSinger, registerRow,
+}: PhraseRowProps) {
+  const { t } = useLanguage()
+  const isActive = activeBeat !== null
+
+  const phraseEl = (
+    <span className="phrase-text">
+      {syllables.map((s, j) => {
+        const isActiveNote =
+          activeBeat !== null &&
+          activeBeat >= s.startBeat &&
+          activeBeat < s.endBeat
+        return (
+          <span
+            key={j}
+            className={[
+              'syllable',
+              s.type === '*' ? 'golden' : '',
+              s.type === 'F' ? 'freestyle' : '',
+              isActiveNote ? 'active-note' : '',
+            ].filter(Boolean).join(' ')}
+          >
+            {j > 0 && s.startsWord ? ' ' : ''}{s.text}
+          </span>
+        )
+      })}
+    </span>
+  )
+
+  return (
+    <div
+      ref={(el) => registerRow(index, el)}
+      className={`phrase phrase--singer-${singer}${isActive ? ' phrase--active' : ''}`}
+    >
+      <span className="phrase-number">{index + 1}</span>
+      <div className="phrase-col phrase-col--1">{(singer === 1 || singer === 3) && phraseEl}</div>
+      <Tooltip text={singer === 1 ? t.songview.assignToSinger2 : singer === 2 ? t.songview.assignToSinger1 : t.songview.assignBoth}>
+        <button
+          className={`assign-btn assign-btn--${singer === 1 ? 'to2' : singer === 2 ? 'to1' : 'both'}`}
+          onClick={() => onToggleSinger(index)}
+        >
+          {singer === 1 ? '→' : singer === 2 ? '←' : '⇔'}
+        </button>
+      </Tooltip>
+      <div className="phrase-col phrase-col--2">{(singer === 2 || singer === 3) && phraseEl}</div>
+    </div>
+  )
+})
 
 export function SongView({ song, filename, files, onReset }: SongViewProps) {
   const { t } = useLanguage()
@@ -151,10 +218,33 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
 
   // Playback state
   const [activePos, setActivePos] = useState<ActivePos | null>(null)
-  const activePhraseRef = useRef<HTMLDivElement | null>(null)
-  const firstPhraseRef = useRef<HTMLDivElement | null>(null)
   const lyricsColumnRef = useRef<HTMLDivElement | null>(null)
   const skipNextScrollRef = useRef(false)
+
+  // Syllables never change during playback — compute once per track
+  const syllablesPerPhrase = useMemo(
+    () => (track ? track.phrases.map(phraseToSyllables) : []),
+    [track]
+  )
+
+  // Row elements by phrase index, for scroll-to-active-phrase
+  const rowRefs = useRef(new Map<number, HTMLDivElement>())
+  const registerRow = useCallback((index: number, el: HTMLDivElement | null) => {
+    if (el) rowRefs.current.set(index, el)
+    else rowRefs.current.delete(index)
+  }, [])
+
+  // Auto-scroll when a different phrase becomes active
+  useEffect(() => {
+    const index = activePos?.phraseIndex
+    if (index === undefined) return
+    const el = rowRefs.current.get(index)
+    if (!el) return
+    if (!skipNextScrollRef.current) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+    skipNextScrollRef.current = false
+  }, [activePos?.phraseIndex])
   const [warningDismissed, setWarningDismissed] = useState(false)
   const [deprecationDismissed, setDeprecationDismissed] = useState(false)
 
@@ -258,13 +348,14 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
     URL.revokeObjectURL(url)
   }
 
-  const toggleSinger = (i: number) => {
+  // Stable identity — passed to the memoized PhraseRow
+  const toggleSinger = useCallback((i: number) => {
     setSingerMap(prev => {
       const cur = prev[i] ?? 1
       const next = cur === 1 ? 2 : cur === 2 ? 3 : 1
       return { ...prev, [i]: next }
     })
-  }
+  }, [])
 
   const singerOf = (i: number): 1 | 2 | 3 => singerMap[i] ?? 1
 
@@ -412,66 +503,17 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
             </div>
           )}
           {lyricsView === 'text' && <div className="phrases">
-            {Array.from({ length: phraseCount }, (_, i) => {
-              const phrase = track.phrases[i]
-              const singer = singerOf(i)
-              const syllables = phraseToSyllables(phrase)
-              const isActivePhrase = activePos?.phraseIndex === i
-
-              const phraseEl = (
-                <span className="phrase-text">
-                  {syllables.map((s, j) => {
-                    const isActiveNote =
-                      isActivePhrase &&
-                      activePos !== null &&
-                      activePos.beat >= s.startBeat &&
-                      activePos.beat < s.endBeat
-                    return (
-                      <span
-                        key={j}
-                        className={[
-                          'syllable',
-                          s.type === '*' ? 'golden' : '',
-                          s.type === 'F' ? 'freestyle' : '',
-                          isActiveNote ? 'active-note' : '',
-                        ].filter(Boolean).join(' ')}
-                      >
-                        {j > 0 && s.startsWord ? ' ' : ''}{s.text}
-                      </span>
-                    )
-                  })}
-                </span>
-              )
-
-              return (
-                <div
-                  key={i}
-                  ref={(el) => {
-                    if (i === 0) firstPhraseRef.current = el
-                    if (isActivePhrase && el && el !== activePhraseRef.current) {
-                      activePhraseRef.current = el
-                      if (!skipNextScrollRef.current) {
-                        el.scrollIntoView({ behavior: 'smooth', block: 'center' })
-                      }
-                      skipNextScrollRef.current = false
-                    }
-                  }}
-                  className={`phrase phrase--singer-${singer}${isActivePhrase ? ' phrase--active' : ''}`}
-                >
-                  <span className="phrase-number">{i + 1}</span>
-                  <div className="phrase-col phrase-col--1">{(singer === 1 || singer === 3) && phraseEl}</div>
-                  <Tooltip text={singer === 1 ? t.songview.assignToSinger2 : singer === 2 ? t.songview.assignToSinger1 : t.songview.assignBoth}>
-                    <button
-                      className={`assign-btn assign-btn--${singer === 1 ? 'to2' : singer === 2 ? 'to1' : 'both'}`}
-                      onClick={() => toggleSinger(i)}
-                    >
-                      {singer === 1 ? '→' : singer === 2 ? '←' : '⇔'}
-                    </button>
-                  </Tooltip>
-                  <div className="phrase-col phrase-col--2">{(singer === 2 || singer === 3) && phraseEl}</div>
-                </div>
-              )
-            })}
+            {Array.from({ length: phraseCount }, (_, i) => (
+              <PhraseRow
+                key={i}
+                index={i}
+                syllables={syllablesPerPhrase[i]}
+                singer={singerOf(i)}
+                activeBeat={activePos?.phraseIndex === i ? activePos.beat : null}
+                onToggleSinger={toggleSinger}
+                registerRow={registerRow}
+              />
+            ))}
           </div>}
         </div>
 

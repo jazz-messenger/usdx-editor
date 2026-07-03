@@ -1,52 +1,61 @@
 export type Platform = 'PS2' | 'PS3'
 
-export type SingStarGame =
-  | "SingStar"
-  | "SingStar '80s"
-  | "SingStar '90s"
-  | "SingStar ABBA"
-  | "SingStar Amped"
-  | "SingStar Anthems"
-  | "SingStar Après-Ski Party"
-  | "SingStar Boy Bands vs Girl Bands"
-  | "SingStar Chart Hits"
-  | "SingStar Chartbreaker"
-  | "SingStar Country"
-  | "SingStar Dance"
-  | "SingStar Deutsch Rock-Pop"
-  | "SingStar Deutsch Rock-Pop Vol. 2"
-  | "SingStar Die Toten Hosen"
-  | "SingStar Guitar"
-  | "SingStar Hits"
-  | "SingStar Hottest Hits"
-  | "SingStar Legends"
-  | "SingStar Made In Germany"
-  | "SingStar Mallorca Party"
-  | "SingStar Mecano"
-  | "SingStar Morangos com Açucar"
-  | "SingStar Motown"
-  | "SingStar Party"
-  | "SingStar Polskie Hity"
-  | "SingStar Pop"
-  | "SingStar Pop Edition"
-  | "SingStar Pop Hits"
-  | "SingStar Pop Vol 2"
-  | "SingStar Queen"
-  | "SingStar R&B"
-  | "SingStar Rock Ballads"
-  | "SingStar Rocks!"
-  | "SingStar Schlager"
-  | "SingStar Starter Pack"
-  | "SingStar Studio 100"
-  | "SingStar Summer Party"
-  | "SingStar Singalong with Disney"
-  | "SingStar Take That"
-  | "SingStar The Wiggles"
-  | "SingStar Turkish Party"
-  | "SingStar Ultimate Party"
-  | "SingStar Vasco"
-  | "SingStar Vol. 2"
-  | "SingStar Vol. 3: Party Edition"
+// Single source of truth for all known SingStar game names.
+// Both the SingStarGame type and the KNOWN_SINGSTAR_GAMES set are derived
+// from this array — new games only need to be added HERE.
+const SINGSTAR_GAMES = [
+  "SingStar",
+  "SingStar '80s",
+  "SingStar '90s",
+  "SingStar ABBA",
+  "SingStar Amped",
+  "SingStar Anthems",
+  "SingStar Après-Ski Party",
+  "SingStar Boy Bands vs Girl Bands",
+  "SingStar Chart Hits",
+  "SingStar Chartbreaker",
+  "SingStar Country",
+  "SingStar Dance",
+  "SingStar Deutsch Rock-Pop",
+  "SingStar Deutsch Rock-Pop Vol. 2",
+  "SingStar Die Toten Hosen",
+  "SingStar Guitar",
+  "SingStar Hits",
+  "SingStar Hottest Hits",
+  "SingStar Legends",
+  "SingStar Made In Germany",
+  "SingStar Mallorca Party",
+  "SingStar Mecano",
+  "SingStar Morangos com Açucar",
+  "SingStar Motown",
+  "SingStar Party",
+  "SingStar Polskie Hity",
+  "SingStar Pop",
+  "SingStar Pop Edition",
+  "SingStar Pop Hits",
+  "SingStar Pop Vol 2",
+  "SingStar Queen",
+  "SingStar R&B",
+  "SingStar Rock Ballads",
+  "SingStar Rocks!",
+  "SingStar Schlager",
+  "SingStar Starter Pack",
+  "SingStar Studio 100",
+  "SingStar Summer Party",
+  "SingStar Singalong with Disney",
+  "SingStar Take That",
+  "SingStar The Wiggles",
+  "SingStar Turkish Party",
+  "SingStar Ultimate Party",
+  "SingStar Vasco",
+  "SingStar Vol. 2",
+  "SingStar Vol. 3: Party Edition",
+] as const
+
+export type SingStarGame = (typeof SINGSTAR_GAMES)[number]
+
+/** All known SingStar game names as a Set — used for warn-indicator logic in the UI */
+export const KNOWN_SINGSTAR_GAMES = new Set<string>(SINGSTAR_GAMES)
 
 interface DictEdition {
   game: SingStarGame | string
@@ -101,56 +110,6 @@ function loadIndex(): Promise<Map<string, DictEntry>> {
   })
   return indexPromise
 }
-
-/** All known SingStar game names as a Set — used for warn-indicator logic in the UI */
-export const KNOWN_SINGSTAR_GAMES = new Set<string>([
-  "SingStar",
-  "SingStar '80s",
-  "SingStar '90s",
-  "SingStar ABBA",
-  "SingStar Amped",
-  "SingStar Anthems",
-  "SingStar Après-Ski Party",
-  "SingStar Boy Bands vs Girl Bands",
-  "SingStar Chart Hits",
-  "SingStar Chartbreaker",
-  "SingStar Country",
-  "SingStar Dance",
-  "SingStar Deutsch Rock-Pop",
-  "SingStar Deutsch Rock-Pop Vol. 2",
-  "SingStar Die Toten Hosen",
-  "SingStar Guitar",
-  "SingStar Hits",
-  "SingStar Hottest Hits",
-  "SingStar Legends",
-  "SingStar Made In Germany",
-  "SingStar Mallorca Party",
-  "SingStar Mecano",
-  "SingStar Morangos com Açucar",
-  "SingStar Motown",
-  "SingStar Party",
-  "SingStar Polskie Hity",
-  "SingStar Pop",
-  "SingStar Pop Edition",
-  "SingStar Pop Hits",
-  "SingStar Pop Vol 2",
-  "SingStar Queen",
-  "SingStar R&B",
-  "SingStar Rock Ballads",
-  "SingStar Rocks!",
-  "SingStar Schlager",
-  "SingStar Starter Pack",
-  "SingStar Studio 100",
-  "SingStar Summer Party",
-  "SingStar Singalong with Disney",
-  "SingStar Take That",
-  "SingStar The Wiggles",
-  "SingStar Turkish Party",
-  "SingStar Ultimate Party",
-  "SingStar Vasco",
-  "SingStar Vol. 2",
-  "SingStar Vol. 3: Party Edition",
-])
 
 export async function lookupSingStarEdition(
   artist: string,
