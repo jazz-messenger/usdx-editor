@@ -1,7 +1,8 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import type { ReactNode } from 'react'
 import { translations } from './translations'
-import type { Locale, Translations } from './translations'
+import type { Locale } from './translations'
+import { LanguageContext } from './useLanguage'
 
 const STORAGE_KEY = 'usdx-locale'
 
@@ -11,18 +12,6 @@ function detectLocale(): Locale {
   const lang = navigator.language.slice(0, 2).toLowerCase()
   return lang === 'de' ? 'de' : 'en'
 }
-
-interface LanguageContextValue {
-  locale: Locale
-  setLocale: (l: Locale) => void
-  t: Translations
-}
-
-const LanguageContext = createContext<LanguageContextValue>({
-  locale: 'de',
-  setLocale: () => {},
-  t: translations['de'],
-})
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(detectLocale)
@@ -41,8 +30,4 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       {children}
     </LanguageContext.Provider>
   )
-}
-
-export function useLanguage() {
-  return useContext(LanguageContext)
 }

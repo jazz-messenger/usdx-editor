@@ -1,7 +1,8 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { GapSync, shouldHandover } from './GapSync'
+import { GapSync } from './GapSync'
+import { shouldHandover } from '../utils/playback'
 import { LanguageProvider } from '../i18n/LanguageContext'
 import type { GapSyncTiming, GapSyncMedia } from './GapSync'
 

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { useLanguage } from '../i18n/LanguageContext'
+import { useLanguage } from '../i18n/useLanguage'
 import { Tooltip } from './Tooltip'
 
 export type SuggestionGroup = { group: string; items: string[] }
@@ -16,7 +16,7 @@ export interface TagEditorProps {
   tooltip?: string
 }
 
-export function flatItems(suggestions: string[] | SuggestionGroup[]): string[] {
+function flatItems(suggestions: string[] | SuggestionGroup[]): string[] {
   if (suggestions.length === 0) return []
   return typeof suggestions[0] === 'string'
     ? (suggestions as string[])

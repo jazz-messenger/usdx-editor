@@ -3,7 +3,7 @@ import { GapSync } from './GapSync'
 import { HeaderEditor } from './HeaderEditor'
 import { Tooltip } from './Tooltip'
 import { WaveformView } from './WaveformView'
-import { useLanguage } from '../i18n/LanguageContext'
+import { useLanguage } from '../i18n/useLanguage'
 import { exportUsdx } from '../parser/usdxExporter'
 import { phraseToSyllables } from '../parser/lyrics'
 import type { DisplaySyllable } from '../parser/lyrics'
@@ -178,6 +178,7 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
   const audioUrl = useObjectUrl(effectiveAudioFile)
   const backgroundFile = useMemo(() => findBackgroundFile(header, files), [header, files])
   const backgroundUrl = useObjectUrl(backgroundFile)
+  const waveformFile = effectiveAudioFile ?? effectiveVideoFile ?? null
 
   const [singerMap, setSingerMap] = useState<Record<number, 1 | 2 | 3>>(
     () => mergedDuet?.singerMap ?? {}
@@ -348,6 +349,10 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
     URL.revokeObjectURL(url)
   }
 
+  // Stable identities — CoverArt lists onCoverUrl as an effect dependency
+  const handleCoverUrl = useCallback((v: string) => dispatch({ type: 'SET_COVER_URL', value: v }), [])
+  const handleCoverFileSaved = useCallback((v: string) => dispatch({ type: 'SET_COVER', value: v }), [])
+
   // Stable identity — passed to the memoized PhraseRow
   const toggleSinger = useCallback((i: number) => {
     setSingerMap(prev => {
@@ -376,8 +381,8 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
         onDismissGenre={() => setSuggestedGenre(null)}
         onAcceptSingstar={() => { dispatch({ type: 'SET_EDITION', value: [singstarMatch!.suggestedEdition] }); setSingstarMatch(null) }}
         onDismissSingstar={() => setSingstarMatch(null)}
-        onCoverUrl={v => dispatch({ type: 'SET_COVER_URL', value: v })}
-        onCoverFileSaved={v => dispatch({ type: 'SET_COVER', value: v })}
+        onCoverUrl={handleCoverUrl}
+        onCoverFileSaved={handleCoverFileSaved}
         onDownload={handleDownload}
         onReset={onReset}
       />
@@ -477,7 +482,10 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
         <div className="lyrics-column" ref={lyricsColumnRef}>
           {lyricsView === 'waveform' && (
             <WaveformView
-              file={effectiveAudioFile ?? effectiveVideoFile ?? null}
+              // Keyed by file identity: a new file remounts the view, which
+              // resets zoom/pan/status via initial state (no reset effects)
+              key={waveformFile ? `${waveformFile.name}|${waveformFile.size}|${waveformFile.lastModified}` : 'none'}
+              file={waveformFile}
               gap={gap}
               playheadS={absolutePlayheadS - videoGap}
               onSetGap={v => dispatch({ type: 'SET_GAP', value: v })}

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { useLanguage } from '../i18n/LanguageContext'
+import { useLanguage } from '../i18n/useLanguage'
 
 interface HelpModalProps {
   onClose: () => void

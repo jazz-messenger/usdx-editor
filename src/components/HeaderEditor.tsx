@@ -5,20 +5,20 @@ import { KNOWN_SINGSTAR_GAMES } from '../utils/singstarEditions'
 import type { SingStarEditionMatch } from '../utils/singstarEditions'
 import type { UsdxHeader } from '../parser/usdxParser'
 import type { SongFileMap } from '../utils/fileLoader'
-import { useLanguage } from '../i18n/LanguageContext'
+import { useLanguage } from '../i18n/useLanguage'
 
-export const GENRE_SUGGESTIONS = [
+const GENRE_SUGGESTIONS = [
   'Blues', 'Country', 'Darkwave', 'Electronic', 'Folk', 'Funk',
   'Hip-Hop', 'Jazz', 'Metal', 'Musical', 'Oldies', 'Pop', 'Punk',
   'R&B', 'Rap', 'Reggae', 'Rock', 'Soul',
 ]
 
-export const LANGUAGE_SUGGESTIONS = [
+const LANGUAGE_SUGGESTIONS = [
   'Deutsch', 'English', 'Español', 'Français', 'Italiano',
   'Nederlands', 'Polski', 'Português', 'Русский', '日本語',
 ]
 
-export const EDITION_SUGGESTIONS = [
+const EDITION_SUGGESTIONS = [
   'SingStar', 'SingStar Pop', 'SingStar Rock', 'SingStar 80s',
   'SingStar Deutsch Rock-Pop', 'SingStar Party',
 ]

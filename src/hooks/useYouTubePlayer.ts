@@ -56,15 +56,17 @@ export function useYouTubePlayer(videoId: string | null) {
   const [playerState, setPlayerState] = useState<YTPlayerState>('idle')
   const [isPlaying, setIsPlaying] = useState(false)
 
-  useEffect(() => {
-    if (!videoId) {
-      setPlayerState('idle')
-      setIsPlaying(false)
-      return
-    }
-
+  // Reset player state whenever the video changes —
+  // adjust-state-during-render pattern instead of setState in the effect.
+  const [prevVideoId, setPrevVideoId] = useState(videoId)
+  if (videoId !== prevVideoId) {
+    setPrevVideoId(videoId)
     setPlayerState('idle')
     setIsPlaying(false)
+  }
+
+  useEffect(() => {
+    if (!videoId) return
 
     const createPlayer = () => {
       if (!containerRef.current || !window.YT?.Player) return

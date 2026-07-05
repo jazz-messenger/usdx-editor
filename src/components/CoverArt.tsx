@@ -3,7 +3,7 @@ import type { UsdxHeader } from '../parser/usdxParser'
 import { useObjectUrl } from '../hooks/useObjectUrl'
 import { findCoverFiles, fetchRemoteCovers } from '../utils/fileLoader'
 import type { SongFileMap } from '../utils/fileLoader'
-import { useLanguage } from '../i18n/LanguageContext'
+import { useLanguage } from '../i18n/useLanguage'
 import { Tooltip } from './Tooltip'
 
 interface CoverArtProps {
@@ -25,10 +25,13 @@ export function CoverArt({ header, files, onCoverUrl, onCoverFileSaved }: CoverA
   const localUrl = useObjectUrl(localFile)
 
   // ── Remote covers ────────────────────────────────────────────────────────────
+  // No song-change reset needed: SongView remounts per song (key), so header
+  // and files are constant for this component's lifetime.
   const [remoteUrls, setRemoteUrls] = useState<string[]>([])
   const [remoteIndex, setRemoteIndex] = useState(0)
   const [showRemote, setShowRemote] = useState(false)
-  const [loading, setLoading] = useState(false)
+  // Auto-fetch starts immediately when there is no local cover (effect below)
+  const [loading, setLoading] = useState(() => localFiles.length === 0)
   const [saving, setSaving] = useState(false)
   // URL of a remote cover that was saved locally — treated as the effective local cover
   const [savedAsLocalUrl, setSavedAsLocalUrl] = useState<string | null>(null)
@@ -36,21 +39,11 @@ export function CoverArt({ header, files, onCoverUrl, onCoverFileSaved }: CoverA
   // ── Lightbox ─────────────────────────────────────────────────────────────────
   const [lightboxOpen, setLightboxOpen] = useState(false)
 
-  // Reset view state when the song changes (header identity changes)
-  useEffect(() => {
-    setShowRemote(false)
-    setSavedAsLocalUrl(null)
-    setRemoteUrls([])
-    setRemoteIndex(0)
-  }, [header.artist, header.title]) // eslint-disable-line react-hooks/exhaustive-deps
-
   // Auto-fetch remote covers when no local file is present. The cancelled
-  // guard keeps a late response for a previous artist/title from overwriting
-  // the covers of the current one.
+  // guard keeps a late response from applying after unmount.
   useEffect(() => {
     if (localFiles.length !== 0) return
     let cancelled = false
-    setLoading(true)
     fetchRemoteCovers(header.artist, header.title).then((urls) => {
       if (cancelled) return
       setRemoteUrls(urls)
@@ -58,7 +51,7 @@ export function CoverArt({ header, files, onCoverUrl, onCoverFileSaved }: CoverA
       setLoading(false)
     })
     return () => { cancelled = true }
-  }, [header.artist, header.title, localFiles.length]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [header.artist, header.title, localFiles.length, onCoverUrl])
 
   // Close lightbox on Escape
   useEffect(() => {

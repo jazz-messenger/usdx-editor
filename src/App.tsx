@@ -7,7 +7,7 @@ import { Tooltip } from './components/Tooltip'
 import { KofiWidget } from './components/KofiWidget'
 import { HelpModal } from './components/HelpModal'
 import type { SongFileMap } from './utils/fileLoader'
-import { useLanguage } from './i18n/LanguageContext'
+import { useLanguage } from './i18n/useLanguage'
 import { version } from '../package.json'
 import type { Locale } from './i18n/translations'
 

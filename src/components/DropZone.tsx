@@ -4,7 +4,7 @@ import { parseUsdx } from '../parser/usdxParser'
 import type { UsdxSong } from '../parser/usdxParser'
 import { readTxtFile, readDroppedEntry } from '../utils/fileLoader'
 import type { SongFileMap } from '../utils/fileLoader'
-import { useLanguage } from '../i18n/LanguageContext'
+import { useLanguage } from '../i18n/useLanguage'
 
 export function DropZone({ onLoad }: { onLoad: (song: UsdxSong, filename: string, files: SongFileMap) => void }) {
   const { t } = useLanguage()

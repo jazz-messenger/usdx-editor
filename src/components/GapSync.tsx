@@ -2,8 +2,9 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useYouTubePlayer } from '../hooks/useYouTubePlayer'
 import { useLocalPlayer } from '../hooks/useLocalPlayer'
 import { searchYouTube, openYouTubeSearch, extractYouTubeId } from '../utils/youtubeSearch'
+import { shouldHandover } from '../utils/playback'
 import type { YtResult } from '../utils/youtubeSearch'
-import { useLanguage } from '../i18n/LanguageContext'
+import { useLanguage } from '../i18n/useLanguage'
 import { Tooltip } from './Tooltip'
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -49,11 +50,6 @@ interface GapSyncProps {
   startSignal?: number
 }
 
-/** Pure helper — determines whether a seek+play handover should fire. */
-export function shouldHandover(pendingTime: number | null, playerState: string): boolean {
-  return pendingTime !== null && playerState === 'ready'
-}
-
 export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSignal }: GapSyncProps) {
   const { gap, onChange, videoGap, onVideoGapChange, start, onStartChange } = timing
   const { videoUrl, audioUrl, backgroundUrl, initialVideoUrl, onVideoUrlChange, onVideoFileSelect, onAudioFileSelect, forceYoutube } = media
@@ -75,11 +71,9 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
     pause: ytPause,
   } = useYouTubePlayer(videoId)
 
-  const [ytDuration, setYtDuration] = useState(0)
-  useEffect(() => {
-    if (ytPlayerState === 'ready') setYtDuration(ytGetDuration())
-    else setYtDuration(0)
-  }, [ytPlayerState, ytGetDuration])
+  // Duration is a plain read from the player instance — derived per render,
+  // no state/effect needed (it is fixed once a video is ready).
+  const ytDuration = ytPlayerState === 'ready' ? ytGetDuration() : 0
 
   // ── Tab state: video | audio | youtube ─────────────────────────────────────
   type MediaTab = 'video' | 'audio' | 'youtube'
@@ -89,8 +83,14 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
     if (audioUrl) return 'audio'
     return 'youtube'
   })
-  // Sync forceYoutube from parent (e.g. user declined mismatch banner)
-  useEffect(() => { if (forceYoutube) setActiveTab('youtube') }, [forceYoutube])
+  // Sync forceYoutube from parent (e.g. user declined mismatch banner) —
+  // adjust-state-during-render pattern: fires exactly when the prop flips,
+  // the user can still switch tabs afterwards.
+  const [prevForceYoutube, setPrevForceYoutube] = useState(forceYoutube)
+  if (forceYoutube !== prevForceYoutube) {
+    setPrevForceYoutube(forceYoutube)
+    if (forceYoutube) setActiveTab('youtube')
+  }
 
   // Local media source depends on active tab — must be declared before local player hooks
   const localMediaUrl = activeTab === 'video' ? (videoUrl ?? null)

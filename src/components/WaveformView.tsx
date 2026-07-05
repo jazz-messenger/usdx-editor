@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { useLanguage } from '../i18n/LanguageContext'
+import { useLanguage } from '../i18n/useLanguage'
 import { buildPeaks } from '../utils/waveform'
 import { Tooltip } from './Tooltip'
 
@@ -30,23 +30,19 @@ export function WaveformView({ file, gap, playheadS, onSetGap, onJumpToGap }: Wa
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const wrapRef   = useRef<HTMLDivElement>(null)
 
+  // NOTE: SongView keys this component by file identity — a new file means a
+  // fresh mount, so per-file resets (zoom, pan, pending GAP, status) happen
+  // via the initial state instead of reset effects.
   const [peaks, setPeaks]               = useState<Float32Array | null>(null)
   const [duration, setDuration]         = useState(0)
   const [pendingGapMs, setPendingGapMs] = useState<number | null>(null)
-  const [status, setStatus]             = useState<'idle' | 'loading' | 'error'>('idle')
+  const [status, setStatus]             = useState<'idle' | 'loading' | 'error'>(file ? 'loading' : 'idle')
   const [zoom, setZoom]                 = useState(1)
   const [pan, setPan]                   = useState(0)   // 0..1 fraction of total duration
 
-  // ── Reset zoom on new file ───────────────────────────────────────────────────
-  useEffect(() => { setZoom(1); setPan(0) }, [file])
-
   // ── Decode audio ────────────────────────────────────────────────────────────
   useEffect(() => {
-    if (!file) { setPeaks(null); setDuration(0); return }
-    setStatus('loading')
-    setPeaks(null)
-    setPendingGapMs(null)
-
+    if (!file) return
     const ctx = new AudioContext()
     file.arrayBuffer()
       .then(buf   => ctx.decodeAudioData(buf))
@@ -194,16 +190,18 @@ export function WaveformView({ file, gap, playheadS, onSetGap, onJumpToGap }: Wa
   }, [zoom, pan, duration, clampPan])
 
   // ── Auto-pan to keep playhead visible during playback ───────────────────────
-  useEffect(() => {
-    if (!duration || zoom <= 1 || playheadS <= 0) return
+  // Adjust-state-during-render pattern: reacts to the playheadS prop without
+  // an extra effect pass. The next !== pan guard terminates the re-render.
+  if (duration > 0 && zoom > 1 && playheadS > 0) {
     const visStart = pan * duration
     const visDur   = duration / zoom
     const margin   = visDur * 0.15
 
     if (playheadS < visStart + margin || playheadS > visStart + visDur - margin) {
-      setPan(clampPan(playheadS / duration - 0.5 / zoom, zoom))
+      const next = clampPan(playheadS / duration - 0.5 / zoom, zoom)
+      if (next !== pan) setPan(next)
     }
-  }, [playheadS, duration, zoom, pan, clampPan])
+  }
 
   // ── Click → pending GAP ──────────────────────────────────────────────────────
   const handleClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
