@@ -50,121 +50,104 @@ export async function readDroppedEntry(entry: FileSystemEntry): Promise<SongFile
   return files
 }
 
-// ── Cover resolution ─────────────────────────────────────────────────────────
+// ── Media resolution ─────────────────────────────────────────────────────────
+// One generic lookup drives cover/audio/video/background resolution.
+// Priority order is always: header filename → folder scan → exact fallbacks.
+
+const IMAGE_EXTENSIONS = /\.(jpg|jpeg|png|webp)$/
+const AUDIO_EXTENSIONS = /\.(mp3|ogg|flac|m4a|wav|aac|opus)$/i
+const VIDEO_EXTENSIONS = /\.(mp4|mkv|avi|webm|mov|m4v|mpeg|mpg|wmv|flv)$/i
+
+interface MediaLookup {
+  /** Filename from the header tag (e.g. header.cover) — highest priority */
+  headerName?: string
+  /** Extension filter for the folder scan (map keys are lowercase) */
+  extensions: RegExp
+  /** Filename tag the folder scan additionally requires, e.g. '[co]' */
+  tag?: string
+  /** Exact filenames tried last, in order */
+  fallbackNames?: string[]
+}
+
+/** Returns all candidate files in priority order (deduplicated by name). */
+function findMediaFiles(files: SongFileMap, lookup: MediaLookup): File[] {
+  const seen = new Set<string>()
+  const result: File[] = []
+  const add = (f: File | undefined) => {
+    if (f && !seen.has(f.name)) { seen.add(f.name); result.push(f) }
+  }
+
+  if (lookup.headerName) add(files.get(lookup.headerName.toLowerCase()))
+  for (const [name, file] of files) {
+    if (lookup.tag && !name.includes(lookup.tag)) continue
+    if (lookup.extensions.test(name)) add(file)
+  }
+  for (const name of lookup.fallbackNames ?? []) add(files.get(name))
+
+  return result
+}
+
+/**
+ * Returns the first folder file matching `extensions` when the header names
+ * a file that is NOT present — i.e. a mismatch situation. Returns null when
+ * there is no mismatch (no header entry, exact match, or empty folder).
+ */
+function findMismatch(headerName: string | undefined, files: SongFileMap, extensions: RegExp): File | null {
+  if (!headerName) return null
+  if (files.get(headerName.toLowerCase())) return null // exact match — no mismatch
+  for (const [name, file] of files) {
+    if (extensions.test(name)) return file
+  }
+  return null
+}
 
 /** Returns all candidate cover files in priority order (deduplicated). */
 export function findCoverFiles(header: UsdxHeader, files: SongFileMap): File[] {
-  const seen = new Set<string>()
-  const result: File[] = []
-  const add = (f: File) => { if (!seen.has(f.name)) { seen.add(f.name); result.push(f) } }
-
-  if (header.cover) {
-    const f = files.get(header.cover.toLowerCase())
-    if (f) add(f)
-  }
-  for (const [name, file] of files) {
-    if (name.includes('[co]') && /\.(jpg|jpeg|png|webp)$/.test(name)) add(file)
-  }
-  for (const name of ['cover.jpg', 'cover.jpeg', 'cover.png', 'cover.webp']) {
-    const f = files.get(name)
-    if (f) add(f)
-  }
-  return result
+  return findMediaFiles(files, {
+    headerName: header.cover,
+    extensions: IMAGE_EXTENSIONS,
+    tag: '[co]',
+    fallbackNames: ['cover.jpg', 'cover.jpeg', 'cover.png', 'cover.webp'],
+  })
 }
 
 export function findCoverFile(header: UsdxHeader, files: SongFileMap): File | null {
   return findCoverFiles(header, files)[0] ?? null
 }
 
-const AUDIO_EXTENSIONS = /\.(mp3|ogg|flac|m4a|wav|aac|opus)$/i
-
 /** Returns all candidate audio files: header match first, then any audio file in the folder. */
 export function findAudioFiles(header: UsdxHeader, files: SongFileMap): File[] {
-  const seen = new Set<string>()
-  const result: File[] = []
-  const add = (f: File) => { if (!seen.has(f.name)) { seen.add(f.name); result.push(f) } }
-  if (header.audio) {
-    const f = files.get(header.audio.toLowerCase())
-    if (f) add(f)
-  }
-  for (const [name, file] of files) {
-    if (AUDIO_EXTENSIONS.test(name)) add(file)
-  }
-  return result
+  return findMediaFiles(files, { headerName: header.audio, extensions: AUDIO_EXTENSIONS })
 }
 
 export function findAudioFile(header: UsdxHeader, files: SongFileMap): File | null {
   return findAudioFiles(header, files)[0] ?? null
 }
 
-/** Same mismatch logic as findVideoMismatch, but for #AUDIO. */
-export function findAudioMismatch(
-  header: UsdxHeader,
-  files: SongFileMap,
-): File | null {
-  if (!header.audio) return null
-  const exact = files.get(header.audio.toLowerCase())
-  if (exact) return null
-  for (const [name, file] of files) {
-    if (AUDIO_EXTENSIONS.test(name)) return file
-  }
-  return null
+export function findAudioMismatch(header: UsdxHeader, files: SongFileMap): File | null {
+  return findMismatch(header.audio, files, AUDIO_EXTENSIONS)
 }
-
-const VIDEO_EXTENSIONS = /\.(mp4|mkv|avi|webm|mov|m4v|mpeg|mpg|wmv|flv)$/i
 
 /** Returns all candidate video files: header match first, then any video file in the folder. */
 export function findVideoFiles(header: UsdxHeader, files: SongFileMap): File[] {
-  const seen = new Set<string>()
-  const result: File[] = []
-  const add = (f: File) => { if (!seen.has(f.name)) { seen.add(f.name); result.push(f) } }
-  if (header.video) {
-    const f = files.get(header.video.toLowerCase())
-    if (f) add(f)
-  }
-  for (const [name, file] of files) {
-    if (VIDEO_EXTENSIONS.test(name)) add(file)
-  }
-  return result
+  return findMediaFiles(files, { headerName: header.video, extensions: VIDEO_EXTENSIONS })
 }
 
 export function findVideoFile(header: UsdxHeader, files: SongFileMap): File | null {
   return findVideoFiles(header, files)[0] ?? null
 }
 
-/**
- * Returns the first video file found in the folder when it doesn't match
- * the filename stored in the header — i.e. a mismatch situation.
- * Returns null when there is no mismatch (either no header.video, exact match,
- * or no video file in the folder at all).
- */
-export function findVideoMismatch(
-  header: UsdxHeader,
-  files: SongFileMap,
-): File | null {
-  if (!header.video) return null
-  const exact = files.get(header.video.toLowerCase())
-  if (exact) return null // exact match — no mismatch
-  // Header names a file that isn't present; look for any video in the folder
-  for (const [name, file] of files) {
-    if (VIDEO_EXTENSIONS.test(name)) return file
-  }
-  return null
+export function findVideoMismatch(header: UsdxHeader, files: SongFileMap): File | null {
+  return findMismatch(header.video, files, VIDEO_EXTENSIONS)
 }
 
 export function findBackgroundFile(header: UsdxHeader, files: SongFileMap): File | null {
-  if (header.background) {
-    const f = files.get(header.background.toLowerCase())
-    if (f) return f
-  }
-  for (const [name, file] of files) {
-    if (name.includes('[bg]') && /\.(jpg|jpeg|png|webp)$/.test(name)) return file
-  }
-  for (const name of ['background.jpg', 'background.jpeg', 'background.png', 'background.webp']) {
-    const f = files.get(name)
-    if (f) return f
-  }
-  return null
+  return findMediaFiles(files, {
+    headerName: header.background,
+    extensions: IMAGE_EXTENSIONS,
+    tag: '[bg]',
+    fallbackNames: ['background.jpg', 'background.jpeg', 'background.png', 'background.webp'],
+  })[0] ?? null
 }
 
 /** Fetches up to 5 remote cover URLs from iTunes for the given artist + title. */

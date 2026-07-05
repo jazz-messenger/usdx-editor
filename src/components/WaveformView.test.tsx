@@ -26,6 +26,7 @@ const mockGetContext = vi.fn(() => ({
   save: vi.fn(),
   restore: vi.fn(),
   setLineDash: vi.fn(),
+  setTransform: vi.fn(),
 }))
 
 beforeEach(() => {

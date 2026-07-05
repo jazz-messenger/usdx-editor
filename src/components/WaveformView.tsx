@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { useLanguage } from '../i18n/LanguageContext'
+import { buildPeaks } from '../utils/waveform'
 import { Tooltip } from './Tooltip'
 
 interface WaveformViewProps {
@@ -23,21 +24,6 @@ const ZOOM_STEP = 1.35
 const ZOOM_MIN  = 1
 const ZOOM_MAX  = 64
 const MINIMAP_H = 18   // px reserved at canvas bottom when zoomed
-
-function buildPeaks(channelData: Float32Array, samples: number): Float32Array {
-  const blockSize = Math.floor(channelData.length / samples)
-  const peaks = new Float32Array(samples)
-  for (let i = 0; i < samples; i++) {
-    let max = 0
-    const start = i * blockSize
-    for (let j = 0; j < blockSize; j++) {
-      const v = Math.abs(channelData[start + j] ?? 0)
-      if (v > max) max = v
-    }
-    peaks[i] = max
-  }
-  return peaks
-}
 
 export function WaveformView({ file, gap, playheadS, onSetGap, onJumpToGap }: WaveformViewProps) {
   const { t } = useLanguage()
@@ -84,8 +70,12 @@ export function WaveformView({ file, gap, playheadS, onSetGap, onJumpToGap }: Wa
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')!
-    const W  = canvas.width
-    const H  = canvas.height
+    // Canvas backing store is devicePixelRatio-scaled for crisp HiDPI
+    // rendering; all drawing below works in CSS pixels via the transform.
+    const dpr = window.devicePixelRatio || 1
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+    const W  = canvas.width / dpr
+    const H  = canvas.height / dpr
     const WH = zoom > 1 ? H - MINIMAP_H : H   // waveform height (leaves room for minimap)
 
     ctx.clearRect(0, 0, W, H)
@@ -182,8 +172,11 @@ export function WaveformView({ file, gap, playheadS, onSetGap, onJumpToGap }: Wa
     const canvas = canvasRef.current
     if (!wrap || !canvas) return
     const ro = new ResizeObserver(() => {
-      canvas.width  = wrap.clientWidth
-      canvas.height = 120
+      const dpr = window.devicePixelRatio || 1
+      canvas.width  = wrap.clientWidth * dpr
+      canvas.height = 120 * dpr
+      canvas.style.width  = `${wrap.clientWidth}px`
+      canvas.style.height = '120px'
       draw()
     })
     ro.observe(wrap)
