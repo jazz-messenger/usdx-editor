@@ -14,6 +14,7 @@ import { lookupReleaseInfo } from '../utils/musicbrainz'
 import { lookupSingStarEdition } from '../utils/singstarEditions'
 import type { SingStarEditionMatch } from '../utils/singstarEditions'
 import { useObjectUrl } from '../hooks/useObjectUrl'
+import { fileKey } from '../utils/fileKey'
 import { findVideoFile, findAudioFile, findBackgroundFile, findVideoMismatch, findAudioMismatch } from '../utils/fileLoader'
 import type { SongFileMap } from '../utils/fileLoader'
 import type { UsdxSong } from '../parser/usdxParser'
@@ -482,9 +483,9 @@ export function SongView({ song, filename, files, onReset }: SongViewProps) {
         <div className="lyrics-column" ref={lyricsColumnRef}>
           {lyricsView === 'waveform' && (
             <WaveformView
-              // Keyed by file identity: a new file remounts the view, which
-              // resets zoom/pan/status via initial state (no reset effects)
-              key={waveformFile ? `${waveformFile.name}|${waveformFile.size}|${waveformFile.lastModified}` : 'none'}
+              // Keyed by file identity: a new File object remounts the view,
+              // which resets zoom/pan/status via initial state (no reset effects)
+              key={fileKey(waveformFile)}
               file={waveformFile}
               gap={gap}
               playheadS={absolutePlayheadS - videoGap}

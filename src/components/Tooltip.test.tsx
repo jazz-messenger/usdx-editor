@@ -30,6 +30,14 @@ describe('Tooltip', () => {
     expect(bubble).toHaveTextContent('Beschreibung')
   })
 
+  it('merges an existing aria-describedby on the child instead of replacing it', () => {
+    render(<Tooltip text="Hilfe"><button aria-describedby="err-1">Trigger</button></Tooltip>)
+    const describedBy = screen.getByRole('button').getAttribute('aria-describedby')!
+    const ids = describedBy.split(' ')
+    expect(ids).toContain('err-1')
+    expect(ids.length).toBe(2)
+  })
+
   it('closes on Escape while the trigger is focused', () => {
     render(<Tooltip text="Hilfe"><button>Trigger</button></Tooltip>)
     const button = screen.getByRole('button')

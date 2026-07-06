@@ -21,12 +21,22 @@ export function Tooltip({ text, children }: TooltipProps) {
   const hide = () => setPos(null)
 
   // Link the trigger to the bubble for screenreaders. For an element child
-  // (button, img, …) inject aria-describedby via cloneElement; the fallback
-  // ⓘ icon is made focusable so keyboard users can reach the tooltip at all.
+  // (button, img, …) inject aria-describedby via cloneElement — merged with
+  // any id the child already carries. The fallback ⓘ icon is made focusable
+  // so keyboard users can reach the tooltip; onMouseDown-preventDefault stops
+  // mouse clicks from focusing the icon (it often sits inside <label> —
+  // stealing focus there would break the label's click-through to its input).
   const trigger = isValidElement<{ 'aria-describedby'?: string }>(children)
-    ? cloneElement(children, { 'aria-describedby': id })
+    ? cloneElement(children, {
+        'aria-describedby': [children.props['aria-describedby'], id].filter(Boolean).join(' '),
+      })
     : children ?? (
-        <span className="tooltip-icon" tabIndex={0} aria-describedby={id}>ⓘ</span>
+        <span
+          className="tooltip-icon"
+          tabIndex={0}
+          aria-describedby={id}
+          onMouseDown={(e) => e.preventDefault()}
+        >ⓘ</span>
       )
 
   return (

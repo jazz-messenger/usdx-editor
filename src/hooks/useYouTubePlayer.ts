@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { useResetOnChange } from './useResetOnChange'
 
 export type YTPlayerState = 'idle' | 'ready' | 'error'
 
@@ -55,15 +56,16 @@ export function useYouTubePlayer(videoId: string | null) {
   const playerRef = useRef<YTPlayerInstance | null>(null)
   const [playerState, setPlayerState] = useState<YTPlayerState>('idle')
   const [isPlaying, setIsPlaying] = useState(false)
+  // Duration as state (not a render-time read): YT players can report 0 at
+  // onReady until metadata settles, so we also refresh it on state changes.
+  const [duration, setDuration] = useState(0)
 
-  // Reset player state whenever the video changes —
-  // adjust-state-during-render pattern instead of setState in the effect.
-  const [prevVideoId, setPrevVideoId] = useState(videoId)
-  if (videoId !== prevVideoId) {
-    setPrevVideoId(videoId)
+  // Reset player state whenever the video changes
+  useResetOnChange(videoId, () => {
     setPlayerState('idle')
     setIsPlaying(false)
-  }
+    setDuration(0)
+  })
 
   useEffect(() => {
     if (!videoId) return
@@ -74,17 +76,32 @@ export function useYouTubePlayer(videoId: string | null) {
       const el = document.createElement('div')
       containerRef.current.innerHTML = ''
       containerRef.current.appendChild(el)
-      playerRef.current = new window.YT.Player(el, {
+      // Guard every event against late callbacks from a player that has
+      // already been replaced/destroyed (events arrive via postMessage and
+      // can straddle the swap).
+      const player: YTPlayerInstance = new window.YT.Player(el, {
         videoId,
         playerVars: { rel: 0, modestbranding: 1, controls: 0 },
         events: {
-          onReady: () => setPlayerState('ready'),
-          onError: () => setPlayerState('error'),
+          onReady: () => {
+            if (playerRef.current !== player) return
+            setPlayerState('ready')
+            setDuration(player.getDuration())
+          },
+          onError: () => {
+            if (playerRef.current !== player) return
+            setPlayerState('error')
+          },
           onStateChange: (e) => {
+            if (playerRef.current !== player) return
             setIsPlaying(e.data === 1) // 1 = YT.PlayerState.PLAYING
+            // Metadata (and thus duration) is reliably present by the first
+            // state change at the latest
+            setDuration(player.getDuration())
           },
         },
       })
+      playerRef.current = player
     }
 
     loadYTScript(createPlayer)
@@ -98,10 +115,9 @@ export function useYouTubePlayer(videoId: string | null) {
   // Stable identities — all access goes through the ref, so consumers can
   // safely list these in effect dependency arrays.
   const getCurrentTime = useCallback((): number => playerRef.current?.getCurrentTime() ?? 0, [])
-  const getDuration = useCallback((): number => playerRef.current?.getDuration() ?? 0, [])
   const seekTo = useCallback((seconds: number) => { playerRef.current?.seekTo(seconds, true) }, [])
   const play  = useCallback(() => { if (typeof playerRef.current?.playVideo  === 'function') playerRef.current.playVideo() }, [])
   const pause = useCallback(() => { if (typeof playerRef.current?.pauseVideo === 'function') playerRef.current.pauseVideo() }, [])
 
-  return { containerRef, playerState, isPlaying, getCurrentTime, getDuration, seekTo, play, pause }
+  return { containerRef, playerState, isPlaying, duration, getCurrentTime, seekTo, play, pause }
 }

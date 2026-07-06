@@ -64,11 +64,23 @@ export function WaveformView({ file, gap, playheadS, onSetGap, onJumpToGap }: Wa
   // ── Draw ────────────────────────────────────────────────────────────────────
   const draw = useCallback(() => {
     const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')!
+    const wrap   = wrapRef.current
+    if (!canvas || !wrap) return
     // Canvas backing store is devicePixelRatio-scaled for crisp HiDPI
     // rendering; all drawing below works in CSS pixels via the transform.
+    // Sizing lives here (not only in the ResizeObserver) so a dpr change
+    // without a layout resize — window dragged to another monitor — also
+    // resizes the backing store on the next draw.
     const dpr = window.devicePixelRatio || 1
+    const targetW = Math.round(wrap.clientWidth * dpr)
+    const targetH = Math.round(120 * dpr)
+    if (canvas.width !== targetW || canvas.height !== targetH) {
+      canvas.width  = targetW
+      canvas.height = targetH
+      canvas.style.width  = `${wrap.clientWidth}px`
+      canvas.style.height = '120px'
+    }
+    const ctx = canvas.getContext('2d')!
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     const W  = canvas.width / dpr
     const H  = canvas.height / dpr
@@ -167,14 +179,8 @@ export function WaveformView({ file, gap, playheadS, onSetGap, onJumpToGap }: Wa
     const wrap   = wrapRef.current
     const canvas = canvasRef.current
     if (!wrap || !canvas) return
-    const ro = new ResizeObserver(() => {
-      const dpr = window.devicePixelRatio || 1
-      canvas.width  = wrap.clientWidth * dpr
-      canvas.height = 120 * dpr
-      canvas.style.width  = `${wrap.clientWidth}px`
-      canvas.style.height = '120px'
-      draw()
-    })
+    // Sizing happens inside draw() — the observer only triggers a redraw
+    const ro = new ResizeObserver(() => draw())
     ro.observe(wrap)
     return () => ro.disconnect()
   }, [draw])
@@ -233,7 +239,7 @@ export function WaveformView({ file, gap, playheadS, onSetGap, onJumpToGap }: Wa
         {status === 'error' && (
           <div className="waveform-status waveform-status--error">{t.waveform.error}</div>
         )}
-        {!file && status === 'idle' && (
+        {!file && (
           <div className="waveform-status">{t.waveform.noFile}</div>
         )}
         <canvas

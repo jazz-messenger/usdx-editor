@@ -54,7 +54,7 @@ export async function readDroppedEntry(entry: FileSystemEntry): Promise<SongFile
 // One generic lookup drives cover/audio/video/background resolution.
 // Priority order is always: header filename → folder scan → exact fallbacks.
 
-const IMAGE_EXTENSIONS = /\.(jpg|jpeg|png|webp)$/
+const IMAGE_EXTENSIONS = /\.(jpg|jpeg|png|webp)$/i
 const AUDIO_EXTENSIONS = /\.(mp3|ogg|flac|m4a|wav|aac|opus)$/i
 const VIDEO_EXTENSIONS = /\.(mp4|mkv|avi|webm|mov|m4v|mpeg|mpg|wmv|flv)$/i
 

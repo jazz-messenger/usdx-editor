@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react'
 import { translations } from './translations'
 import type { Locale, Translations } from './translations'
 
-export interface LanguageContextValue {
+interface LanguageContextValue {
   locale: Locale
   setLocale: (l: Locale) => void
   t: Translations

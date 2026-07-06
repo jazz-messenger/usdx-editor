@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from 'react'
+import { useResetOnChange } from './useResetOnChange'
 
 export type LocalPlayerState = 'idle' | 'ready' | 'error'
 
@@ -13,14 +14,11 @@ export function useLocalPlayer(mediaUrl: string | null) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [duration, setDuration] = useState(0)
 
-  // Reset player state whenever the source changes —
-  // adjust-state-during-render pattern instead of an effect.
-  const [prevUrl, setPrevUrl] = useState(mediaUrl)
-  if (mediaUrl !== prevUrl) {
-    setPrevUrl(mediaUrl)
+  // Reset player state whenever the source changes
+  useResetOnChange(mediaUrl, () => {
     setPlayerState('idle')
     setIsPlaying(false)
-  }
+  })
 
   const getCurrentTime = useCallback(() => videoRef.current?.currentTime ?? 0, [])
   const seekTo = useCallback((s: number) => { if (videoRef.current) videoRef.current.currentTime = s }, [])
