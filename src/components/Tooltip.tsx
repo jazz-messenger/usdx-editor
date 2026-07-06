@@ -1,4 +1,4 @@
-import { useState, useRef, type ReactNode } from 'react'
+import { cloneElement, isValidElement, useId, useRef, useState, type ReactNode } from 'react'
 
 interface TooltipProps {
   text: string
@@ -9,6 +9,7 @@ interface TooltipProps {
 export function Tooltip({ text, children }: TooltipProps) {
   const [pos, setPos] = useState<{ top: number; left: number } | null>(null)
   const triggerRef = useRef<HTMLSpanElement>(null)
+  const id = useId()
 
   const show = () => {
     if (triggerRef.current) {
@@ -19,18 +20,36 @@ export function Tooltip({ text, children }: TooltipProps) {
 
   const hide = () => setPos(null)
 
+  // Link the trigger to the bubble for screenreaders. For an element child
+  // (button, img, …) inject aria-describedby via cloneElement; the fallback
+  // ⓘ icon is made focusable so keyboard users can reach the tooltip at all.
+  const trigger = isValidElement<{ 'aria-describedby'?: string }>(children)
+    ? cloneElement(children, { 'aria-describedby': id })
+    : children ?? (
+        <span className="tooltip-icon" tabIndex={0} aria-describedby={id}>ⓘ</span>
+      )
+
   return (
-    <span ref={triggerRef} className="tooltip-wrap" onMouseEnter={show} onMouseLeave={hide}>
-      {children ?? <span className="tooltip-icon" aria-hidden="true">ⓘ</span>}
-      {pos && (
-        <span
-          className="tooltip-bubble"
-          role="tooltip"
-          style={{ top: pos.top, left: pos.left }}
-        >
-          {text}
-        </span>
-      )}
+    <span
+      ref={triggerRef}
+      className="tooltip-wrap"
+      onMouseEnter={show}
+      onMouseLeave={hide}
+      onFocus={show}
+      onBlur={hide}
+      onKeyDown={(e) => { if (e.key === 'Escape') hide() }}
+    >
+      {trigger}
+      {/* Always in the DOM so aria-describedby resolves; role queries and
+          visual rendering only apply while it is shown. */}
+      <span
+        id={id}
+        className="tooltip-bubble"
+        role="tooltip"
+        style={pos ? { top: pos.top, left: pos.left } : { display: 'none' }}
+      >
+        {text}
+      </span>
     </span>
   )
 }
