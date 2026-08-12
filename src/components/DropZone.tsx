@@ -6,11 +6,24 @@ import { readTxtFile, readDroppedEntry } from '../utils/fileLoader'
 import type { SongFileMap } from '../utils/fileLoader'
 import { useLanguage } from '../i18n/useLanguage'
 
+// Self-written demo song (fictional artist, generated audio and video) served
+// from public/demo — fetched only when someone actually asks for it.
+// The MIME types are spelled out rather than taken from the response: a File
+// with an empty type produces a blob URL the <video> element refuses to play,
+// and static hosts are not reliable about Content-Type for .wav / .webm.
+const DEMO_FILES: { name: string; type: string }[] = [
+  { name: 'Neon Skyline.txt', type: 'text/plain' },
+  { name: 'Neon Skyline.wav', type: 'audio/wav' },
+  { name: 'Neon Skyline.webm', type: 'video/webm' },
+  { name: 'Neon Skyline [CO].png', type: 'image/png' },
+]
+
 export function DropZone({ onLoad }: { onLoad: (song: UsdxSong, filename: string, files: SongFileMap) => void }) {
   const { t } = useLanguage()
   const [dragOver, setDragOver] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [pendingFiles, setPendingFiles] = useState<{ txtFiles: File[]; allFiles: SongFileMap } | null>(null)
+  const [demoLoading, setDemoLoading] = useState(false)
 
   const processFileMap = useCallback((allFiles: SongFileMap) => {
     const txtFiles = Array.from(allFiles.values())
@@ -51,6 +64,24 @@ export function DropZone({ onLoad }: { onLoad: (song: UsdxSong, filename: string
     }
     processFileMap(files)
   }
+
+  const loadDemo = useCallback(async () => {
+    setDemoLoading(true)
+    setError(null)
+    try {
+      const files: SongFileMap = new Map()
+      await Promise.all(DEMO_FILES.map(async ({ name, type }) => {
+        const res = await fetch(`${import.meta.env.BASE_URL}demo/${encodeURIComponent(name)}`)
+        if (!res.ok) throw new Error(`${name}: ${res.status}`)
+        files.set(name.toLowerCase(), new File([await res.blob()], name, { type }))
+      }))
+      processFileMap(files)
+    } catch {
+      setError(t.dropzone.demoError)
+    } finally {
+      setDemoLoading(false)
+    }
+  }, [processFileMap, t])
 
   const onFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return
@@ -97,11 +128,19 @@ export function DropZone({ onLoad }: { onLoad: (song: UsdxSong, filename: string
       <div className="drop-zone-icon">🎵</div>
       <h2>{t.dropzone.heading}</h2>
       <p>{t.dropzone.instruction(/Mac|iPhone|iPad/.test(navigator.userAgent) ? '⌘' : 'Strg')}</p>
-      {error && <p className="drop-zone-error">{error}</p>}
+      {error && <p className="drop-zone-error" role="alert">{error}</p>}
       <label className="btn-primary drop-zone-btn">
         {t.dropzone.button}
         <input type="file" multiple onChange={onFileInput} style={{ display: 'none' }} />
       </label>
+
+      <div className="drop-zone-demo">
+        <span className="drop-zone-or">{t.dropzone.or}</span>
+        <button className="btn-secondary drop-zone-demo-btn" onClick={loadDemo} disabled={demoLoading}>
+          {demoLoading ? t.dropzone.demoLoading : t.dropzone.demoButton}
+        </button>
+        <span className="drop-zone-demo-hint">{t.dropzone.demoHint}</span>
+      </div>
     </div>
   )
 }

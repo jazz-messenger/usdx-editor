@@ -86,6 +86,11 @@ const de = {
       multiTxtHeading: 'Welche Datei möchtest du öffnen?',
       multiTxtDesc: 'Der Ordner enthält mehrere .txt-Dateien. Klicke auf eine Datei um sie zu öffnen.',
       cancel: 'Abbrechen',
+      or: 'oder',
+      demoButton: 'Beispiel-Song laden',
+      demoLoading: 'Beispiel-Song wird geladen…',
+      demoHint: 'Ein erfundener Song zum Ausprobieren – mit Audio, Video und Cover.',
+      demoError: 'Der Beispiel-Song konnte nicht geladen werden.',
     },
     header: {
       titleLabel: 'Titel',
@@ -349,6 +354,11 @@ export const translations = {
       multiTxtHeading: 'Which file would you like to open?',
       multiTxtDesc: 'The folder contains multiple .txt files. Click a file to open it.',
       cancel: 'Cancel',
+      or: 'or',
+      demoButton: 'Load demo song',
+      demoLoading: 'Loading demo song…',
+      demoHint: 'A made-up song to try things out – audio, video and cover included.',
+      demoError: 'The demo song could not be loaded.',
     },
     header: {
       titleLabel: 'Title',

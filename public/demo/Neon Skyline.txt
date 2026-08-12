@@ -1,0 +1,61 @@
+#TITLE:Neon Skyline
+#ARTIST:The Midnight Owls
+#LANGUAGE:English
+#GENRE:Synthpop
+#YEAR:2024
+#EDITION:Demo Session
+#CREATOR:USDX Editor Demo
+#BPM:320
+#GAP:1200
+#AUDIO:Neon Skyline.wav
+#VIDEO:Neon Skyline.webm
+#VIDEOGAP:1.8
+#TAGS:Party, Synthwave, Duett
+#COVER:Neon Skyline [CO].png
+#P1:Mara
+#P2:Jonas
+P1
+: 0 2 0 Neon 
+: 2 2 2 sky
+: 4 2 4 line 
+: 6 2 2 o
+: 8 4 0 ver 
+: 12 4 -1 town
+- 16
+: 16 2 0 Ev'
+: 18 2 2 ry 
+: 20 2 4 win
+: 22 2 5 dow 
+: 24 4 4 burn
+: 28 4 2 ing
+- 32
+: 32 2 4 We 
+: 34 2 5 were 
+* 36 3 7 young 
+: 39 3 5 and 
+: 42 6 4 loud
+- 48
+: 48 2 0 Head
+: 50 2 2 lights 
+: 52 2 4 drift
+: 54 2 2 ing 
+: 56 6 0 slow
+P2
+: 16 2 4 Hold 
+: 18 2 5 the 
+: 20 2 7 night 
+: 22 2 9 a 
+: 24 8 7 while
+- 32
+: 32 2 7 Fill 
+: 34 2 9 the 
+* 36 3 11 qui
+: 39 3 9 et 
+: 42 6 7 air
+- 48
+: 48 2 4 Let 
+: 50 2 5 the 
+: 52 2 7 cit
+: 54 2 5 y 
+: 56 6 4 go
+E
