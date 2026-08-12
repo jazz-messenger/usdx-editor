@@ -12,6 +12,35 @@ const de = {
       kofiButtonText: 'Danke sagen',
       backToHome: 'Zurück zur Startseite',
     },
+    tour: {
+      heading: 'So sieht es nach dem Öffnen aus',
+      intro: 'Ein Blick in den Editor – vier Schritte von der geladenen Datei bis zum sauber gesetzten GAP.',
+      prev: 'Vorheriger Schritt',
+      next: 'Nächster Schritt',
+      goTo: (n: number) => `Zu Schritt ${n}`,
+      slides: [
+        {
+          title: 'Alles auf einen Blick',
+          body: 'Der Ordner wird eingelesen, Cover, Metadaten, Text und Video stehen sofort nebeneinander. Nichts wird hochgeladen – alles bleibt auf deinem Rechner.',
+          alt: 'Editor mit geladenem Song: Cover und Metadaten oben, Songtext links, Videovorschau rechts',
+        },
+        {
+          title: 'Duette aufteilen',
+          body: 'Jede Zeile lässt sich per Pfeil der zweiten Person zuweisen – oder beiden gleichzeitig. Die Sängernamen sind direkt über den Spalten editierbar.',
+          alt: 'Songtext-Ansicht mit Zuweisungspfeil und Tooltip „Zu Sänger:in 2"',
+        },
+        {
+          title: 'Mitlesen beim Abspielen',
+          body: 'Beim Abspielen wandert die Markierung silbengenau durch den Text. So siehst du sofort, ob Timing und GAP zur Musik passen.',
+          alt: 'Songtext-Ansicht während der Wiedergabe, aktive Zeile und Silbe hervorgehoben',
+        },
+        {
+          title: 'GAP per Wellenform setzen',
+          body: 'Im Audio-Tab siehst du die Wellenform der Datei. Ein Klick setzt einen GAP-Kandidaten, „⏱ Jetzt!" übernimmt die laufende Position in Echtzeit.',
+          alt: 'Audio-Tab mit Wellenform, GAP-Markierung und Button „GAP auf 1s setzen"',
+        },
+      ],
+    },
     dropzone: {
       heading: 'Song-Ordner hierher ziehen',
       instruction: (key: string) => `…oder Ordner über den Button öffnen und alle Dateien auswählen (${key}+A)`,
@@ -207,6 +236,35 @@ export const translations = {
       datenschutz: 'Privacy Policy',
       kofiButtonText: 'Say thanks',
       backToHome: 'Back to home',
+    },
+    tour: {
+      heading: 'This is what you get after opening a folder',
+      intro: 'A look inside the editor – four steps from the loaded file to a properly placed GAP.',
+      prev: 'Previous step',
+      next: 'Next step',
+      goTo: (n: number) => `Go to step ${n}`,
+      slides: [
+        {
+          title: 'Everything at a glance',
+          body: 'The folder is read in and cover, metadata, lyrics and video sit side by side right away. Nothing is uploaded – it all stays on your machine.',
+          alt: 'Editor with a loaded song: cover and metadata on top, lyrics on the left, video preview on the right',
+        },
+        {
+          title: 'Split up duets',
+          body: 'Every line can be handed to the second singer with one arrow – or to both at once. Singer names are editable right above the columns.',
+          alt: 'Lyrics view with the assignment arrow and the tooltip "Assign to Singer 2"',
+        },
+        {
+          title: 'Follow along during playback',
+          body: 'While the song plays, the highlight moves through the lyrics syllable by syllable. You can see immediately whether timing and GAP match the music.',
+          alt: 'Lyrics view during playback with the active line and syllable highlighted',
+        },
+        {
+          title: 'Set GAP from the waveform',
+          body: 'The Audio tab shows the waveform of your file. One click sets a GAP candidate, "⏱ Now!" takes the running position in real time.',
+          alt: 'Audio tab with waveform, GAP marker and the button "Set GAP to 1s"',
+        },
+      ],
     },
     dropzone: {
       heading: 'Drop song folder here',

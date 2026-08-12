@@ -173,17 +173,20 @@
   flex-direction: column;
   align-items: center;
   gap: 32px;
-  max-width: 560px;
+  max-width: 960px;
   margin: 0 auto;
   padding: 48px 16px 64px;
 }
 
+/* Hero and drop zone stay in the narrow column the landing page started with —
+   only the sections below them use the full width. */
 .landing-hero {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 14px;
   text-align: center;
+  max-width: 560px;
 }
 
 .landing-icon {
@@ -232,6 +235,173 @@
 
 .landing .drop-zone {
   width: 100%;
+  max-width: 560px;
+}
+
+/* ─── Landing sections (tour, song sources) ──────────────────────────────── */
+.landing-tour,
+.landing-sources {
+  width: 100%;
+  border-top: 1px solid rgb(var(--border-subtle));
+  padding-top: 32px;
+}
+
+.landing-section-heading {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: rgb(var(--text-primary) / .92);
+  margin: 0 0 6px;
+  text-align: center;
+}
+
+.landing-section-intro {
+  font-size: 0.85rem;
+  color: rgb(var(--text-muted));
+  line-height: 1.6;
+  margin: 0 auto 20px;
+  max-width: 620px;
+  text-align: center;
+}
+
+/* ─── Landing tour (screenshot slideshow) ────────────────────────────────── */
+.tour-frame {
+  background: rgb(var(--bg-panel));
+  border: 1px solid rgb(var(--border-subtle));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 12px 12px 14px;
+  outline: none;
+}
+
+.tour-frame:focus-visible {
+  border-color: rgb(var(--accent-primary) / .55);
+  box-shadow: var(--shadow-sm), 0 0 0 3px rgb(var(--accent-primary) / .18);
+}
+
+.tour-stage {
+  position: relative;
+  aspect-ratio: 2000 / 1029;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: rgb(var(--bg-base));
+}
+
+.tour-shot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.tour-shot--active {
+  opacity: 1;
+}
+
+.tour-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: rgb(var(--text-primary) / .85);
+  background: rgb(var(--bg-elevated) / .82);
+  border: 1px solid rgb(var(--border-mid));
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.tour-nav:hover {
+  background: rgb(var(--accent-primary) / .12);
+  color: rgb(var(--accent-primary-2));
+}
+
+.tour-nav--prev { left: 10px; }
+.tour-nav--next { right: 10px; }
+
+.tour-caption {
+  /* Fixed height: the caption text varies, the frame below must not jump. */
+  min-height: 76px;
+  padding: 14px 6px 4px;
+}
+
+.tour-caption-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgb(var(--text-primary) / .92);
+  margin: 0 0 4px;
+}
+
+.tour-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex: none;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgb(var(--accent-primary-2));
+  background: rgb(var(--accent-primary) / .12);
+  border: 1px solid rgb(var(--accent-primary) / .30);
+  border-radius: 50%;
+}
+
+.tour-caption-body {
+  font-size: 0.83rem;
+  color: rgb(var(--text-muted));
+  line-height: 1.6;
+  margin: 0;
+}
+
+.tour-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.tour-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgb(var(--border-mid));
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.tour-dot:hover { background: rgb(var(--accent-primary) / .45); }
+
+.tour-dot--active {
+  background: rgb(var(--accent-primary));
+  transform: scale(1.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tour-shot { transition: none; }
+}
+
+@media (max-width: 620px) {
+  /* A whole desktop editor squeezed into 360 px reads as grey mush — crop into
+     the part of each shot the caption is talking about instead. */
+  .tour-stage { aspect-ratio: 3 / 4; }
+  .tour-shot { object-position: var(--tour-focus, 0%) top; }
+  .tour-caption { min-height: 104px; }
+  .tour-nav { width: 28px; height: 28px; font-size: 1.1rem; }
 }
 
 /* ─── Drop zone ──────────────────────────────────────────────────────────── */
