@@ -479,11 +479,30 @@ export function GapSync({ timing, media, song, onTimeUpdate, onReset, startSigna
         </div>
       )}
 
-      {/* ── Local video/audio player ── */}
+      {/* ── Local video/audio player ──
+           In the Audio tab the <video> element is still the thing that plays —
+           the playhead logic reads its currentTime — but it has no picture, so
+           it is collapsed out of sight and a poster takes its place instead of
+           a black 16:9 rectangle. */}
       {localMediaUrl && (
         <div className={`local-video-wrap${!useLocal ? ' local-video-wrap--hidden' : ''}${activeTab === 'audio' ? ' local-video-wrap--audio-only' : ''}`}>
           {localPlayerState === 'error' && (
             <div className="yt-error">{t.gapsync.videoError}</div>
+          )}
+          {activeTab === 'audio' && (
+            backgroundUrl
+              ? (
+                <div className="bg-preview-wrap">
+                  <img className="bg-preview" src={backgroundUrl} alt="" />
+                  <span className="bg-preview-label">{t.gapsync.background}</span>
+                </div>
+              )
+              : (
+                <div className="audio-poster">
+                  <span className="audio-poster-icon" aria-hidden="true">♪</span>
+                  <span className="audio-poster-label">{t.gapsync.audioOnly}</span>
+                </div>
+              )
           )}
           <video
             ref={localVideoRef}

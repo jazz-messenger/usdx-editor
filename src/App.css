@@ -604,7 +604,10 @@
   border: 1px solid rgb(var(--border-subtle));
   border-radius: var(--radius-lg);
   position: relative;
-  z-index: 1;
+  /* Establishes a stacking context, so the tag dropdowns and tooltips inside
+     can never rise above it — it has to outrank everything they hang over,
+     including the sticky .duet-header (z-index 10) below. */
+  z-index: 20;
   padding: 16px 20px;
   display: flex;
   flex-wrap: wrap;
@@ -1655,6 +1658,41 @@
 
 .local-video-wrap--hidden,
 .yt-player-wrap--hidden { display: none; }
+
+/* Audio tab: the <video> keeps playing (it drives the playhead) but has no
+   picture — collapse it and let the poster above stand in for it. */
+.local-video-wrap--audio-only {
+  position: relative;
+}
+
+.local-video-wrap--audio-only .local-video {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  aspect-ratio: auto;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.audio-poster {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: rgb(var(--bg-elevated));
+  border: 1px solid rgb(var(--border-subtle));
+  border-radius: var(--radius-md);
+}
+
+.audio-poster-icon {
+  font-size: 1.2rem;
+  color: rgb(var(--accent-primary));
+}
+
+.audio-poster-label {
+  font-size: 0.82rem;
+  color: rgb(var(--text-muted));
+}
 
 .yt-player,
 .local-video {

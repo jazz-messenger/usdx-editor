@@ -71,6 +71,36 @@ describe('GapSync', () => {
     expect(screen.getByText(/hintergrundbild/i)).toBeInTheDocument()
   })
 
+  describe('audio-only playback', () => {
+    it('replaces the blank video frame with an audio-only poster', () => {
+      renderGapSync(makeTiming(), { audioUrl: 'blob:audio' })
+      expect(screen.getByText(/nur audio/i)).toBeInTheDocument()
+    })
+
+    it('keeps the video element mounted — it drives the playhead', () => {
+      const { container } = render(
+        <LanguageProvider>
+          <GapSync timing={makeTiming()} media={{ audioUrl: 'blob:audio' }} />
+        </LanguageProvider>
+      )
+      const video = container.querySelector('video.local-video')
+      expect(video).toBeInTheDocument()
+      expect(video).toHaveAttribute('src', 'blob:audio')
+      expect(video!.closest('.local-video-wrap')).toHaveClass('local-video-wrap--audio-only')
+    })
+
+    it('prefers the background image over the generic poster', () => {
+      renderGapSync(makeTiming(), { audioUrl: 'blob:audio', backgroundUrl: 'blob:bg' })
+      expect(screen.getByText(/hintergrundbild/i)).toBeInTheDocument()
+      expect(screen.queryByText(/nur audio/i)).not.toBeInTheDocument()
+    })
+
+    it('shows no poster while a real video is playing', () => {
+      renderGapSync(makeTiming(), { videoUrl: 'blob:video', audioUrl: 'blob:audio' })
+      expect(screen.queryByText(/nur audio/i)).not.toBeInTheDocument()
+    })
+  })
+
   it('renders GAP and VIDEOGAP labels', () => {
     renderGapSync()
     expect(screen.getByText('GAP')).toBeInTheDocument()
