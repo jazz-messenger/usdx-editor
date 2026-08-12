@@ -4,6 +4,7 @@ import type { UsdxSong } from './parser/usdxParser'
 import { SongView } from './components/SongView'
 import { DropZone } from './components/DropZone'
 import { LandingTour } from './components/LandingTour'
+import { SongSources } from './components/SongSources'
 import { Tooltip } from './components/Tooltip'
 import { KofiWidget } from './components/KofiWidget'
 import { HelpModal } from './components/HelpModal'
@@ -80,6 +81,7 @@ export default function App() {
               </div>
               <DropZone onLoad={handleLoad} />
               <LandingTour />
+              <SongSources />
               <footer className="landing-footer">
                 <a href="/impressum.html">{t.app.impressum}</a>
                 <a href="/datenschutz.html">{t.app.datenschutz}</a>

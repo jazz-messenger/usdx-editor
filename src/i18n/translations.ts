@@ -41,6 +41,43 @@ const de = {
         },
       ],
     },
+    sources: {
+      heading: 'Woher bekomme ich Songs?',
+      intro: 'UltraStar-Songs sind Textdateien mit Noten und Timing. Diese Anlaufstellen sind ein guter Start:',
+      note: 'Die Datenbanken liefern nur die .txt-Datei mit Text und Timing – Musik und Video musst du selbst beisteuern und besitzen.',
+      categories: {
+        database: 'Datenbank',
+        tool: 'Tool',
+        docs: 'Doku',
+        community: 'Community',
+      } as Record<string, string>,
+      items: {
+        openSongs: {
+          name: 'UltraStar Open Songs',
+          desc: 'Offizielle Sammlung frei lizenzierter Songs (Creative Commons) – inklusive Audio, ohne Registrierung, rechtlich unbedenklich.',
+        },
+        usdb: {
+          name: 'USDB',
+          desc: 'Die größte Community-Datenbank für UltraStar-Songdateien. Kostenloses Konto nötig, um Songs herunterzuladen.',
+        },
+        usdbEu: {
+          name: 'UltraStar DataBase',
+          desc: 'Neuere Datenbank, auch ohne Konto durchsuchbar. Enthält laut Betreiber nur .txt-Dateien und Cover.',
+        },
+        usdbSyncer: {
+          name: 'USDB Syncer',
+          desc: 'Desktop-Tool, das Songs aus der USDB lädt und den Song-Ordner sauber anlegt. Braucht ein USDB-Konto.',
+        },
+        format: {
+          name: 'Song-Format',
+          desc: 'Die offizielle Spezifikation des .txt-Formats – nachschlagen, was #GAP, #VIDEOGAP und die Notenzeilen genau bedeuten.',
+        },
+        discord: {
+          name: 'Community-Discord',
+          desc: 'Discord von UltraStar, Vocaluxe und Performous – der schnellste Weg zu Hilfe bei kaputten Songdateien.',
+        },
+      } as Record<string, { name: string; desc: string }>,
+    },
     dropzone: {
       heading: 'Song-Ordner hierher ziehen',
       instruction: (key: string) => `…oder Ordner über den Button öffnen und alle Dateien auswählen (${key}+A)`,
@@ -265,6 +302,43 @@ export const translations = {
           alt: 'Audio tab with waveform, GAP marker and the button "Set GAP to 1s"',
         },
       ],
+    },
+    sources: {
+      heading: 'Where do I find songs?',
+      intro: 'UltraStar songs are text files holding notes and timing. These are good places to start:',
+      note: 'The databases only hand you the .txt file with lyrics and timing – the music and video you have to supply, and own, yourself.',
+      categories: {
+        database: 'Database',
+        tool: 'Tool',
+        docs: 'Docs',
+        community: 'Community',
+      } as Record<string, string>,
+      items: {
+        openSongs: {
+          name: 'UltraStar Open Songs',
+          desc: 'Official collection of freely licensed songs (Creative Commons) – audio included, no account needed, no copyright worries.',
+        },
+        usdb: {
+          name: 'USDB',
+          desc: 'The largest community database for UltraStar song files. A free account is required to download songs.',
+        },
+        usdbEu: {
+          name: 'UltraStar DataBase',
+          desc: 'Newer database, browsable without an account. Per its operator it holds only .txt files and cover art.',
+        },
+        usdbSyncer: {
+          name: 'USDB Syncer',
+          desc: 'Desktop tool that pulls songs from USDB and lays out the song folder for you. Needs a USDB account.',
+        },
+        format: {
+          name: 'Song format',
+          desc: 'The official spec of the .txt format – look up what #GAP, #VIDEOGAP and the note lines actually mean.',
+        },
+        discord: {
+          name: 'Community Discord',
+          desc: 'Discord of the UltraStar, Vocaluxe and Performous communities – the fastest route to help with broken song files.',
+        },
+      } as Record<string, { name: string; desc: string }>,
     },
     dropzone: {
       heading: 'Drop song folder here',

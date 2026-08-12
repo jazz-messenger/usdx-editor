@@ -404,6 +404,83 @@
   .tour-nav { width: 28px; height: 28px; font-size: 1.1rem; }
 }
 
+/* ─── Song sources ───────────────────────────────────────────────────────── */
+.source-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 10px;
+}
+
+.source-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 14px 16px;
+  background: rgb(var(--bg-panel));
+  border: 1px solid rgb(var(--border-subtle));
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.source-card:hover,
+.source-card:focus-visible {
+  background: rgb(var(--accent-primary) / .08);
+  border-color: rgb(var(--accent-primary) / .35);
+  outline: none;
+}
+
+.source-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.source-card-name {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: rgb(var(--text-primary) / .92);
+}
+
+.source-card-tag {
+  flex: none;
+  font-size: 0.68rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: rgb(var(--text-primary) / .55);
+  background: rgb(var(--bg-elevated));
+  border: 1px solid rgb(var(--border-subtle));
+  border-radius: 20px;
+  padding: 2px 8px;
+}
+
+.source-card-desc {
+  font-size: 0.8rem;
+  color: rgb(var(--text-muted));
+  line-height: 1.55;
+  flex: 1;
+}
+
+.source-card-host {
+  font-size: 0.72rem;
+  color: rgb(var(--accent-primary) / .75);
+}
+
+.source-note {
+  font-size: 0.78rem;
+  color: rgb(var(--text-dim));
+  line-height: 1.6;
+  text-align: center;
+  margin: 16px auto 0;
+  max-width: 620px;
+}
+
 /* ─── Drop zone ──────────────────────────────────────────────────────────── */
 .drop-zone {
   border: 2px dashed rgb(var(--border-mid));
