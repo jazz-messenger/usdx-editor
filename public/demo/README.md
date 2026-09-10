@@ -14,7 +14,9 @@ The files are a deliberately ordinary UltraStar song folder: a duet with two
 singers, a golden note per track, `#GAP` at 1200 ms and `#VIDEOGAP` at 1.8 s so
 the sync features have something real to work on.
 
-Regenerating them requires the scripts used to author them; if you change the
+These files are generated, not hand-written — regenerate them with
+`scripts/generate-demo-song.py` and `scripts/generate-demo-video.mjs` rather
+than editing them in place (see `scripts/README.md`). If you do change the
 `.txt` by hand, keep `#AUDIO`, `#VIDEO` and `#COVER` pointing at the filenames
 in this folder and keep the filename list in `src/components/DropZone.tsx`
 in sync.
