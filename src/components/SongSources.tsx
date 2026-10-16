@@ -20,10 +20,7 @@ export function SongSources() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <span className="source-card-head">
-                  <span className="source-card-name">{item.name}</span>
-                  <span className="source-card-tag">{t.sources.categories[source.category]}</span>
-                </span>
+                <span className="source-card-name">{item.name}</span>
                 <span className="source-card-desc">{item.desc}</span>
                 <span className="source-card-host">{new URL(source.url).host.replace(/^www\./, '')} ↗</span>
               </a>

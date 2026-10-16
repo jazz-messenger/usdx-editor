@@ -435,29 +435,10 @@
   outline: none;
 }
 
-.source-card-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
 .source-card-name {
   font-size: 0.92rem;
   font-weight: 600;
   color: rgb(var(--text-primary) / .92);
-}
-
-.source-card-tag {
-  flex: none;
-  font-size: 0.68rem;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  color: rgb(var(--text-primary) / .55);
-  background: rgb(var(--bg-elevated));
-  border: 1px solid rgb(var(--border-subtle));
-  border-radius: 20px;
-  padding: 2px 8px;
 }
 
 .source-card-desc {

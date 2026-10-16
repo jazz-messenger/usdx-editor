@@ -51,8 +51,12 @@ describe('SongSources', () => {
       expect(translations.en.sources.items[source.id]).toBeDefined()
       expect(translations.de.sources.items[source.id].desc)
         .not.toBe(translations.en.sources.items[source.id].desc)
-      expect(translations.de.sources.categories[source.category]).toBeTruthy()
-      expect(translations.en.sources.categories[source.category]).toBeTruthy()
     }
+  })
+
+  it('leaves no orphaned translations behind when a source is dropped', () => {
+    const ids = SONG_SOURCES.map((s) => s.id).sort()
+    expect(Object.keys(translations.de.sources.items).sort()).toEqual(ids)
+    expect(Object.keys(translations.en.sources.items).sort()).toEqual(ids)
   })
 })

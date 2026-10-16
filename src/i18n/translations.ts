@@ -44,13 +44,7 @@ const de = {
     sources: {
       heading: 'Woher bekomme ich Songs?',
       intro: 'UltraStar-Songs sind Textdateien mit Noten und Timing. Diese Anlaufstellen sind ein guter Start:',
-      note: 'Die Datenbanken liefern nur die .txt-Datei mit Text und Timing – Musik und Video musst du selbst beisteuern und besitzen.',
-      categories: {
-        database: 'Datenbank',
-        tool: 'Tool',
-        docs: 'Doku',
-        community: 'Community',
-      } as Record<string, string>,
+      note: 'Bis auf die frei lizenzierte Sammlung liefern die Datenbanken nur die .txt-Datei mit Text und Timing – Musik und Video musst du selbst beisteuern und besitzen.',
       items: {
         openSongs: {
           name: 'UltraStar Open Songs',
@@ -63,18 +57,6 @@ const de = {
         usdbEu: {
           name: 'UltraStar DataBase',
           desc: 'Neuere Datenbank, auch ohne Konto durchsuchbar. Enthält laut Betreiber nur .txt-Dateien und Cover.',
-        },
-        usdbSyncer: {
-          name: 'USDB Syncer',
-          desc: 'Desktop-Tool, das Songs aus der USDB lädt und den Song-Ordner sauber anlegt. Braucht ein USDB-Konto.',
-        },
-        format: {
-          name: 'Song-Format',
-          desc: 'Die offizielle Spezifikation des .txt-Formats – nachschlagen, was #GAP, #VIDEOGAP und die Notenzeilen genau bedeuten.',
-        },
-        discord: {
-          name: 'Community-Discord',
-          desc: 'Discord von UltraStar, Vocaluxe und Performous – der schnellste Weg zu Hilfe bei kaputten Songdateien.',
         },
       } as Record<string, { name: string; desc: string }>,
     },
@@ -312,13 +294,7 @@ export const translations = {
     sources: {
       heading: 'Where do I find songs?',
       intro: 'UltraStar songs are text files holding notes and timing. These are good places to start:',
-      note: 'The databases only hand you the .txt file with lyrics and timing – the music and video you have to supply, and own, yourself.',
-      categories: {
-        database: 'Database',
-        tool: 'Tool',
-        docs: 'Docs',
-        community: 'Community',
-      } as Record<string, string>,
+      note: 'Apart from the freely licensed collection, the databases only hand you the .txt file with lyrics and timing – the music and video you have to supply, and own, yourself.',
       items: {
         openSongs: {
           name: 'UltraStar Open Songs',
@@ -331,18 +307,6 @@ export const translations = {
         usdbEu: {
           name: 'UltraStar DataBase',
           desc: 'Newer database, browsable without an account. Per its operator it holds only .txt files and cover art.',
-        },
-        usdbSyncer: {
-          name: 'USDB Syncer',
-          desc: 'Desktop tool that pulls songs from USDB and lays out the song folder for you. Needs a USDB account.',
-        },
-        format: {
-          name: 'Song format',
-          desc: 'The official spec of the .txt format – look up what #GAP, #VIDEOGAP and the note lines actually mean.',
-        },
-        discord: {
-          name: 'Community Discord',
-          desc: 'Discord of the UltraStar, Vocaluxe and Performous communities – the fastest route to help with broken song files.',
         },
       } as Record<string, { name: string; desc: string }>,
     },
