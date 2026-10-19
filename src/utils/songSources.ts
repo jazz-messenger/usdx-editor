@@ -4,11 +4,9 @@ export interface SongSource {
   url: string
 }
 
-// Places to get song files, and nothing else — no tools, no docs, no forums.
-// The freely licensed collection comes first: it is the only one without a
-// copyright question attached to it.
+// Places to get song files, and nothing else — no tools, no docs, no forums,
+// and nothing with a catalogue too small to actually find something in.
 export const SONG_SOURCES: SongSource[] = [
-  { id: 'openSongs', url: 'https://github.com/UltraStar-Deluxe/songs' },
   { id: 'usdb', url: 'https://usdb.animux.de/' },
   { id: 'usdbEu', url: 'https://usdb.eu/' },
 ]

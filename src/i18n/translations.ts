@@ -44,12 +44,8 @@ const de = {
     sources: {
       heading: 'Woher bekomme ich Songs?',
       intro: 'UltraStar-Songs sind Textdateien mit Noten und Timing. Diese Anlaufstellen sind ein guter Start:',
-      note: 'Bis auf die frei lizenzierte Sammlung liefern die Datenbanken nur die .txt-Datei mit Text und Timing – Musik und Video musst du selbst beisteuern und besitzen.',
+      note: 'Die Datenbanken liefern nur die .txt-Datei mit Text und Timing – Musik und Video musst du selbst beisteuern und besitzen.',
       items: {
-        openSongs: {
-          name: 'UltraStar Open Songs',
-          desc: 'Offizielle Sammlung frei lizenzierter Songs (Creative Commons) – inklusive Audio, ohne Registrierung, rechtlich unbedenklich.',
-        },
         usdb: {
           name: 'USDB',
           desc: 'Die größte Community-Datenbank für UltraStar-Songdateien. Kostenloses Konto nötig, um Songs herunterzuladen.',
@@ -294,12 +290,8 @@ export const translations = {
     sources: {
       heading: 'Where do I find songs?',
       intro: 'UltraStar songs are text files holding notes and timing. These are good places to start:',
-      note: 'Apart from the freely licensed collection, the databases only hand you the .txt file with lyrics and timing – the music and video you have to supply, and own, yourself.',
+      note: 'The databases only hand you the .txt file with lyrics and timing – the music and video you have to supply, and own, yourself.',
       items: {
-        openSongs: {
-          name: 'UltraStar Open Songs',
-          desc: 'Official collection of freely licensed songs (Creative Commons) – audio included, no account needed, no copyright worries.',
-        },
         usdb: {
           name: 'USDB',
           desc: 'The largest community database for UltraStar song files. A free account is required to download songs.',
